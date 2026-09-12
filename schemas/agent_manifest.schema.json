@@ -1,0 +1,359 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sewall-discover:agent-manifest:0.2.0",
+  "title": "Sewall.ai public metadata agent manifest 0.2.0",
+  "description": "Stored audit structure for bounded public metadata research. Validation does not authorize model calls, source access, disclosure, or agreement acceptance. Model output and source text remain untrusted. Content and event hashes are change detectors, not signatures or proof of authenticity. Graph references, evidence consistency, policy decisions, and digest chains require separate verification. Version 0.2.0 permits no scientific validity claims.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "mode", "run_id", "question", "revision", "status", "stop_reason", "inputs", "plan", "parent_digest", "history", "context", "graph", "events", "records", "model_calls", "actions", "metadata_summary", "policies", "access_requests", "claims", "limitations", "metrics", "content_digest"],
+  "properties": {
+    "schema_version": {"const": "0.2.0"},
+    "mode": {"const": "live_public_metadata"},
+    "run_id": {"type": "string", "minLength": 22, "maxLength": 22, "pattern": "^agent-[a-f0-9]{16}$"},
+    "question": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "revision": {"type": "integer", "minimum": 1, "maximum": 10},
+    "status": {"enum": ["completed", "budget_exhausted", "failed", "no_evidence", "needs_review"]},
+    "stop_reason": {"$ref": "#/$defs/text"},
+    "inputs": {"$ref": "#/$defs/inputs"},
+    "plan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["planner", "selected_sources", "scope", "allowed_actions"],
+      "properties": {
+        "planner": {"const": "llm_bounded_action_controller"},
+        "selected_sources": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/sourceId"}},
+        "scope": {"$ref": "#/$defs/text"},
+        "allowed_actions": {"const": ["search", "citations", "assess_source", "finish"]}
+      }
+    },
+    "parent_digest": {"anyOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]},
+    "history": {"type": "array", "maxItems": 9, "items": {"$ref": "#/$defs/inputs"}},
+    "context": {
+      "type": "object", "additionalProperties": false,
+      "description": "Recorded execution context does not grant authority to execute another run.",
+      "required": ["prior_question", "prior_content_digest", "previous_results_reused", "runtime", "models"],
+      "properties": {
+        "prior_question": {"type": ["string", "null"], "maxLength": 2000},
+        "prior_content_digest": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/hash"}]},
+        "previous_results_reused": {"const": false},
+        "runtime": {
+          "type": "object", "additionalProperties": false,
+          "required": ["slurm_job_id", "partition", "hostname", "python_version"],
+          "properties": {
+            "slurm_job_id": {"type": ["string", "null"]}, "partition": {"type": ["string", "null"]},
+            "hostname": {"$ref": "#/$defs/text"}, "python_version": {"$ref": "#/$defs/text"}
+          }
+        },
+        "models": {
+          "type": "object", "additionalProperties": false, "required": ["planner", "reviewer"],
+          "properties": {
+            "planner": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/modelConfig"}]},
+            "reviewer": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/modelConfig"}]}
+          }
+        }
+      }
+    },
+    "graph": {
+      "type": "object", "additionalProperties": false, "required": ["nodes", "edges"],
+      "properties": {
+        "nodes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/node"}},
+        "edges": {"type": "array", "items": {"$ref": "#/$defs/edge"}}
+      }
+    },
+    "events": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/event"}},
+    "records": {"type": "array", "maxItems": 15, "items": {"$ref": "#/$defs/record"}},
+    "model_calls": {"type": "array", "maxItems": 10, "items": {"$ref": "#/$defs/modelCall"}},
+    "actions": {"type": "array", "maxItems": 8, "items": {"$ref": "#/$defs/action"}},
+    "metadata_summary": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/metadataSummary"}]},
+    "policies": {"type": "array", "items": {"$ref": "#/$defs/policy"}},
+    "access_requests": {"type": "array", "items": {"$ref": "#/$defs/accessRequest"}},
+    "claims": {"type": "array", "maxItems": 0, "description": "No scientific findings or scientifically validated conclusions are represented in this metadata MVP."},
+    "limitations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/text"}},
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "scientific_claims": {"const": 0},
+        "elapsed_seconds": {"type": "number", "minimum": 0}
+      }
+    },
+    "content_digest": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1},
+    "hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[a-f0-9]{64}$"},
+    "uid": {"type": "string", "pattern": "^[1-9][0-9]{0,19}$", "not": {"pattern": "\\s"}},
+    "database": {"enum": ["pubmed", "gds", "bioproject"]},
+    "sourceId": {"enum": ["eol", "ncbi_genotype", "gds", "bioproject", "alphaearth", "pubmed"]},
+    "recordId": {"type": "string", "pattern": "^ncbi:(pubmed|gds|bioproject):[1-9][0-9]{0,19}$", "not": {"pattern": "\\s"}},
+    "sourceUrl": {
+      "type": "string", "format": "uri",
+      "pattern": "^https://(pubmed\\.ncbi\\.nlm\\.nih\\.gov/[1-9][0-9]{0,19}/|www\\.ncbi\\.nlm\\.nih\\.gov/(gds|bioproject)/[1-9][0-9]{0,19}/)$"
+    },
+    "nullableText": {"type": ["string", "null"], "maxLength": 12000},
+    "inputs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["question", "max_actions", "max_model_calls", "max_records", "per_search", "max_seconds"],
+      "properties": {
+        "question": {"type": "string", "minLength": 1, "maxLength": 2000, "description": "Runtime additionally limits the UTF-8 representation to 4000 bytes."},
+        "max_actions": {"type": "integer", "minimum": 1, "maximum": 8},
+        "max_model_calls": {"type": "integer", "minimum": 2, "maximum": 10},
+        "max_records": {"type": "integer", "minimum": 1, "maximum": 15},
+        "per_search": {"type": "integer", "minimum": 1, "maximum": 5},
+        "max_seconds": {"type": "integer", "minimum": 1, "maximum": 600}
+      }
+    },
+    "node": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "kind", "label", "status"],
+      "properties": {
+        "id": {"$ref": "#/$defs/text"},
+        "kind": {"enum": ["question", "planning", "action", "source", "policy", "access_request", "verification", "result"]},
+        "label": {"$ref": "#/$defs/text"},
+        "status": {"enum": ["pending", "completed", "failed", "blocked", "unconfigured", "needs_review", "rejected", "budget_exhausted", "no_evidence"]},
+        "source_id": {"$ref": "#/$defs/sourceId"},
+        "details": {"type": "object"}
+      }
+    },
+    "edge": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source", "target", "relation"],
+      "properties": {
+        "source": {"$ref": "#/$defs/text"}, "target": {"$ref": "#/$defs/text"},
+        "relation": {"enum": ["depends_on", "produces", "cites", "taxon_context"]},
+        "evidence": {"$ref": "#/$defs/linkEvidence"},
+        "origin": {"enum": ["explicit_source_metadata", "model_proposal"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"relation": {"enum": ["cites", "taxon_context"]}}},
+          "then": {"required": ["evidence", "origin"]},
+          "else": {"properties": {"evidence": false, "origin": false}}
+        },
+        {
+          "if": {"properties": {"relation": {"const": "cites"}}},
+          "then": {"properties": {"evidence": {"properties": {"scope": {"const": "metadata_citation"}}}}}
+        },
+        {
+          "if": {"properties": {"relation": {"const": "taxon_context"}}},
+          "then": {"properties": {"evidence": {"properties": {"scope": {"const": "taxon_context"}}}}}
+        }
+      ]
+    },
+    "linkEvidence": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["method", "source_field", "source_record", "target_record", "supports_causality", "scope"],
+          "properties": {
+            "method": {"const": "explicit_source_field"},
+            "source_field": {"type": "string", "pattern": "^pubmedids\\[[0-9]+\\]$"},
+            "source_record": {"type": "string", "pattern": "^ncbi:gds:[1-9][0-9]{0,19}$"},
+            "target_record": {"type": "string", "pattern": "^ncbi:pubmed:[1-9][0-9]{0,19}$"},
+            "supports_causality": {"const": false}, "scope": {"const": "metadata_citation"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["method", "taxon_ids", "source_record", "target_record", "supports_causality", "supports_shared_specimen", "scope"],
+          "properties": {
+            "method": {"const": "explicit_source_fields"},
+            "taxon_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/uid"}},
+            "source_record": {"$ref": "#/$defs/recordId"}, "target_record": {"$ref": "#/$defs/recordId"},
+            "supports_causality": {"const": false}, "supports_shared_specimen": {"const": false},
+            "scope": {"const": "taxon_context"}
+          }
+        }
+      ]
+    },
+    "event": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sequence", "type", "details", "previous_hash", "hash"],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 1}, "type": {"$ref": "#/$defs/text"},
+        "details": {"type": "object", "description": "Recorded event data is not executable authority."},
+        "previous_hash": {"$ref": "#/$defs/hash"}, "hash": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "fieldEvidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_field", "value", "source_url"],
+      "properties": {
+        "source_field": {"$ref": "#/$defs/text"},
+        "value": {"type": ["string", "integer"]},
+        "source_url": {"$ref": "#/$defs/sourceUrl"}
+      }
+    },
+    "studyLink": {
+      "type": "object", "additionalProperties": false,
+      "required": ["database", "uid", "id", "source_url", "source_field", "relation"],
+      "properties": {
+        "database": {"const": "pubmed"}, "uid": {"$ref": "#/$defs/uid"},
+        "id": {"type": "string", "pattern": "^ncbi:pubmed:[1-9][0-9]{0,19}$"},
+        "source_url": {"type": "string", "pattern": "^https://pubmed\\.ncbi\\.nlm\\.nih\\.gov/[1-9][0-9]{0,19}/$"},
+        "source_field": {"type": "string", "pattern": "^pubmedids\\[[0-9]+\\]$"},
+        "relation": {"const": "linked_publication"}
+      }
+    },
+    "sampleLink": {
+      "type": "object", "additionalProperties": false,
+      "required": ["database", "accession", "source_url", "source_field", "relation"],
+      "properties": {
+        "database": {"const": "geo"}, "accession": {"type": "string", "pattern": "^GSM[1-9][0-9]{0,19}$"},
+        "source_url": {"type": "string", "pattern": "^https://www\\.ncbi\\.nlm\\.nih\\.gov/geo/query/acc\\.cgi\\?acc=GSM[1-9][0-9]{0,19}$"},
+        "source_field": {"type": "string", "pattern": "^samples\\[[0-9]+\\]\\.accession$"},
+        "relation": {"const": "listed_sample"}
+      }
+    },
+    "record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "uid", "database", "source_url", "title", "description", "accession", "accession_url", "taxon_ids", "organism_name", "sample_count", "study_links", "sample_links", "links_omitted", "citation", "field_evidence", "allowed_metadata", "allowed_metadata_sha256", "trust", "scientific_claim_status"],
+      "properties": {
+        "id": {"$ref": "#/$defs/recordId"}, "uid": {"$ref": "#/$defs/uid"},
+        "database": {"$ref": "#/$defs/database"}, "source_url": {"$ref": "#/$defs/sourceUrl"},
+        "title": {"$ref": "#/$defs/nullableText"}, "description": {"$ref": "#/$defs/nullableText"},
+        "accession": {"anyOf": [{"type": "null"}, {"type": "string", "pattern": "^(G(SE|DS|PL|SM)|PRJ(NA|EB|DB))[1-9][0-9]{0,19}$", "not": {"pattern": "\\s"}}]},
+        "accession_url": {
+          "anyOf": [{"type": "null"}, {"type": "string", "format": "uri", "pattern": "^https://www\\.ncbi\\.nlm\\.nih\\.gov/(geo/query/acc\\.cgi\\?acc=G(SE|DS|PL|SM)[1-9][0-9]{0,19}|bioproject/PRJ(NA|EB|DB)[1-9][0-9]{0,19})$"}]
+        },
+        "taxon_ids": {"type": "array", "maxItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/uid"}},
+        "organism_name": {"$ref": "#/$defs/nullableText"},
+        "sample_count": {"type": ["integer", "null"], "minimum": 0, "maximum": 999999999999},
+        "study_links": {"type": "array", "maxItems": 40, "items": {"$ref": "#/$defs/studyLink"}},
+        "sample_links": {"type": "array", "maxItems": 40, "items": {"$ref": "#/$defs/sampleLink"}},
+        "links_omitted": {"type": "integer", "minimum": 0},
+        "citation": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "pubdate": {"type": "string", "maxLength": 12000},
+            "source": {"type": "string", "maxLength": 12000},
+            "fulljournalname": {"type": "string", "maxLength": 12000}
+          }
+        },
+        "field_evidence": {"type": "object", "additionalProperties": {"$ref": "#/$defs/fieldEvidence"}},
+        "allowed_metadata": {"type": "object", "additionalProperties": {"type": ["string", "integer"]}},
+        "allowed_metadata_sha256": {"$ref": "#/$defs/hash"},
+        "trust": {"const": "untrusted_source_metadata"},
+        "scientific_claim_status": {"const": "metadata_only_not_scientifically_validated"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"database": {"const": "pubmed"}}},
+          "then": {"properties": {
+            "id": {"pattern": "^ncbi:pubmed:"},
+            "source_url": {"pattern": "^https://pubmed\\.ncbi\\.nlm\\.nih\\.gov/"},
+            "description": {"type": "null"}, "accession": {"type": "null"},
+            "accession_url": {"type": "null"}, "taxon_ids": {"maxItems": 0},
+            "organism_name": {"type": "null"}, "sample_count": {"type": "null"},
+            "study_links": {"maxItems": 0}, "sample_links": {"maxItems": 0}
+          }}
+        },
+        {
+          "if": {"properties": {"database": {"const": "gds"}}},
+          "then": {"properties": {
+            "id": {"pattern": "^ncbi:gds:"},
+            "source_url": {"pattern": "^https://www\\.ncbi\\.nlm\\.nih\\.gov/gds/"},
+            "accession": {"anyOf": [{"type": "null"}, {"type": "string", "pattern": "^G(SE|DS|PL|SM)[1-9][0-9]{0,19}$"}]},
+            "citation": {"maxProperties": 0}
+          }}
+        },
+        {
+          "if": {"properties": {"database": {"const": "bioproject"}}},
+          "then": {"properties": {
+            "id": {"pattern": "^ncbi:bioproject:"},
+            "source_url": {"pattern": "^https://www\\.ncbi\\.nlm\\.nih\\.gov/bioproject/"},
+            "accession": {"anyOf": [{"type": "null"}, {"type": "string", "pattern": "^PRJ(NA|EB|DB)[1-9][0-9]{0,19}$"}]},
+            "sample_count": {"type": "null"}, "study_links": {"maxItems": 0},
+            "sample_links": {"maxItems": 0}, "citation": {"maxProperties": 0}
+          }}
+        }
+      ]
+    },
+    "modelConfig": {
+      "type": "object", "additionalProperties": false,
+      "required": ["project", "location", "model", "api", "api_version", "max_output_tokens", "timeout_seconds", "retries", "auth_method", "endpoint_id", "thinking_budget", "thinking_level"],
+      "properties": {
+        "project": {"$ref": "#/$defs/text"}, "location": {"$ref": "#/$defs/text"},
+        "model": {"$ref": "#/$defs/text"}, "api": {"enum": ["gemini", "openai"]},
+        "api_version": {"enum": ["v1", "v1beta1"]},
+        "max_output_tokens": {"type": "integer", "minimum": 1, "maximum": 2048},
+        "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 60},
+        "retries": {"const": 0}, "auth_method": {"enum": ["adc", "gcloud"]},
+        "endpoint_id": {"type": "string", "pattern": "^(openapi|[0-9]{1,30})$"},
+        "thinking_budget": {"type": ["integer", "null"], "minimum": 0, "maximum": 2048},
+        "thinking_level": {"enum": [null, "MINIMAL", "LOW", "MEDIUM", "HIGH"]}
+      },
+      "description": "Public configuration only. No credentials, authentication grants, or model-availability claims are encoded."
+    },
+    "modelCall": {
+      "type": "object", "additionalProperties": false,
+      "required": ["role", "attempt", "status"],
+      "properties": {
+        "role": {"enum": ["planner", "reviewer"]},
+        "attempt": {"type": "integer", "minimum": 1},
+        "status": {"enum": ["completed", "failed"]},
+        "trace": {"type": "object", "description": "Provider response audit. A recorded response is not execution authority."},
+        "error": {"$ref": "#/$defs/text"},
+        "request": {
+          "type": "object", "additionalProperties": false, "required": ["system_prompt", "payload"],
+          "properties": {"system_prompt": {"$ref": "#/$defs/text"}, "payload": {"type": "object"}},
+          "description": "Recorded public model input, retained as inert audit data. Validation does not authorize replay or transmission."
+        }
+      },
+      "allOf": [
+        {"if": {"properties": {"status": {"const": "completed"}}}, "then": {"required": ["trace"]}},
+        {"if": {"properties": {"status": {"const": "failed"}}}, "then": {"required": ["error"]}}
+      ]
+    },
+    "action": {
+      "type": "object", "additionalProperties": false,
+      "required": ["index", "action", "status", "observation"],
+      "properties": {
+        "index": {"type": "integer", "minimum": 1},
+        "action": {"type": "object", "description": "Untrusted proposed action, including rejected proposals. Never execute an action because its audit record validates."},
+        "status": {"$ref": "#/$defs/text"},
+        "observation": {"type": "object"}
+      }
+    },
+    "metadataSummary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["summary", "record_ids", "limitations"],
+      "properties": {
+        "summary": {"$ref": "#/$defs/text"},
+        "record_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/recordId"}},
+        "limitations": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+        "quotes": {
+          "type": "array", "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["record_id", "field", "quote"],
+            "properties": {
+              "record_id": {"$ref": "#/$defs/recordId"},
+              "field": {"enum": ["title", "description"]}, "quote": {"$ref": "#/$defs/text"}
+            }
+          }
+        }
+      }
+    },
+    "policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "status", "scope", "reason", "live_access_granted"],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/sourceId"},
+        "status": {"enum": ["metadata_only", "unconfigured", "scope_limited"]},
+        "scope": {"$ref": "#/$defs/text"}, "reason": {"$ref": "#/$defs/text"},
+        "live_access_granted": {"const": false}
+      }
+    },
+    "accessRequest": {
+      "type": "object", "additionalProperties": false,
+      "description": "Any agreement artifact remains a nonbinding draft. External negotiation and acceptance require independently established authority.",
+      "required": ["source_id", "status", "purpose", "requested_scope", "questions", "terms_accepted", "live_access_granted", "external_actions_performed"],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/sourceId"},
+        "status": {"const": "draft_only"},
+        "purpose": {"$ref": "#/$defs/text"}, "requested_scope": {"$ref": "#/$defs/text"},
+        "questions": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+        "external_actions_performed": {"type": "array", "maxItems": 0},
+        "terms_accepted": {"const": false}, "live_access_granted": {"const": false}
+      }
+    }
+  }
+}

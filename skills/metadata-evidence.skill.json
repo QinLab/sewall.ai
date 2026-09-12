@@ -1,0 +1,101 @@
+{
+  "$schema": "../schemas/scientific_skill.schema.json",
+  "schema_version": "0.1.0",
+  "skill_id": "sewall.metadata-evidence",
+  "version": "0.1.0",
+  "name": "Synthetic metadata inspection and evidence linkage",
+  "description": "Inspectable capability descriptor for Sewall.ai's bounded fixture controller. All records, policies, and links are fictional. Internal operation identifiers describe existing code branches; this file is not a plugin installer or an executable tool registry.",
+  "scope": "synthetic_fixture_only",
+  "tools": [
+    {
+      "id": "metadata.inspect", "version": "0.1.0",
+      "implementation": "sewall.graph.run_research: source inspection branch",
+      "invocation": "internal_allowlisted_operation",
+      "description": "Inspect an invented source record after an offline fixture policy allow decision; retain record digest and provenance.",
+      "external_actions": false
+    },
+    {
+      "id": "link.verify", "version": "0.1.0",
+      "implementation": "sewall.graph.run_research: required linkage verification branch",
+      "invocation": "internal_allowlisted_operation",
+      "description": "Compare explicit specimen, taxon, or site identifiers; inspect historical feature interval and availability. Preserve rejected and unresolved links.",
+      "external_actions": false
+    }
+  ],
+  "applicability": {
+    "conditions": [
+      "Mode is synthetic_fixture and all source records originate in sewall.fixtures.",
+      "Focus is cross-scale, traits, molecular, or landscape; auto focus is resolved by the bounded planner.",
+      "Inspection requires an allow decision for the supplied fictional policy and request.",
+      "Verification requires every source selected by the explicit linkage rule to be available."
+    ],
+    "exclusions": [
+      "Real biological inference, expression analysis, participant genotype retrieval, and causal claims.",
+      "Real compute-to-data execution, agreement signing, authorization grants, and live repository credentials.",
+      "Treating a shared taxon, author address, or literature mention as a matched specimen."
+    ],
+    "failure_behavior": [
+      "Policy review or denial blocks source inspection and dependent conclusions.",
+      "Unavailable sources, missing identifiers, and temporal leakage remain visible in graph status and limitations.",
+      "A step budget bounds execution; exhausted runs retain their partial trace and failed status."
+    ]
+  },
+  "inputs": [
+    {"name": "question", "type": "string", "required": true, "description": "Scientist's requested metadata question; 1 to 4000 characters."},
+    {"name": "focus", "type": "string", "required": false, "description": "auto, cross-scale, traits, molecular, or landscape."},
+    {"name": "scenario", "type": "string", "required": false, "description": "coastal, missing-link, policy-review, policy-denied, source-failure, or future-leakage."},
+    {"name": "max_steps", "type": "integer", "required": false, "description": "Controller step budget from 1 to 100; default 30."},
+    {"name": "previous", "type": "object", "required": false, "description": "Prior manifest for a revised question; integrity must pass and total revisions may not exceed ten.", "schema_reference": "../schemas/research_manifest.schema.json"}
+  ],
+  "outputs": [
+    {"name": "research_manifest", "type": "object", "required": true, "description": "Fixture graph, policy assessments, draft-only requests, limitations, event chain, metrics, and content digest; scientific claims remain empty.", "schema_reference": "../schemas/research_manifest.schema.json"}
+  ],
+  "evidence": {
+    "origin": "synthetic_fixture",
+    "required_fields": ["record_id", "origin", "source_uri", "record_digest", "method", "field", "left_record", "right_record", "scope", "supports_causality"],
+    "method": "explicit-field",
+    "supports_causality": false,
+    "limitations": [
+      "Evidence fields describe software fixtures, not measurements or validated scientific findings.",
+      "Temporal comparison uses explicitly formatted fictional dates and cannot establish real historical data availability.",
+      "Hashes support comparison against a retained digest; they are not signatures or independent proof of authenticity."
+    ]
+  },
+  "compute": {
+    "execution_environment": "local_offline_fixture",
+    "runtime": "Python 3.10 or later",
+    "dependencies": [],
+    "network_required": false,
+    "gpu_required": false,
+    "max_controller_steps": 100,
+    "max_sources": 5,
+    "placement_notice": "The fictional source compute location is a policy label. The current controller executes locally and makes no claim of real remote computation."
+  },
+  "policy_constraints": {
+    "required_decision": "allow_for_offline_fixture",
+    "checked_fields": ["purpose", "operation", "compute_location", "output", "estimated_bytes", "retention_days", "attribution", "authorization_required", "prohibited_purposes"],
+    "unknown_or_review": "block_dependent_execution",
+    "denied": "block_dependent_execution",
+    "authorization_authority": "data_custodian_and_authorized_institutional_officials",
+    "may_sign_agreements": false,
+    "may_grant_access": false,
+    "attribution": "Retain the fictional source attribution marker; real item-level licensing requires a separate validated adapter.",
+    "audit": "Record policy decisions, graph changes, source failures, rejected links, and run status in the event chain."
+  },
+  "validation": {
+    "scope": "local_software_behavior_only",
+    "references": ["../tests/test_schemas.py", "../tests/test_policy.py", "../sewall/graph.py:check_integrity", "../sewall/graph.py:replay_manifest"],
+    "commands": ["python -m unittest discover -s tests -v"],
+    "acceptance": [
+      "Every fixture focus and scenario, budget stop, and question revision satisfies the manifest schema.",
+      "Malformed nested fields, elevated live-access claims, and nonempty biological claims fail schema validation.",
+      "Graph integrity and deterministic replay must be checked separately from JSON Schema validation."
+    ],
+    "optional_schema_dependency": "jsonschema >= 4.18, < 5"
+  },
+  "distribution": {
+    "location": "repository_local",
+    "published_to_registry": false,
+    "registry_commitment": false
+  }
+}

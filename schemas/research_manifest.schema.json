@@ -1,0 +1,275 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sewall-discover:research-manifest:0.1.0",
+  "title": "Sewall.ai synthetic research manifest 0.1.0",
+  "description": "Fixture-only structure. Schema validation does not verify digest chains, graph references, replay, real authorization, or scientific validity. Version 0.1.0 permits no scientific claims.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "mode", "run_id", "question", "revision", "status", "inputs", "plan", "parent_digest", "history", "graph", "events", "policies", "access_requests", "claims", "limitations", "metrics", "content_digest"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "mode": {"const": "synthetic_fixture"},
+    "run_id": {"type": "string", "pattern": "^demo-[a-f0-9]{16}$"},
+    "question": {"type": "string", "minLength": 1, "maxLength": 4000},
+    "revision": {"type": "integer", "minimum": 1, "maximum": 10},
+    "status": {"$ref": "#/$defs/runStatus"},
+    "inputs": {"$ref": "#/$defs/inputs"},
+    "plan": {"$ref": "#/$defs/plan"},
+    "parent_digest": {"anyOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]},
+    "history": {"type": "array", "maxItems": 9, "items": {"$ref": "#/$defs/inputs"}},
+    "graph": {
+      "type": "object", "additionalProperties": false, "required": ["nodes", "edges"],
+      "properties": {
+        "nodes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/node"}},
+        "edges": {"type": "array", "items": {"$ref": "#/$defs/edge"}}
+      }
+    },
+    "events": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/event"}},
+    "policies": {"type": "array", "maxItems": 5, "items": {"$ref": "#/$defs/policyResult"}},
+    "access_requests": {"type": "array", "maxItems": 5, "items": {"$ref": "#/$defs/draft"}},
+    "claims": {"type": "array", "maxItems": 0, "description": "Scientific claims are deliberately unsupported in synthetic fixture version 0.1.0."},
+    "limitations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/text"}},
+    "metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["selected_sources", "inspected_sources", "blocked_or_failed_sources", "steps", "network_bytes", "scientific_claims", "verified_links"],
+      "properties": {
+        "selected_sources": {"type": "integer", "minimum": 1, "maximum": 5},
+        "inspected_sources": {"type": "integer", "minimum": 0, "maximum": 5},
+        "blocked_or_failed_sources": {"type": "integer", "minimum": 0, "maximum": 5},
+        "steps": {"type": "integer", "minimum": 0, "maximum": 100},
+        "network_bytes": {"const": 0},
+        "scientific_claims": {"const": 0},
+        "verified_links": {"type": "integer", "minimum": 0}
+      }
+    },
+    "content_digest": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1},
+    "texts": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "sourceId": {"enum": ["eol", "ncbi_genotype", "geo", "alphaearth", "pubmed"]},
+    "sources": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/sourceId"}},
+    "focus": {"enum": ["cross-scale", "traits", "molecular", "landscape"]},
+    "scenario": {"enum": ["coastal", "missing-link", "policy-review", "policy-denied", "source-failure", "future-leakage"]},
+    "runStatus": {"enum": ["completed", "failed", "needs_review", "abstained"]},
+    "nodeStatus": {"enum": ["pending", "completed", "blocked", "needs_review", "failed", "rejected", "abstained"]},
+    "representation": {"enum": ["metadata", "aggregate", "individual"]},
+    "representations": {"type": "array", "items": {"$ref": "#/$defs/representation"}},
+    "inputs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["question", "focus", "scenario", "max_steps"],
+      "properties": {
+        "question": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "focus": {"$ref": "#/$defs/focus"},
+        "scenario": {"$ref": "#/$defs/scenario"},
+        "max_steps": {"type": "integer", "minimum": 1, "maximum": 100}
+      }
+    },
+    "plan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["question", "focus", "scenario", "max_steps", "selected_sources", "planner", "mode", "external_actions", "purpose"],
+      "properties": {
+        "question": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "focus": {"$ref": "#/$defs/focus"},
+        "scenario": {"$ref": "#/$defs/scenario"},
+        "max_steps": {"type": "integer", "minimum": 1, "maximum": 100},
+        "selected_sources": {"allOf": [{"$ref": "#/$defs/sources"}], "minItems": 1},
+        "planner": {"const": "bounded_rule_based_fixture_planner"},
+        "mode": {"const": "synthetic_fixture"},
+        "external_actions": {"const": false},
+        "purpose": {"$ref": "#/$defs/text"}
+      }
+    },
+    "profile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["policy_id", "version", "allowed_purposes", "prohibited_purposes", "allowed_operations", "compute_locations", "egress", "max_bytes", "max_retention_days", "attribution", "authorization_required", "negotiation_allowed"],
+      "properties": {
+        "policy_id": {"$ref": "#/$defs/text"}, "version": {"$ref": "#/$defs/text"},
+        "allowed_purposes": {"$ref": "#/$defs/texts"},
+        "prohibited_purposes": {"$ref": "#/$defs/texts"},
+        "allowed_operations": {"$ref": "#/$defs/representations"},
+        "compute_locations": {"$ref": "#/$defs/texts"},
+        "egress": {"$ref": "#/$defs/representations"},
+        "max_bytes": {"type": "integer", "minimum": 0},
+        "max_retention_days": {"type": "integer", "minimum": 0},
+        "attribution": {"$ref": "#/$defs/texts"},
+        "authorization_required": {"type": "boolean"},
+        "negotiation_allowed": {"type": "boolean"}
+      }
+    },
+    "request": {
+      "type": "object", "additionalProperties": false,
+      "required": ["purpose", "operation", "compute_location", "output", "estimated_bytes", "retention_days", "attribution"],
+      "properties": {
+        "purpose": {"$ref": "#/$defs/text"},
+        "operation": {"$ref": "#/$defs/representation"},
+        "compute_location": {"$ref": "#/$defs/text"},
+        "output": {"$ref": "#/$defs/representation"},
+        "estimated_bytes": {"type": "integer", "minimum": 0},
+        "retention_days": {"type": "integer", "minimum": 0},
+        "attribution": {"$ref": "#/$defs/texts"},
+        "authorization": {"type": "object", "description": "Untrusted requester evidence; never a verified grant."}
+      }
+    },
+    "obligations": {
+      "type": "object", "additionalProperties": false,
+      "required": ["decision_scope", "live_access_granted", "audit_required", "policy_authority"],
+      "properties": {
+        "decision_scope": {"const": "synthetic_offline_fixture_only"},
+        "live_access_granted": {"const": false},
+        "audit_required": {"const": true},
+        "policy_authority": {"const": "data_custodian"},
+        "policy_id": {"$ref": "#/$defs/text"}, "policy_version": {"$ref": "#/$defs/text"},
+        "compute_locations": {"$ref": "#/$defs/texts"},
+        "allowed_egress": {"$ref": "#/$defs/representations"},
+        "max_bytes": {"type": "integer", "minimum": 0},
+        "max_retention_days": {"type": "integer", "minimum": 0},
+        "required_attribution": {"$ref": "#/$defs/texts"},
+        "authorization_required": {"type": "boolean"}
+      }
+    },
+    "decision": {
+      "type": "object", "additionalProperties": false, "required": ["status", "reasons", "obligations"],
+      "properties": {
+        "status": {"enum": ["allow", "review", "deny"]},
+        "reasons": {"$ref": "#/$defs/texts"},
+        "obligations": {"$ref": "#/$defs/obligations"}
+      }
+    },
+    "policyResult": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "profile", "request", "status", "reasons", "obligations"],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/sourceId"},
+        "profile": {"$ref": "#/$defs/profile"}, "request": {"$ref": "#/$defs/request"},
+        "status": {"enum": ["allow", "review", "deny"]},
+        "reasons": {"$ref": "#/$defs/texts"}, "obligations": {"$ref": "#/$defs/obligations"}
+      }
+    },
+    "draft": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "status", "requested_terms", "assessment", "conflicts", "reasons", "required_approvers", "external_actions_performed", "terms_accepted", "live_access_granted", "alternative_request", "alternative_assessment", "proposed_changes", "authority_notice"],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/sourceId"}, "status": {"const": "draft_only"},
+        "requested_terms": {"$ref": "#/$defs/request"}, "assessment": {"$ref": "#/$defs/decision"},
+        "conflicts": {"$ref": "#/$defs/texts"}, "reasons": {"$ref": "#/$defs/texts"},
+        "required_approvers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["institutional_official", "data_custodian", "responsible_scientist"]}},
+        "external_actions_performed": {"type": "array", "maxItems": 0},
+        "terms_accepted": {"const": false}, "live_access_granted": {"const": false},
+        "alternative_request": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/request"}]},
+        "alternative_assessment": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/decision"}]},
+        "proposed_changes": {"$ref": "#/$defs/texts"}, "authority_notice": {"$ref": "#/$defs/text"}
+      }
+    },
+    "record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["record_id", "taxon_id", "specimen_id", "site_id", "period_end", "available_at", "forecast_cutoff", "evidence", "origin", "source_uri"],
+      "properties": {
+        "record_id": {"type": "string", "pattern": "^demo:"},
+        "taxon_id": {"type": "string", "pattern": "^demo:"},
+        "specimen_id": {"type": ["string", "null"]}, "site_id": {"type": ["string", "null"]},
+        "period_end": {"type": "string", "format": "date"},
+        "available_at": {"type": "string", "format": "date"},
+        "forecast_cutoff": {"type": "string", "format": "date"},
+        "evidence": {
+          "type": "object", "additionalProperties": false, "required": ["source", "method", "span"],
+          "properties": {"source": {"const": "synthetic_fixture"}, "method": {"const": "explicit-field"}, "span": {"$ref": "#/$defs/text"}}
+        },
+        "origin": {"const": "synthetic_fixture"}, "source_uri": {"type": "string", "pattern": "^fixture://"}
+      }
+    },
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["method", "field", "left_record", "right_record", "origin", "left_value", "right_value", "scope", "supports_causality"],
+      "properties": {
+        "method": {"const": "explicit-field"},
+        "field": {"enum": ["specimen_id", "taxon_id", "site_id", "period_end"]},
+        "left_record": {"type": "string", "pattern": "^demo:"}, "right_record": {"type": "string", "pattern": "^demo:"},
+        "origin": {"const": "synthetic_fixture"},
+        "left_value": {"type": ["string", "null"]}, "right_value": {"type": ["string", "null"]},
+        "scope": {"enum": ["same_specimen", "taxon_context", "site_context", "historical_context"]},
+        "supports_causality": {"const": false},
+        "period_end": {"type": "string", "format": "date"},
+        "available_at": {"type": "string", "format": "date"},
+        "forecast_cutoff": {"type": "string", "format": "date"}
+      },
+      "allOf": [{"if": {"properties": {"scope": {"const": "historical_context"}}}, "then": {"required": ["period_end", "available_at", "forecast_cutoff"]}}]
+    },
+    "nodeDetails": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["decision"], "properties": {"decision": {"$ref": "#/$defs/decision"}}},
+        {
+          "type": "object", "additionalProperties": false, "required": ["record", "record_digest", "skill"],
+          "properties": {"record": {"$ref": "#/$defs/record"}, "record_digest": {"$ref": "#/$defs/hash"}, "skill": {"const": "metadata.inspect@0.1.0"}}
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["reason"],
+          "properties": {"reason": {"$ref": "#/$defs/text"}, "evidence": {"$ref": "#/$defs/evidence"}, "skill": {"const": "link.verify@0.1.0"}},
+          "dependentRequired": {"evidence": ["skill"], "skill": ["evidence"]}
+        },
+        {"$ref": "#/$defs/draft"}
+      ]
+    },
+    "node": {
+      "type": "object", "additionalProperties": false, "required": ["id", "kind", "label", "status"],
+      "properties": {
+        "id": {"$ref": "#/$defs/text"},
+        "kind": {"enum": ["question", "policy", "source", "access_request", "verification", "guard", "result"]},
+        "label": {"$ref": "#/$defs/text"}, "status": {"$ref": "#/$defs/nodeStatus"},
+        "source_id": {"$ref": "#/$defs/sourceId"}, "details": {"$ref": "#/$defs/nodeDetails"}
+      },
+      "allOf": [{"if": {"properties": {"kind": {"enum": ["policy", "source", "access_request"]}}}, "then": {"required": ["source_id"]}}]
+    },
+    "edge": {
+      "type": "object", "additionalProperties": false, "required": ["source", "target", "relation"],
+      "properties": {
+        "source": {"$ref": "#/$defs/text"}, "target": {"$ref": "#/$defs/text"},
+        "relation": {"enum": ["depends_on", "same_specimen", "taxon_context", "site_context", "historical_context"]},
+        "evidence": {"$ref": "#/$defs/evidence"}
+      },
+      "allOf": [{"if": {"properties": {"relation": {"not": {"const": "depends_on"}}}}, "then": {"required": ["evidence"]}}]
+    },
+    "event": {
+      "type": "object", "additionalProperties": false, "required": ["sequence", "type", "details", "previous_hash", "hash"],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 1},
+        "type": {"enum": ["plan_created", "question_revised", "node_added", "node_status_changed", "edge_added", "execution_blocked", "source_failed", "link_rejected", "budget_exhausted", "run_finished"]},
+        "details": {"type": "object"}, "previous_hash": {"$ref": "#/$defs/hash"}, "hash": {"$ref": "#/$defs/hash"}
+      },
+      "allOf": [
+        {"if": {"properties": {"type": {"const": "plan_created"}}}, "then": {"properties": {"details": {"$ref": "#/$defs/plan"}}}},
+        {"if": {"properties": {"type": {"const": "node_added"}}}, "then": {"properties": {"details": {"$ref": "#/$defs/node"}}}},
+        {"if": {"properties": {"type": {"const": "edge_added"}}}, "then": {"properties": {"details": {"$ref": "#/$defs/edge"}}}},
+        {"if": {"properties": {"type": {"const": "node_status_changed"}}}, "then": {"properties": {"details": {
+          "type": "object", "additionalProperties": false, "required": ["node_id", "before", "after", "details"],
+          "properties": {"node_id": {"$ref": "#/$defs/text"}, "before": {"$ref": "#/$defs/nodeStatus"}, "after": {"$ref": "#/$defs/nodeStatus"}, "details": {"$ref": "#/$defs/nodeDetails"}}
+        }}}},
+        {"if": {"properties": {"type": {"const": "question_revised"}}}, "then": {"properties": {"details": {
+          "type": "object", "additionalProperties": false, "required": ["parent_digest", "old_question", "new_question", "sources_added", "sources_removed", "invalidation"],
+          "properties": {"parent_digest": {"$ref": "#/$defs/hash"}, "old_question": {"$ref": "#/$defs/text"}, "new_question": {"$ref": "#/$defs/text"}, "sources_added": {"$ref": "#/$defs/sources"}, "sources_removed": {"$ref": "#/$defs/sources"}, "invalidation": {"$ref": "#/$defs/text"}}
+        }}}},
+        {"if": {"properties": {"type": {"const": "execution_blocked"}}}, "then": {"properties": {"details": {
+          "type": "object", "additionalProperties": false, "required": ["source_id", "decision"],
+          "properties": {"source_id": {"$ref": "#/$defs/sourceId"}, "decision": {"enum": ["review", "deny"]}}
+        }}}},
+        {"if": {"properties": {"type": {"const": "source_failed"}}}, "then": {"properties": {"details": {
+          "type": "object", "additionalProperties": false, "required": ["source_id", "retry_count"],
+          "properties": {"source_id": {"$ref": "#/$defs/sourceId"}, "retry_count": {"const": 0}}
+        }}}},
+        {"if": {"properties": {"type": {"const": "link_rejected"}}}, "then": {"properties": {"details": {
+          "type": "object", "additionalProperties": false, "required": ["check", "reason"],
+          "properties": {"check": {"enum": ["specimen", "taxon", "site", "time"]}, "reason": {"$ref": "#/$defs/text"}}
+        }}}},
+        {"if": {"properties": {"type": {"const": "budget_exhausted"}}}, "then": {"properties": {"details": {
+          "type": "object", "additionalProperties": false, "required": ["max_steps", "completed_steps"],
+          "properties": {"max_steps": {"type": "integer", "minimum": 1, "maximum": 100}, "completed_steps": {"type": "integer", "minimum": 0, "maximum": 100}}
+        }}}},
+        {"if": {"properties": {"type": {"const": "run_finished"}}}, "then": {"properties": {"details": {
+          "type": "object", "additionalProperties": false, "required": ["status", "scientific_claim_count"],
+          "properties": {"status": {"$ref": "#/$defs/runStatus"}, "scientific_claim_count": {"const": 0}}
+        }}}}
+      ]
+    }
+  }
+}

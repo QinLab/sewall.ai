@@ -1,0 +1,12 @@
+{
+  "project": "your-gcp-project",
+  "location": "us-central1",
+  "model": "gemini-2.5-flash",
+  "api": "gemini",
+  "api_version": "v1",
+  "auth_method": "adc",
+  "max_output_tokens": 2048,
+  "thinking_budget": 0,
+  "timeout_seconds": 45,
+  "retries": 0
+}

@@ -1,0 +1,12 @@
+{
+  "project": "your-gcp-project",
+  "location": "us-central1",
+  "model": "meta/llama-3.3-70b-instruct-maas",
+  "api": "openai",
+  "api_version": "v1beta1",
+  "endpoint_id": "openapi",
+  "auth_method": "adc",
+  "max_output_tokens": 2048,
+  "timeout_seconds": 45,
+  "retries": 0
+}

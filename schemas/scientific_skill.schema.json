@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sewall-discover:scientific-skill:0.1.0",
+  "title": "Sewall.ai inspectable scientific Skill descriptor 0.1.0",
+  "description": "A versioned capability contract for synthetic metadata fixtures. A descriptor is not an authorization, installed plugin, registry publication, or independent evidence of validation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "skill_id", "version", "name", "description", "scope", "tools", "applicability", "inputs", "outputs", "evidence", "compute", "policy_constraints", "validation", "distribution"],
+  "properties": {
+    "$schema": {"const": "../schemas/scientific_skill.schema.json"},
+    "schema_version": {"const": "0.1.0"},
+    "skill_id": {"type": "string", "pattern": "^[a-z][a-z0-9.-]+$"},
+    "version": {"const": "0.1.0"},
+    "name": {"$ref": "#/$defs/text"}, "description": {"$ref": "#/$defs/text"},
+    "scope": {"const": "synthetic_fixture_only"},
+    "tools": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "version", "implementation", "invocation", "description", "external_actions"],
+        "properties": {
+          "id": {"enum": ["metadata.inspect", "link.verify"]}, "version": {"const": "0.1.0"},
+          "implementation": {"$ref": "#/$defs/text"},
+          "invocation": {"const": "internal_allowlisted_operation"},
+          "description": {"$ref": "#/$defs/text"}, "external_actions": {"const": false}
+        }
+      }
+    },
+    "applicability": {
+      "type": "object", "additionalProperties": false, "required": ["conditions", "exclusions", "failure_behavior"],
+      "properties": {"conditions": {"$ref": "#/$defs/nonemptyTexts"}, "exclusions": {"$ref": "#/$defs/nonemptyTexts"}, "failure_behavior": {"$ref": "#/$defs/nonemptyTexts"}}
+    },
+    "inputs": {"$ref": "#/$defs/fields"}, "outputs": {"$ref": "#/$defs/fields"},
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["origin", "required_fields", "method", "supports_causality", "limitations"],
+      "properties": {
+        "origin": {"const": "synthetic_fixture"}, "required_fields": {"$ref": "#/$defs/nonemptyTexts"},
+        "method": {"const": "explicit-field"}, "supports_causality": {"const": false},
+        "limitations": {"$ref": "#/$defs/nonemptyTexts"}
+      }
+    },
+    "compute": {
+      "type": "object", "additionalProperties": false,
+      "required": ["execution_environment", "runtime", "dependencies", "network_required", "gpu_required", "max_controller_steps", "max_sources", "placement_notice"],
+      "properties": {
+        "execution_environment": {"const": "local_offline_fixture"}, "runtime": {"$ref": "#/$defs/text"},
+        "dependencies": {"type": "array", "maxItems": 0}, "network_required": {"const": false}, "gpu_required": {"const": false},
+        "max_controller_steps": {"type": "integer", "minimum": 1, "maximum": 100},
+        "max_sources": {"type": "integer", "minimum": 1, "maximum": 5},
+        "placement_notice": {"$ref": "#/$defs/text"}
+      }
+    },
+    "policy_constraints": {
+      "type": "object", "additionalProperties": false,
+      "required": ["required_decision", "checked_fields", "unknown_or_review", "denied", "authorization_authority", "may_sign_agreements", "may_grant_access", "attribution", "audit"],
+      "properties": {
+        "required_decision": {"const": "allow_for_offline_fixture"},
+        "checked_fields": {"$ref": "#/$defs/nonemptyTexts"},
+        "unknown_or_review": {"const": "block_dependent_execution"}, "denied": {"const": "block_dependent_execution"},
+        "authorization_authority": {"const": "data_custodian_and_authorized_institutional_officials"},
+        "may_sign_agreements": {"const": false}, "may_grant_access": {"const": false},
+        "attribution": {"$ref": "#/$defs/text"}, "audit": {"$ref": "#/$defs/text"}
+      }
+    },
+    "validation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scope", "references", "commands", "acceptance", "optional_schema_dependency"],
+      "properties": {
+        "scope": {"const": "local_software_behavior_only"},
+        "references": {"$ref": "#/$defs/nonemptyTexts"}, "commands": {"$ref": "#/$defs/nonemptyTexts"},
+        "acceptance": {"$ref": "#/$defs/nonemptyTexts"}, "optional_schema_dependency": {"const": "jsonschema >= 4.18, < 5"}
+      }
+    },
+    "distribution": {
+      "type": "object", "additionalProperties": false, "required": ["location", "published_to_registry", "registry_commitment"],
+      "properties": {"location": {"const": "repository_local"}, "published_to_registry": {"const": false}, "registry_commitment": {"const": false}}
+    }
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1},
+    "nonemptyTexts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/text"}},
+    "fields": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["name", "type", "required", "description"],
+        "properties": {
+          "name": {"$ref": "#/$defs/text"}, "type": {"enum": ["string", "object", "array", "integer"]},
+          "required": {"type": "boolean"}, "description": {"$ref": "#/$defs/text"}, "schema_reference": {"$ref": "#/$defs/text"}
+        }
+      }
+    }
+  }
+}

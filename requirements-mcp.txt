@@ -1,0 +1,3 @@
+# Optional local stdio demonstration. Exact version exercised in this workspace.
+# Review/upgrade and lock transitive dependencies before any service deployment.
+mcp==1.23.3

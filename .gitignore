@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.waterfield-env/
+output/
+slurm-sewall-*.out
+slurm-sewall-*.err
+.DS_Store
+.env
+.env.*
