@@ -218,6 +218,14 @@ class MCPStdioIntegrationTests(unittest.IsolatedAsyncioTestCase):
                         ))
                         self.assertFalse(unsupported_live["valid"])
                         self.assertEqual(unsupported_live["kind"], "recorded_trace_replay")
+                        recorded = self.result_dict(await session.call_tool("verify_recorded_run", {"manifest": manifest}))
+                        self.assertEqual((recorded["valid"], recorded["mode"]), (True, "synthetic_fixture"))
+                        skills = self.result_dict(await session.call_tool("list_skills", {}))["skills"]
+                        self.assertIn("taxon_inventory", {item["operation"] for item in skills})
+                        stopped = self.result_dict(await session.call_tool("run_safety_demo", {}))
+                        self.assertEqual(stopped["status"], "safe_stopped")
+                        self.assertTrue(tools_by_name["run_planned_research"].annotations.openWorldHint)
+                        self.assertFalse(tools_by_name["list_skills"].annotations.openWorldHint)
 
         await asyncio.wait_for(roundtrip(), timeout=35)
 

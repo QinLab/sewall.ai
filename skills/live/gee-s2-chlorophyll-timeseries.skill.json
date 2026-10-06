@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schemas/executable_skill.schema.json",
+  "schema_version": "0.2.0",
+  "skill_id": "gee.s2-chlorophyll-timeseries",
+  "version": "0.1.0",
+  "name": "Sentinel-2 chlorophyll index time series over a named site",
+  "description": "Compute per-scene mean NDCI, a chlorophyll-a proxy, over Sentinel-2 pixels classified as water at a named site inside Google Earth Engine. Only small per-scene summaries are returned; no imagery is downloaded.",
+  "operation": "chlorophyll_timeseries",
+  "implementation": "sewall.agent:earthengine_s2_chlorophyll",
+  "planner_template": "{\"action\":\"chlorophyll_timeseries\",\"site\":\"lafayette-river\",\"start\":\"YYYY-MM-DD\",\"end\":\"YYYY-MM-DD\",\"reason\":\"why\"}",
+  "planner_guidance": [
+    "Use chlorophyll_timeseries to see whether a satellite chlorophyll proxy varies over a date window at a named site, for example around bloom dates reported in returned literature.",
+    "Choose an inclusive window of at most 366 days on or after 2017-03-28. Only the first 20 scenes in date order with at most 60 percent cloud are summarized; narrow the window to see a later period.",
+    "NDCI is a biomass proxy. It does not identify a species, confirm a bloom, or measure chlorophyll concentration."
+  ],
+  "arguments": [
+    {"name": "site", "type": "string", "enum": ["lafayette-river"],
+     "description": "A named study site. Each site is a fixed approximate bounding box recorded in the result."},
+    {"name": "start", "type": "string", "max_length": 10, "description": "First date of the window, YYYY-MM-DD."},
+    {"name": "end", "type": "string", "max_length": 10, "description": "Last date of the window, YYYY-MM-DD, inclusive."}
+  ],
+  "sources": ["Copernicus Sentinel-2 surface reflectance, Earth Engine collection COPERNICUS/S2_SR_HARMONIZED"],
+  "external_actions": true,
+  "evidence": {
+    "method": "per_scene_water_masked_ndci_mean",
+    "supports_causality": false,
+    "limitations": [
+      "NDCI (B5 - B4) / (B5 + B4) is a chlorophyll proxy; it does not identify a species or confirm a bloom.",
+      "Water pixels come from the Sentinel-2 scene classification and can include mixed shoreline, shallow bottom or residual cloud pixels.",
+      "The site is an approximate bounding box, and a 20 m scale averages over narrow channels.",
+      "Clouds, sun glint, tides and revisit gaps leave dates without usable scenes; a missing scene is not a negative observation.",
+      "No atmospheric or in-water validation against field measurements is performed."
+    ]
+  },
+  "policy_constraints": {
+    "egress": "public_metadata_only",
+    "may_grant_access": false,
+    "may_sign_agreements": false,
+    "attribution": "Contains modified Copernicus Sentinel data, processed in Google Earth Engine. Earth Engine use requires a registered Cloud project and is subject to Earth Engine terms."
+  },
+  "validation": {"tests": ["tests/test_earthengine.py", "tests/test_skills.py"]}
+}

@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
+from . import __version__
 from .fixtures import DEFAULT_QUESTION, FOCI, SCENARIOS
 from .graph import plan_research, replay_manifest, run_research
 from .report import render_report
@@ -55,6 +56,7 @@ def _save_safety(manifest, directory):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Sewall.ai: inspectable research graph MVP")
+    parser.add_argument("--version", action="version", version="sewall " + __version__)
     commands = parser.add_subparsers(dest="command", required=True)
     for name in ("plan", "demo"):
         command = commands.add_parser(name, help="Plan or run a synthetic metadata graph")
@@ -78,7 +80,9 @@ def main(argv=None):
     discover.add_argument("--email")
     agent = commands.add_parser("agent", help="LIVE: model-driven public metadata research on a Slurm CPU node")
     agent.add_argument("--question", required=True)
-    agent.add_argument("--config", required=True, help="Explicit Vertex planner configuration JSON")
+    planner_source = agent.add_mutually_exclusive_group(required=True)
+    planner_source.add_argument("--config", help="Planner model configuration JSON (Vertex AI, Anthropic or OpenAI)")
+    planner_source.add_argument("--script", help="Fixed action script; runs without model keys")
     agent.add_argument("--reviewer-config", help="Optional separate reviewer model configuration JSON")
     agent.add_argument("--previous", help="Prior live manifest for a revised research question")
     agent.add_argument("--max-actions", type=int, default=4)
@@ -94,7 +98,13 @@ def main(argv=None):
     safety.add_argument("--out", required=True)
     safety_verify = commands.add_parser("safety-verify", help="Verify a saved safety-demo snapshot and audit chain offline")
     safety_verify.add_argument("manifest")
-    commands.add_parser("mcp", help="Run optional MCP stdio server")
+    gallery = commands.add_parser("gallery", help="Build a static site of verified recorded runs")
+    gallery.add_argument("--catalog", default="gallery/catalog.json")
+    gallery.add_argument("--out", required=True)
+    mcp = commands.add_parser("mcp", help="Run the optional MCP server (stdio, or loopback streamable HTTP)")
+    mcp.add_argument("--transport", choices=("stdio", "streamable-http"), default="stdio")
+    mcp.add_argument("--port", type=int, default=8000)
+    mcp.add_argument("--allowed-host", action="append", default=[])
     args = parser.parse_args(argv)
     try:
         if args.command in ("demo", "plan"):
@@ -120,16 +130,18 @@ def main(argv=None):
                                              email=args.email), indent=2))
         elif args.command == "agent":
             from .agent import require_cpu_allocation, run_agent
-            from .llm import ModelConfig, VertexClient
+            from .providers import client_from_config
+            from .scripted import ScriptedClient
             require_cpu_allocation()
             _prepare_output(args.out)
-            planner = VertexClient(ModelConfig.from_dict(_load(args.config, 64 * 1024)))
-            reviewer = (VertexClient(ModelConfig.from_dict(_load(args.reviewer_config, 64 * 1024)))
+            planner = (ScriptedClient(_load(args.script, 64 * 1024)) if args.script
+                       else client_from_config(_load(args.config, 64 * 1024)))
+            reviewer = (client_from_config(_load(args.reviewer_config, 64 * 1024))
                         if args.reviewer_config else planner)
             manifest = run_agent(args.question, planner, reviewer,
                                  max_actions=args.max_actions, max_model_calls=args.max_model_calls,
                                  max_records=args.max_records, per_search=args.per_search,
-                                 max_seconds=args.max_seconds,
+                                 max_seconds=args.max_seconds, monitor=planner.monitor if args.script else None,
                                  previous=_load(args.previous, 64 * 1024 * 1024) if args.previous else None)
             _save(manifest, args.out)
             return 0 if manifest["status"] == "completed" else 1
@@ -149,9 +161,13 @@ def main(argv=None):
             result = verify_safety_manifest(_load(args.manifest))
             print(json.dumps(result, indent=2))
             return 0 if result["valid"] else 1
+        elif args.command == "gallery":
+            from .gallery import build_gallery
+            print(json.dumps(build_gallery(args.catalog, args.out), indent=2))
         elif args.command == "mcp":
             from .mcp_server import main as mcp_main
-            mcp_main()
+            mcp_main(["--transport", args.transport, "--port", str(args.port),
+                      *(item for host in args.allowed_host for item in ("--allowed-host", host))])
     except (ValueError, OSError, RuntimeError, KeyError, TypeError) as exc:
         parser.exit(2, "sewall: " + str(exc) + "\n")
     return 0

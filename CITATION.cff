@@ -1,0 +1,29 @@
+# Citation metadata for Sewall.ai. GitHub shows a "Cite this repository" box from this file.
+# The DOI is minted by Zenodo when a GitHub release of QinLab/sewall.ai is published with the
+# Zenodo integration enabled. Add the concept DOI under "identifiers" after the first release;
+# none exists yet, so none is listed here.
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+title: "Sewall.ai: a bounded, inspectable agentic harness over public biological data"
+abstract: >-
+  Sewall.ai is a prototype of a federated, policy-aware, model-agnostic agentic data harness.
+  A planner model, a scripted plan or an MCP host selects versioned scientific Skills over
+  public NCBI metadata and Earth Engine summaries. A deterministic controller checks every
+  action against the Skill registry, access policies and budgets, and writes a manifest that
+  can be replayed and verified offline.
+authors:
+  - given-names: Hong
+    family-names: Qin
+    affiliation: "Old Dominion University"
+version: 0.1.0
+license: Apache-2.0
+repository-code: "https://github.com/QinLab/sewall.ai"
+keywords:
+  - agentic AI
+  - scientific data
+  - provenance
+  - Model Context Protocol
+  - NCBI
+  - Earth Engine
+  - AI-ready datasets

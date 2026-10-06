@@ -9,6 +9,7 @@ import os
 import unittest
 from unittest.mock import patch
 
+from sewall import agent as agent_module
 from sewall.agent import require_cpu_allocation, run_agent, verify_agent_manifest
 from sewall.evidence import _normalize
 from sewall.graph import digest
@@ -370,6 +371,11 @@ class AgentTests(unittest.TestCase):
 
 
 class CPUAllocationTests(unittest.TestCase):
+    def setUp(self):
+        cluster = patch("sewall.agent._on_slurm_cluster", return_value=True)
+        cluster.start()
+        self.addCleanup(cluster.stop)
+
     def test_requires_cpu_slurm_job_and_compute_hostname(self):
         with patch.dict(os.environ, {"SLURM_JOB_ID": "123", "SLURM_JOB_PARTITION": "cpu-2"}, clear=True), patch("sewall.agent.socket.gethostname", return_value="cpu-node-01"):
             self.assertEqual(require_cpu_allocation()["job_id"], "123")
@@ -378,6 +384,22 @@ class CPUAllocationTests(unittest.TestCase):
             with self.subTest(variables=variables, hostname=hostname), patch.dict(os.environ, variables, clear=True), patch("sewall.agent.socket.gethostname", return_value=hostname):
                 with self.assertRaises(RuntimeError):
                     require_cpu_allocation()
+
+    def test_workstation_without_slurm_runs_directly(self):
+        with patch("sewall.agent._on_slurm_cluster", return_value=False), patch.dict(os.environ, {}, clear=True), \
+                patch("sewall.agent.socket.gethostname", return_value="laptop"):
+            self.assertEqual(require_cpu_allocation(), {"job_id": None, "partition": None, "hostname": "laptop"})
+
+
+class ClusterDetectionTests(unittest.TestCase):
+    def test_slurm_hosts_are_detected(self):
+        with patch.dict(os.environ, {}, clear=True), patch("sewall.agent.shutil.which", return_value=None), \
+                patch("sewall.agent.os.path.isdir", return_value=False):
+            self.assertFalse(agent_module._on_slurm_cluster())
+            with patch("sewall.agent.shutil.which", return_value="/usr/bin/sbatch"):
+                self.assertTrue(agent_module._on_slurm_cluster())
+        with patch.dict(os.environ, {"SLURM_CONF": "/etc/slurm.conf"}, clear=True):
+            self.assertTrue(agent_module._on_slurm_cluster())
 
 
 if __name__ == "__main__":

@@ -126,5 +126,34 @@ an in-flight callback, revoke already-written external artifacts, enforce source
 or prevent arbitrary side effects in trusted code. Generic callback runs report external calls
 as `null`/`not_instrumented`, not a measured zero. Built-in scenarios report zero by construction.
 Production integration needs isolated workers, real tool authorization, independent monitoring,
-timeouts, revocation, source enforcement and additional validation. Existing live-agent and graph
-contracts are unchanged by this standalone supervisor.
+timeouts, revocation, source enforcement and additional validation.
+
+## Live controller integration
+
+`run_agent` in `sewall/agent.py` applies the same stop to real public-metadata runs. It reuses
+the monitor contract above, with graph node IDs in `task_ids`.
+
+- Gates: `before_action` (target `action:N`, before any request), `after_action` (after the
+  action is recorded) and `before_review`. Each gate writes an `integrity_gate` event.
+- Built-in check: every gate recomputes `record_digest` and `inventory_digest` for source nodes
+  and compares the working record with its retrieved copy. A mismatch is `tampered_evidence`.
+- Monitor: optional `run_agent(..., monitor=callable)`. It receives a copy of the graph,
+  records and actions. A scoped critique with `"integrity": "valid"` affects its nodes only.
+  `invalid` or `unknown` integrity, a malformed signal or an exception affects every node.
+- Safe stop: affected nodes expand along `depends_on` and `produces` edges. Completed nodes
+  become `quarantined`; others become `blocked`. No further model or source call happens, the
+  review is skipped, `metadata_summary` is null, the result node and run status are
+  `safe_stopped` and the stop reason is `integrity_critique`. Saved `records` are the
+  retrieved copies from the hash chain, not the working copies.
+- Replay: `verify_agent_manifest` requires a `safe_stop` event exactly when the status is
+  `safe_stopped`, recomputes the affected closure from the edges recorded before the stop,
+  rejects any dispatch or review event after it, and checks that no affected node was released.
+- Fault injection: a scripted planner may list `critiques`
+  (`{"after_action": N, "type": T, "reason": R}`). `ScriptedClient.monitor` raises them with
+  the prefix "Injected fault for demonstration". `configs/scripted-safe-stop-demo.json` is
+  the bundled example. The CLI passes this monitor only for `--script` runs.
+
+Slurm job 48057 ran that demo against live NCBI. It stopped after the first GenBank
+inventory with 10 source requests, quarantined `action:2` and its inventory node, never
+sent the second inventory and passed `agent-replay`. The stop came from an injected fault,
+not from a detected integrity problem.

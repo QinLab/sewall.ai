@@ -1,0 +1,7 @@
+output/
+.waterfield-env/
+slurm-sewall-*
+**/__pycache__/
+build/
+dist/
+*.egg-info/

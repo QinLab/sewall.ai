@@ -1,0 +1,2048 @@
+{
+  "schema_version": "0.1.0",
+  "mode": "synthetic_fixture",
+  "run_id": "demo-8c2018b3a59a7308",
+  "question": "Which existing coastal plant records could support linking genotype and expression evidence to organismal traits and historical habitat context?",
+  "revision": 1,
+  "status": "completed",
+  "inputs": {
+    "question": "Which existing coastal plant records could support linking genotype and expression evidence to organismal traits and historical habitat context?",
+    "focus": "cross-scale",
+    "scenario": "coastal",
+    "max_steps": 30
+  },
+  "plan": {
+    "question": "Which existing coastal plant records could support linking genotype and expression evidence to organismal traits and historical habitat context?",
+    "focus": "cross-scale",
+    "scenario": "coastal",
+    "max_steps": 30,
+    "selected_sources": [
+      "eol",
+      "ncbi_genotype",
+      "geo",
+      "alphaearth",
+      "pubmed"
+    ],
+    "planner": "bounded_rule_based_fixture_planner",
+    "mode": "synthetic_fixture",
+    "external_actions": false,
+    "purpose": "Inspect candidate metadata links; no biological inference or analysis"
+  },
+  "parent_digest": null,
+  "history": [],
+  "graph": {
+    "nodes": [
+      {
+        "id": "question",
+        "kind": "question",
+        "label": "Which existing coastal plant records could support linking genotype and expression evidence to organismal traits and historical habitat context?",
+        "status": "completed"
+      },
+      {
+        "id": "policy:eol",
+        "kind": "policy",
+        "label": "Check access: eol",
+        "status": "completed",
+        "source_id": "eol",
+        "details": {
+          "decision": {
+            "status": "allow",
+            "reasons": [
+              "Request satisfies the supplied synthetic policy for offline simulation."
+            ],
+            "obligations": {
+              "decision_scope": "synthetic_offline_fixture_only",
+              "live_access_granted": false,
+              "audit_required": true,
+              "policy_authority": "data_custodian",
+              "policy_id": "demo:policy:eol",
+              "policy_version": "0.1.0",
+              "compute_locations": [
+                "source"
+              ],
+              "allowed_egress": [
+                "metadata"
+              ],
+              "max_bytes": 10000,
+              "max_retention_days": 30,
+              "required_attribution": [
+                "eol:synthetic_fixture"
+              ],
+              "authorization_required": false
+            }
+          }
+        }
+      },
+      {
+        "id": "source:eol",
+        "kind": "source",
+        "label": "Encyclopedia of Life: trait context",
+        "status": "completed",
+        "source_id": "eol",
+        "details": {
+          "record": {
+            "record_id": "demo:eol",
+            "taxon_id": "demo:coastal-plant",
+            "specimen_id": null,
+            "site_id": null,
+            "period_end": "2020-12-31",
+            "available_at": "2021-06-01",
+            "forecast_cutoff": "2022-01-01",
+            "evidence": {
+              "source": "synthetic_fixture",
+              "method": "explicit-field",
+              "span": "Invented coastal plant metadata for software testing only."
+            },
+            "origin": "synthetic_fixture",
+            "source_uri": "fixture://eol"
+          },
+          "record_digest": "45ea6b51290c06e4b5380ec33aaffcc2e744941f19c21ad9acfb497c5866555a",
+          "skill": "metadata.inspect@0.1.0"
+        }
+      },
+      {
+        "id": "policy:ncbi_genotype",
+        "kind": "policy",
+        "label": "Check access: ncbi_genotype",
+        "status": "completed",
+        "source_id": "ncbi_genotype",
+        "details": {
+          "decision": {
+            "status": "allow",
+            "reasons": [
+              "Request satisfies the supplied synthetic policy for offline simulation."
+            ],
+            "obligations": {
+              "decision_scope": "synthetic_offline_fixture_only",
+              "live_access_granted": false,
+              "audit_required": true,
+              "policy_authority": "data_custodian",
+              "policy_id": "demo:policy:ncbi_genotype",
+              "policy_version": "0.1.0",
+              "compute_locations": [
+                "source"
+              ],
+              "allowed_egress": [
+                "metadata"
+              ],
+              "max_bytes": 10000,
+              "max_retention_days": 30,
+              "required_attribution": [
+                "ncbi_genotype:synthetic_fixture"
+              ],
+              "authorization_required": false
+            }
+          }
+        }
+      },
+      {
+        "id": "source:ncbi_genotype",
+        "kind": "source",
+        "label": "NCBI: genotype study metadata",
+        "status": "completed",
+        "source_id": "ncbi_genotype",
+        "details": {
+          "record": {
+            "record_id": "demo:ncbi_genotype",
+            "taxon_id": "demo:coastal-plant",
+            "specimen_id": "demo:specimen-1",
+            "site_id": null,
+            "period_end": "2020-12-31",
+            "available_at": "2021-06-01",
+            "forecast_cutoff": "2022-01-01",
+            "evidence": {
+              "source": "synthetic_fixture",
+              "method": "explicit-field",
+              "span": "Invented coastal plant metadata for software testing only."
+            },
+            "origin": "synthetic_fixture",
+            "source_uri": "fixture://ncbi_genotype"
+          },
+          "record_digest": "f9bb3eed54681cb7ebf646d8b9b1b587e6288dc4b11ff76a2592e8c3a5677747",
+          "skill": "metadata.inspect@0.1.0"
+        }
+      },
+      {
+        "id": "policy:geo",
+        "kind": "policy",
+        "label": "Check access: geo",
+        "status": "completed",
+        "source_id": "geo",
+        "details": {
+          "decision": {
+            "status": "allow",
+            "reasons": [
+              "Request satisfies the supplied synthetic policy for offline simulation."
+            ],
+            "obligations": {
+              "decision_scope": "synthetic_offline_fixture_only",
+              "live_access_granted": false,
+              "audit_required": true,
+              "policy_authority": "data_custodian",
+              "policy_id": "demo:policy:geo",
+              "policy_version": "0.1.0",
+              "compute_locations": [
+                "source"
+              ],
+              "allowed_egress": [
+                "metadata"
+              ],
+              "max_bytes": 10000,
+              "max_retention_days": 30,
+              "required_attribution": [
+                "geo:synthetic_fixture"
+              ],
+              "authorization_required": false
+            }
+          }
+        }
+      },
+      {
+        "id": "source:geo",
+        "kind": "source",
+        "label": "GEO: expression study metadata",
+        "status": "completed",
+        "source_id": "geo",
+        "details": {
+          "record": {
+            "record_id": "demo:geo",
+            "taxon_id": "demo:coastal-plant",
+            "specimen_id": "demo:specimen-1",
+            "site_id": "demo:coastal-site-1",
+            "period_end": "2020-12-31",
+            "available_at": "2021-06-01",
+            "forecast_cutoff": "2022-01-01",
+            "evidence": {
+              "source": "synthetic_fixture",
+              "method": "explicit-field",
+              "span": "Invented coastal plant metadata for software testing only."
+            },
+            "origin": "synthetic_fixture",
+            "source_uri": "fixture://geo"
+          },
+          "record_digest": "e0aa16eba331be807edd71cb933542cf2eb701c906b06c537409c013694832d7",
+          "skill": "metadata.inspect@0.1.0"
+        }
+      },
+      {
+        "id": "policy:alphaearth",
+        "kind": "policy",
+        "label": "Check access: alphaearth",
+        "status": "completed",
+        "source_id": "alphaearth",
+        "details": {
+          "decision": {
+            "status": "allow",
+            "reasons": [
+              "Request satisfies the supplied synthetic policy for offline simulation."
+            ],
+            "obligations": {
+              "decision_scope": "synthetic_offline_fixture_only",
+              "live_access_granted": false,
+              "audit_required": true,
+              "policy_authority": "data_custodian",
+              "policy_id": "demo:policy:alphaearth",
+              "policy_version": "0.1.0",
+              "compute_locations": [
+                "source"
+              ],
+              "allowed_egress": [
+                "metadata"
+              ],
+              "max_bytes": 10000,
+              "max_retention_days": 30,
+              "required_attribution": [
+                "alphaearth:synthetic_fixture"
+              ],
+              "authorization_required": false
+            }
+          }
+        }
+      },
+      {
+        "id": "source:alphaearth",
+        "kind": "source",
+        "label": "AlphaEarth: annual landscape context",
+        "status": "completed",
+        "source_id": "alphaearth",
+        "details": {
+          "record": {
+            "record_id": "demo:alphaearth",
+            "taxon_id": "demo:coastal-plant",
+            "specimen_id": null,
+            "site_id": "demo:coastal-site-1",
+            "period_end": "2020-12-31",
+            "available_at": "2021-06-01",
+            "forecast_cutoff": "2022-01-01",
+            "evidence": {
+              "source": "synthetic_fixture",
+              "method": "explicit-field",
+              "span": "Invented coastal plant metadata for software testing only."
+            },
+            "origin": "synthetic_fixture",
+            "source_uri": "fixture://alphaearth"
+          },
+          "record_digest": "54b99d8f7debb0d13369f08677040c101ce56c94feb5aab0dbb0c74ccdec382a",
+          "skill": "metadata.inspect@0.1.0"
+        }
+      },
+      {
+        "id": "policy:pubmed",
+        "kind": "policy",
+        "label": "Check access: pubmed",
+        "status": "completed",
+        "source_id": "pubmed",
+        "details": {
+          "decision": {
+            "status": "allow",
+            "reasons": [
+              "Request satisfies the supplied synthetic policy for offline simulation."
+            ],
+            "obligations": {
+              "decision_scope": "synthetic_offline_fixture_only",
+              "live_access_granted": false,
+              "audit_required": true,
+              "policy_authority": "data_custodian",
+              "policy_id": "demo:policy:pubmed",
+              "policy_version": "0.1.0",
+              "compute_locations": [
+                "source"
+              ],
+              "allowed_egress": [
+                "metadata"
+              ],
+              "max_bytes": 10000,
+              "max_retention_days": 30,
+              "required_attribution": [
+                "pubmed:synthetic_fixture"
+              ],
+              "authorization_required": false
+            }
+          }
+        }
+      },
+      {
+        "id": "source:pubmed",
+        "kind": "source",
+        "label": "PubMed: literature context",
+        "status": "completed",
+        "source_id": "pubmed",
+        "details": {
+          "record": {
+            "record_id": "demo:pubmed",
+            "taxon_id": "demo:coastal-plant",
+            "specimen_id": null,
+            "site_id": null,
+            "period_end": "2020-12-31",
+            "available_at": "2021-06-01",
+            "forecast_cutoff": "2022-01-01",
+            "evidence": {
+              "source": "synthetic_fixture",
+              "method": "explicit-field",
+              "span": "Invented coastal plant metadata for software testing only."
+            },
+            "origin": "synthetic_fixture",
+            "source_uri": "fixture://pubmed"
+          },
+          "record_digest": "1dc7926a0f9fafd91888b366baeb8d4b24402bee45d9688767572b5976d62a75",
+          "skill": "metadata.inspect@0.1.0"
+        }
+      },
+      {
+        "id": "check:specimen",
+        "kind": "verification",
+        "label": "Verify specimen linkage",
+        "status": "completed",
+        "details": {
+          "reason": "Explicit matching specimen_id required; a taxon match cannot substitute for a specimen",
+          "evidence": {
+            "method": "explicit-field",
+            "field": "specimen_id",
+            "left_record": "demo:ncbi_genotype",
+            "right_record": "demo:geo",
+            "origin": "synthetic_fixture",
+            "left_value": "demo:specimen-1",
+            "right_value": "demo:specimen-1",
+            "scope": "same_specimen",
+            "supports_causality": false
+          },
+          "skill": "link.verify@0.1.0"
+        }
+      },
+      {
+        "id": "check:taxon",
+        "kind": "verification",
+        "label": "Verify taxon linkage",
+        "status": "completed",
+        "details": {
+          "reason": "Explicit matching taxon_id required; a taxon match cannot substitute for a specimen",
+          "evidence": {
+            "method": "explicit-field",
+            "field": "taxon_id",
+            "left_record": "demo:eol",
+            "right_record": "demo:geo",
+            "origin": "synthetic_fixture",
+            "left_value": "demo:coastal-plant",
+            "right_value": "demo:coastal-plant",
+            "scope": "taxon_context",
+            "supports_causality": false
+          },
+          "skill": "link.verify@0.1.0"
+        }
+      },
+      {
+        "id": "check:site",
+        "kind": "verification",
+        "label": "Verify site linkage",
+        "status": "completed",
+        "details": {
+          "reason": "Explicit matching site_id required; a taxon match cannot substitute for a specimen",
+          "evidence": {
+            "method": "explicit-field",
+            "field": "site_id",
+            "left_record": "demo:alphaearth",
+            "right_record": "demo:geo",
+            "origin": "synthetic_fixture",
+            "left_value": "demo:coastal-site-1",
+            "right_value": "demo:coastal-site-1",
+            "scope": "site_context",
+            "supports_causality": false
+          },
+          "skill": "link.verify@0.1.0"
+        }
+      },
+      {
+        "id": "check:time",
+        "kind": "verification",
+        "label": "Verify time linkage",
+        "status": "completed",
+        "details": {
+          "reason": "Feature interval and availability must precede the historical forecast cutoff",
+          "evidence": {
+            "method": "explicit-field",
+            "field": "period_end",
+            "left_record": "demo:alphaearth",
+            "right_record": "demo:alphaearth",
+            "origin": "synthetic_fixture",
+            "left_value": "2020-12-31",
+            "right_value": "2020-12-31",
+            "scope": "historical_context",
+            "supports_causality": false,
+            "period_end": "2020-12-31",
+            "available_at": "2021-06-01",
+            "forecast_cutoff": "2022-01-01"
+          },
+          "skill": "link.verify@0.1.0"
+        }
+      },
+      {
+        "id": "result",
+        "kind": "result",
+        "label": "Metadata evidence map; biological claims withheld",
+        "status": "completed"
+      }
+    ],
+    "edges": [
+      {
+        "source": "question",
+        "target": "policy:eol",
+        "relation": "depends_on"
+      },
+      {
+        "source": "policy:eol",
+        "target": "source:eol",
+        "relation": "depends_on"
+      },
+      {
+        "source": "question",
+        "target": "policy:ncbi_genotype",
+        "relation": "depends_on"
+      },
+      {
+        "source": "policy:ncbi_genotype",
+        "target": "source:ncbi_genotype",
+        "relation": "depends_on"
+      },
+      {
+        "source": "question",
+        "target": "policy:geo",
+        "relation": "depends_on"
+      },
+      {
+        "source": "policy:geo",
+        "target": "source:geo",
+        "relation": "depends_on"
+      },
+      {
+        "source": "question",
+        "target": "policy:alphaearth",
+        "relation": "depends_on"
+      },
+      {
+        "source": "policy:alphaearth",
+        "target": "source:alphaearth",
+        "relation": "depends_on"
+      },
+      {
+        "source": "question",
+        "target": "policy:pubmed",
+        "relation": "depends_on"
+      },
+      {
+        "source": "policy:pubmed",
+        "target": "source:pubmed",
+        "relation": "depends_on"
+      },
+      {
+        "source": "source:ncbi_genotype",
+        "target": "check:specimen",
+        "relation": "depends_on"
+      },
+      {
+        "source": "source:geo",
+        "target": "check:specimen",
+        "relation": "depends_on"
+      },
+      {
+        "source": "source:ncbi_genotype",
+        "target": "source:geo",
+        "relation": "same_specimen",
+        "evidence": {
+          "method": "explicit-field",
+          "field": "specimen_id",
+          "left_record": "demo:ncbi_genotype",
+          "right_record": "demo:geo",
+          "origin": "synthetic_fixture",
+          "left_value": "demo:specimen-1",
+          "right_value": "demo:specimen-1",
+          "scope": "same_specimen",
+          "supports_causality": false
+        }
+      },
+      {
+        "source": "source:eol",
+        "target": "check:taxon",
+        "relation": "depends_on"
+      },
+      {
+        "source": "source:geo",
+        "target": "check:taxon",
+        "relation": "depends_on"
+      },
+      {
+        "source": "source:eol",
+        "target": "source:geo",
+        "relation": "taxon_context",
+        "evidence": {
+          "method": "explicit-field",
+          "field": "taxon_id",
+          "left_record": "demo:eol",
+          "right_record": "demo:geo",
+          "origin": "synthetic_fixture",
+          "left_value": "demo:coastal-plant",
+          "right_value": "demo:coastal-plant",
+          "scope": "taxon_context",
+          "supports_causality": false
+        }
+      },
+      {
+        "source": "source:alphaearth",
+        "target": "check:site",
+        "relation": "depends_on"
+      },
+      {
+        "source": "source:geo",
+        "target": "check:site",
+        "relation": "depends_on"
+      },
+      {
+        "source": "source:alphaearth",
+        "target": "source:geo",
+        "relation": "site_context",
+        "evidence": {
+          "method": "explicit-field",
+          "field": "site_id",
+          "left_record": "demo:alphaearth",
+          "right_record": "demo:geo",
+          "origin": "synthetic_fixture",
+          "left_value": "demo:coastal-site-1",
+          "right_value": "demo:coastal-site-1",
+          "scope": "site_context",
+          "supports_causality": false
+        }
+      },
+      {
+        "source": "source:alphaearth",
+        "target": "check:time",
+        "relation": "depends_on"
+      },
+      {
+        "source": "source:alphaearth",
+        "target": "source:alphaearth",
+        "relation": "historical_context",
+        "evidence": {
+          "method": "explicit-field",
+          "field": "period_end",
+          "left_record": "demo:alphaearth",
+          "right_record": "demo:alphaearth",
+          "origin": "synthetic_fixture",
+          "left_value": "2020-12-31",
+          "right_value": "2020-12-31",
+          "scope": "historical_context",
+          "supports_causality": false,
+          "period_end": "2020-12-31",
+          "available_at": "2021-06-01",
+          "forecast_cutoff": "2022-01-01"
+        }
+      },
+      {
+        "source": "source:eol",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      {
+        "source": "source:ncbi_genotype",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      {
+        "source": "source:geo",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      {
+        "source": "source:alphaearth",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      {
+        "source": "source:pubmed",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      {
+        "source": "check:specimen",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      {
+        "source": "check:taxon",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      {
+        "source": "check:site",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      {
+        "source": "check:time",
+        "target": "result",
+        "relation": "depends_on"
+      }
+    ]
+  },
+  "events": [
+    {
+      "sequence": 1,
+      "type": "plan_created",
+      "details": {
+        "question": "Which existing coastal plant records could support linking genotype and expression evidence to organismal traits and historical habitat context?",
+        "focus": "cross-scale",
+        "scenario": "coastal",
+        "max_steps": 30,
+        "selected_sources": [
+          "eol",
+          "ncbi_genotype",
+          "geo",
+          "alphaearth",
+          "pubmed"
+        ],
+        "planner": "bounded_rule_based_fixture_planner",
+        "mode": "synthetic_fixture",
+        "external_actions": false,
+        "purpose": "Inspect candidate metadata links; no biological inference or analysis"
+      },
+      "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "hash": "dc7d258a03e6c9c2fec13a0913a0d4de66cef141320b474fcf7398f730096777"
+    },
+    {
+      "sequence": 2,
+      "type": "node_added",
+      "details": {
+        "id": "question",
+        "kind": "question",
+        "label": "Which existing coastal plant records could support linking genotype and expression evidence to organismal traits and historical habitat context?",
+        "status": "completed"
+      },
+      "previous_hash": "dc7d258a03e6c9c2fec13a0913a0d4de66cef141320b474fcf7398f730096777",
+      "hash": "bc184b00c13c56b40d147a1bf18c69381c4bc0be143507fc146a9a45879a1690"
+    },
+    {
+      "sequence": 3,
+      "type": "node_added",
+      "details": {
+        "id": "policy:eol",
+        "kind": "policy",
+        "label": "Check access: eol",
+        "status": "pending",
+        "source_id": "eol"
+      },
+      "previous_hash": "bc184b00c13c56b40d147a1bf18c69381c4bc0be143507fc146a9a45879a1690",
+      "hash": "6d9e02a59ab12dbede8e64008e99e1004cfdd4d0d813ebdaf76adcdcc0b58b3b"
+    },
+    {
+      "sequence": 4,
+      "type": "edge_added",
+      "details": {
+        "source": "question",
+        "target": "policy:eol",
+        "relation": "depends_on"
+      },
+      "previous_hash": "6d9e02a59ab12dbede8e64008e99e1004cfdd4d0d813ebdaf76adcdcc0b58b3b",
+      "hash": "76dde0803ab856955a6cfd64b4fb4601eaea8067795b46b6941fc0a441e3859f"
+    },
+    {
+      "sequence": 5,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "policy:eol",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "decision": {
+            "status": "allow",
+            "reasons": [
+              "Request satisfies the supplied synthetic policy for offline simulation."
+            ],
+            "obligations": {
+              "decision_scope": "synthetic_offline_fixture_only",
+              "live_access_granted": false,
+              "audit_required": true,
+              "policy_authority": "data_custodian",
+              "policy_id": "demo:policy:eol",
+              "policy_version": "0.1.0",
+              "compute_locations": [
+                "source"
+              ],
+              "allowed_egress": [
+                "metadata"
+              ],
+              "max_bytes": 10000,
+              "max_retention_days": 30,
+              "required_attribution": [
+                "eol:synthetic_fixture"
+              ],
+              "authorization_required": false
+            }
+          }
+        }
+      },
+      "previous_hash": "76dde0803ab856955a6cfd64b4fb4601eaea8067795b46b6941fc0a441e3859f",
+      "hash": "6b23e8e8887256731f197365819fdba5d8320f49c58885350c5913c058881c7c"
+    },
+    {
+      "sequence": 6,
+      "type": "node_added",
+      "details": {
+        "id": "source:eol",
+        "kind": "source",
+        "label": "Encyclopedia of Life: trait context",
+        "status": "pending",
+        "source_id": "eol"
+      },
+      "previous_hash": "6b23e8e8887256731f197365819fdba5d8320f49c58885350c5913c058881c7c",
+      "hash": "df60f1fc7c3c0874ebb48022c056eb012ac52b168f0e6dca38eb050c5e1e017c"
+    },
+    {
+      "sequence": 7,
+      "type": "edge_added",
+      "details": {
+        "source": "policy:eol",
+        "target": "source:eol",
+        "relation": "depends_on"
+      },
+      "previous_hash": "df60f1fc7c3c0874ebb48022c056eb012ac52b168f0e6dca38eb050c5e1e017c",
+      "hash": "5d7bd59e94ecca641ea71b42c4dc1bae029c796313053aa8846fd0981844c02d"
+    },
+    {
+      "sequence": 8,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "source:eol",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "record": {
+            "record_id": "demo:eol",
+            "taxon_id": "demo:coastal-plant",
+            "specimen_id": null,
+            "site_id": null,
+            "period_end": "2020-12-31",
+            "available_at": "2021-06-01",
+            "forecast_cutoff": "2022-01-01",
+            "evidence": {
+              "source": "synthetic_fixture",
+              "method": "explicit-field",
+              "span": "Invented coastal plant metadata for software testing only."
+            },
+            "origin": "synthetic_fixture",
+            "source_uri": "fixture://eol"
+          },
+          "record_digest": "45ea6b51290c06e4b5380ec33aaffcc2e744941f19c21ad9acfb497c5866555a",
+          "skill": "metadata.inspect@0.1.0"
+        }
+      },
+      "previous_hash": "5d7bd59e94ecca641ea71b42c4dc1bae029c796313053aa8846fd0981844c02d",
+      "hash": "8aa5af5abe765aa49079c2c7fe8c965bcf64aacfef3cb15d057fde5bfc5442d3"
+    },
+    {
+      "sequence": 9,
+      "type": "node_added",
+      "details": {
+        "id": "policy:ncbi_genotype",
+        "kind": "policy",
+        "label": "Check access: ncbi_genotype",
+        "status": "pending",
+        "source_id": "ncbi_genotype"
+      },
+      "previous_hash": "8aa5af5abe765aa49079c2c7fe8c965bcf64aacfef3cb15d057fde5bfc5442d3",
+      "hash": "fd67d791324514dc766348bf78bc0e93f02d8bb2be8e37647769cc0d7da621fc"
+    },
+    {
+      "sequence": 10,
+      "type": "edge_added",
+      "details": {
+        "source": "question",
+        "target": "policy:ncbi_genotype",
+        "relation": "depends_on"
+      },
+      "previous_hash": "fd67d791324514dc766348bf78bc0e93f02d8bb2be8e37647769cc0d7da621fc",
+      "hash": "57c1da2bdf87382c3bfe0029c806681cf8632d7b87bdd8f3d701157cb489090b"
+    },
+    {
+      "sequence": 11,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "policy:ncbi_genotype",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "decision": {
+            "status": "allow",
+            "reasons": [
+              "Request satisfies the supplied synthetic policy for offline simulation."
+            ],
+            "obligations": {
+              "decision_scope": "synthetic_offline_fixture_only",
+              "live_access_granted": false,
+              "audit_required": true,
+              "policy_authority": "data_custodian",
+              "policy_id": "demo:policy:ncbi_genotype",
+              "policy_version": "0.1.0",
+              "compute_locations": [
+                "source"
+              ],
+              "allowed_egress": [
+                "metadata"
+              ],
+              "max_bytes": 10000,
+              "max_retention_days": 30,
+              "required_attribution": [
+                "ncbi_genotype:synthetic_fixture"
+              ],
+              "authorization_required": false
+            }
+          }
+        }
+      },
+      "previous_hash": "57c1da2bdf87382c3bfe0029c806681cf8632d7b87bdd8f3d701157cb489090b",
+      "hash": "5ccb5172b7ff0e24139224c65b7b3fdc31ca1337312fdf26f9a8ffb5ec856081"
+    },
+    {
+      "sequence": 12,
+      "type": "node_added",
+      "details": {
+        "id": "source:ncbi_genotype",
+        "kind": "source",
+        "label": "NCBI: genotype study metadata",
+        "status": "pending",
+        "source_id": "ncbi_genotype"
+      },
+      "previous_hash": "5ccb5172b7ff0e24139224c65b7b3fdc31ca1337312fdf26f9a8ffb5ec856081",
+      "hash": "fdb7ce066af59f141ea638108e08027ba7bfe6b795eded802f82eecce42cbbb2"
+    },
+    {
+      "sequence": 13,
+      "type": "edge_added",
+      "details": {
+        "source": "policy:ncbi_genotype",
+        "target": "source:ncbi_genotype",
+        "relation": "depends_on"
+      },
+      "previous_hash": "fdb7ce066af59f141ea638108e08027ba7bfe6b795eded802f82eecce42cbbb2",
+      "hash": "f6c846572f6bfa379c3a7f01a75536ff392f782f8575874032e7a8611a25592b"
+    },
+    {
+      "sequence": 14,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "source:ncbi_genotype",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "record": {
+            "record_id": "demo:ncbi_genotype",
+            "taxon_id": "demo:coastal-plant",
+            "specimen_id": "demo:specimen-1",
+            "site_id": null,
+            "period_end": "2020-12-31",
+            "available_at": "2021-06-01",
+            "forecast_cutoff": "2022-01-01",
+            "evidence": {
+              "source": "synthetic_fixture",
+              "method": "explicit-field",
+              "span": "Invented coastal plant metadata for software testing only."
+            },
+            "origin": "synthetic_fixture",
+            "source_uri": "fixture://ncbi_genotype"
+          },
+          "record_digest": "f9bb3eed54681cb7ebf646d8b9b1b587e6288dc4b11ff76a2592e8c3a5677747",
+          "skill": "metadata.inspect@0.1.0"
+        }
+      },
+      "previous_hash": "f6c846572f6bfa379c3a7f01a75536ff392f782f8575874032e7a8611a25592b",
+      "hash": "00ea3c5ce41de61bfd13539084e7d097dd63de528e8b510c6e71ff367c08903c"
+    },
+    {
+      "sequence": 15,
+      "type": "node_added",
+      "details": {
+        "id": "policy:geo",
+        "kind": "policy",
+        "label": "Check access: geo",
+        "status": "pending",
+        "source_id": "geo"
+      },
+      "previous_hash": "00ea3c5ce41de61bfd13539084e7d097dd63de528e8b510c6e71ff367c08903c",
+      "hash": "36eb66503d60e2bd245a1e9a2b00554b3d4a84a3e74602a19658c32ad3f01a7e"
+    },
+    {
+      "sequence": 16,
+      "type": "edge_added",
+      "details": {
+        "source": "question",
+        "target": "policy:geo",
+        "relation": "depends_on"
+      },
+      "previous_hash": "36eb66503d60e2bd245a1e9a2b00554b3d4a84a3e74602a19658c32ad3f01a7e",
+      "hash": "b00761a0106f4d920dbe045e1f172b6ef44dd7befb5658ea67871db2899983bc"
+    },
+    {
+      "sequence": 17,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "policy:geo",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "decision": {
+            "status": "allow",
+            "reasons": [
+              "Request satisfies the supplied synthetic policy for offline simulation."
+            ],
+            "obligations": {
+              "decision_scope": "synthetic_offline_fixture_only",
+              "live_access_granted": false,
+              "audit_required": true,
+              "policy_authority": "data_custodian",
+              "policy_id": "demo:policy:geo",
+              "policy_version": "0.1.0",
+              "compute_locations": [
+                "source"
+              ],
+              "allowed_egress": [
+                "metadata"
+              ],
+              "max_bytes": 10000,
+              "max_retention_days": 30,
+              "required_attribution": [
+                "geo:synthetic_fixture"
+              ],
+              "authorization_required": false
+            }
+          }
+        }
+      },
+      "previous_hash": "b00761a0106f4d920dbe045e1f172b6ef44dd7befb5658ea67871db2899983bc",
+      "hash": "360e0cd3c0c0c48211952dbfb5fd6f32af735aada99f1240bb6cf7f5100ad36b"
+    },
+    {
+      "sequence": 18,
+      "type": "node_added",
+      "details": {
+        "id": "source:geo",
+        "kind": "source",
+        "label": "GEO: expression study metadata",
+        "status": "pending",
+        "source_id": "geo"
+      },
+      "previous_hash": "360e0cd3c0c0c48211952dbfb5fd6f32af735aada99f1240bb6cf7f5100ad36b",
+      "hash": "8fefffb13d21402d3218b5fd38f46ad71c30328c985be35e272ef19340faef5e"
+    },
+    {
+      "sequence": 19,
+      "type": "edge_added",
+      "details": {
+        "source": "policy:geo",
+        "target": "source:geo",
+        "relation": "depends_on"
+      },
+      "previous_hash": "8fefffb13d21402d3218b5fd38f46ad71c30328c985be35e272ef19340faef5e",
+      "hash": "47019396fdc089f6fe7bc1c27324ce905c1c037f02c0e63e4627657d91469e10"
+    },
+    {
+      "sequence": 20,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "source:geo",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "record": {
+            "record_id": "demo:geo",
+            "taxon_id": "demo:coastal-plant",
+            "specimen_id": "demo:specimen-1",
+            "site_id": "demo:coastal-site-1",
+            "period_end": "2020-12-31",
+            "available_at": "2021-06-01",
+            "forecast_cutoff": "2022-01-01",
+            "evidence": {
+              "source": "synthetic_fixture",
+              "method": "explicit-field",
+              "span": "Invented coastal plant metadata for software testing only."
+            },
+            "origin": "synthetic_fixture",
+            "source_uri": "fixture://geo"
+          },
+          "record_digest": "e0aa16eba331be807edd71cb933542cf2eb701c906b06c537409c013694832d7",
+          "skill": "metadata.inspect@0.1.0"
+        }
+      },
+      "previous_hash": "47019396fdc089f6fe7bc1c27324ce905c1c037f02c0e63e4627657d91469e10",
+      "hash": "6754904e3395c6ba9a2dc8bcd4fba1e3728f1ea0b1b78b62770a40ef604bf66c"
+    },
+    {
+      "sequence": 21,
+      "type": "node_added",
+      "details": {
+        "id": "policy:alphaearth",
+        "kind": "policy",
+        "label": "Check access: alphaearth",
+        "status": "pending",
+        "source_id": "alphaearth"
+      },
+      "previous_hash": "6754904e3395c6ba9a2dc8bcd4fba1e3728f1ea0b1b78b62770a40ef604bf66c",
+      "hash": "f4d7fefd3491d765a37084eed652c9bb7a332f3fa10ede6256222a405ed866a6"
+    },
+    {
+      "sequence": 22,
+      "type": "edge_added",
+      "details": {
+        "source": "question",
+        "target": "policy:alphaearth",
+        "relation": "depends_on"
+      },
+      "previous_hash": "f4d7fefd3491d765a37084eed652c9bb7a332f3fa10ede6256222a405ed866a6",
+      "hash": "67f68a92301fdd78c9a71781885c3af0ab087b59cf94835d6af541dc609e6adb"
+    },
+    {
+      "sequence": 23,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "policy:alphaearth",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "decision": {
+            "status": "allow",
+            "reasons": [
+              "Request satisfies the supplied synthetic policy for offline simulation."
+            ],
+            "obligations": {
+              "decision_scope": "synthetic_offline_fixture_only",
+              "live_access_granted": false,
+              "audit_required": true,
+              "policy_authority": "data_custodian",
+              "policy_id": "demo:policy:alphaearth",
+              "policy_version": "0.1.0",
+              "compute_locations": [
+                "source"
+              ],
+              "allowed_egress": [
+                "metadata"
+              ],
+              "max_bytes": 10000,
+              "max_retention_days": 30,
+              "required_attribution": [
+                "alphaearth:synthetic_fixture"
+              ],
+              "authorization_required": false
+            }
+          }
+        }
+      },
+      "previous_hash": "67f68a92301fdd78c9a71781885c3af0ab087b59cf94835d6af541dc609e6adb",
+      "hash": "a28173505d38fda8ae6c8e0933f62203c02e3eb41731b8f9b46bd6fdb8589ced"
+    },
+    {
+      "sequence": 24,
+      "type": "node_added",
+      "details": {
+        "id": "source:alphaearth",
+        "kind": "source",
+        "label": "AlphaEarth: annual landscape context",
+        "status": "pending",
+        "source_id": "alphaearth"
+      },
+      "previous_hash": "a28173505d38fda8ae6c8e0933f62203c02e3eb41731b8f9b46bd6fdb8589ced",
+      "hash": "00f675b74853309d475394cf8dccbacb4234ee5e1553aa31b74493ce5965ac38"
+    },
+    {
+      "sequence": 25,
+      "type": "edge_added",
+      "details": {
+        "source": "policy:alphaearth",
+        "target": "source:alphaearth",
+        "relation": "depends_on"
+      },
+      "previous_hash": "00f675b74853309d475394cf8dccbacb4234ee5e1553aa31b74493ce5965ac38",
+      "hash": "0e10bf6610d518248977417eb110865a2191dc77723ab1bc7e0023d555b36744"
+    },
+    {
+      "sequence": 26,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "source:alphaearth",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "record": {
+            "record_id": "demo:alphaearth",
+            "taxon_id": "demo:coastal-plant",
+            "specimen_id": null,
+            "site_id": "demo:coastal-site-1",
+            "period_end": "2020-12-31",
+            "available_at": "2021-06-01",
+            "forecast_cutoff": "2022-01-01",
+            "evidence": {
+              "source": "synthetic_fixture",
+              "method": "explicit-field",
+              "span": "Invented coastal plant metadata for software testing only."
+            },
+            "origin": "synthetic_fixture",
+            "source_uri": "fixture://alphaearth"
+          },
+          "record_digest": "54b99d8f7debb0d13369f08677040c101ce56c94feb5aab0dbb0c74ccdec382a",
+          "skill": "metadata.inspect@0.1.0"
+        }
+      },
+      "previous_hash": "0e10bf6610d518248977417eb110865a2191dc77723ab1bc7e0023d555b36744",
+      "hash": "7e1fc9f99e979ab54a385a84db3756d2445b1ec2a6d398e0093efeaa8c14ef20"
+    },
+    {
+      "sequence": 27,
+      "type": "node_added",
+      "details": {
+        "id": "policy:pubmed",
+        "kind": "policy",
+        "label": "Check access: pubmed",
+        "status": "pending",
+        "source_id": "pubmed"
+      },
+      "previous_hash": "7e1fc9f99e979ab54a385a84db3756d2445b1ec2a6d398e0093efeaa8c14ef20",
+      "hash": "d48dd6f73dfcc1da8c66ca82b884cf0869b6c2b2ea8f91e60b227516d1576a20"
+    },
+    {
+      "sequence": 28,
+      "type": "edge_added",
+      "details": {
+        "source": "question",
+        "target": "policy:pubmed",
+        "relation": "depends_on"
+      },
+      "previous_hash": "d48dd6f73dfcc1da8c66ca82b884cf0869b6c2b2ea8f91e60b227516d1576a20",
+      "hash": "22aed666cbeeb5f07370a52b58115142785a2c672419645e2e71c87685e16ea7"
+    },
+    {
+      "sequence": 29,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "policy:pubmed",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "decision": {
+            "status": "allow",
+            "reasons": [
+              "Request satisfies the supplied synthetic policy for offline simulation."
+            ],
+            "obligations": {
+              "decision_scope": "synthetic_offline_fixture_only",
+              "live_access_granted": false,
+              "audit_required": true,
+              "policy_authority": "data_custodian",
+              "policy_id": "demo:policy:pubmed",
+              "policy_version": "0.1.0",
+              "compute_locations": [
+                "source"
+              ],
+              "allowed_egress": [
+                "metadata"
+              ],
+              "max_bytes": 10000,
+              "max_retention_days": 30,
+              "required_attribution": [
+                "pubmed:synthetic_fixture"
+              ],
+              "authorization_required": false
+            }
+          }
+        }
+      },
+      "previous_hash": "22aed666cbeeb5f07370a52b58115142785a2c672419645e2e71c87685e16ea7",
+      "hash": "5644aa0b1d0fa4a8717b07531a125035bf688831ee6e645beb3bfb177d2e96bf"
+    },
+    {
+      "sequence": 30,
+      "type": "node_added",
+      "details": {
+        "id": "source:pubmed",
+        "kind": "source",
+        "label": "PubMed: literature context",
+        "status": "pending",
+        "source_id": "pubmed"
+      },
+      "previous_hash": "5644aa0b1d0fa4a8717b07531a125035bf688831ee6e645beb3bfb177d2e96bf",
+      "hash": "bd043146d3ff48e1a6be2eaf660cee5ceef0a1ef75468228191b72d742262641"
+    },
+    {
+      "sequence": 31,
+      "type": "edge_added",
+      "details": {
+        "source": "policy:pubmed",
+        "target": "source:pubmed",
+        "relation": "depends_on"
+      },
+      "previous_hash": "bd043146d3ff48e1a6be2eaf660cee5ceef0a1ef75468228191b72d742262641",
+      "hash": "eae09ae0aed6d036404dee9e9a4ffe8161cb6b7fb3525f5f7c34a265faed7f0d"
+    },
+    {
+      "sequence": 32,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "source:pubmed",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "record": {
+            "record_id": "demo:pubmed",
+            "taxon_id": "demo:coastal-plant",
+            "specimen_id": null,
+            "site_id": null,
+            "period_end": "2020-12-31",
+            "available_at": "2021-06-01",
+            "forecast_cutoff": "2022-01-01",
+            "evidence": {
+              "source": "synthetic_fixture",
+              "method": "explicit-field",
+              "span": "Invented coastal plant metadata for software testing only."
+            },
+            "origin": "synthetic_fixture",
+            "source_uri": "fixture://pubmed"
+          },
+          "record_digest": "1dc7926a0f9fafd91888b366baeb8d4b24402bee45d9688767572b5976d62a75",
+          "skill": "metadata.inspect@0.1.0"
+        }
+      },
+      "previous_hash": "eae09ae0aed6d036404dee9e9a4ffe8161cb6b7fb3525f5f7c34a265faed7f0d",
+      "hash": "200d62015a896370fe3daeefc0dd7946639db0a65ab30093516c8f631a77ec2c"
+    },
+    {
+      "sequence": 33,
+      "type": "node_added",
+      "details": {
+        "id": "check:specimen",
+        "kind": "verification",
+        "label": "Verify specimen linkage",
+        "status": "pending"
+      },
+      "previous_hash": "200d62015a896370fe3daeefc0dd7946639db0a65ab30093516c8f631a77ec2c",
+      "hash": "cb6cd5490c078e66d02d7cf003870a346e7088c150641c6200f168fa17651c81"
+    },
+    {
+      "sequence": 34,
+      "type": "edge_added",
+      "details": {
+        "source": "source:ncbi_genotype",
+        "target": "check:specimen",
+        "relation": "depends_on"
+      },
+      "previous_hash": "cb6cd5490c078e66d02d7cf003870a346e7088c150641c6200f168fa17651c81",
+      "hash": "6a27819702a418cb594e5754647c4a2252aac5806f0577bf914924c619155dcd"
+    },
+    {
+      "sequence": 35,
+      "type": "edge_added",
+      "details": {
+        "source": "source:geo",
+        "target": "check:specimen",
+        "relation": "depends_on"
+      },
+      "previous_hash": "6a27819702a418cb594e5754647c4a2252aac5806f0577bf914924c619155dcd",
+      "hash": "19bff796ec42552ffd0e99add9dd0d2256a41e6d49a078d5c00793e77bc92d93"
+    },
+    {
+      "sequence": 36,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "check:specimen",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "reason": "Explicit matching specimen_id required; a taxon match cannot substitute for a specimen",
+          "evidence": {
+            "method": "explicit-field",
+            "field": "specimen_id",
+            "left_record": "demo:ncbi_genotype",
+            "right_record": "demo:geo",
+            "origin": "synthetic_fixture",
+            "left_value": "demo:specimen-1",
+            "right_value": "demo:specimen-1",
+            "scope": "same_specimen",
+            "supports_causality": false
+          },
+          "skill": "link.verify@0.1.0"
+        }
+      },
+      "previous_hash": "19bff796ec42552ffd0e99add9dd0d2256a41e6d49a078d5c00793e77bc92d93",
+      "hash": "0897d92319a94dfad8699d40cf336db2d43d245684e907fecd472bca7a0ed61f"
+    },
+    {
+      "sequence": 37,
+      "type": "edge_added",
+      "details": {
+        "source": "source:ncbi_genotype",
+        "target": "source:geo",
+        "relation": "same_specimen",
+        "evidence": {
+          "method": "explicit-field",
+          "field": "specimen_id",
+          "left_record": "demo:ncbi_genotype",
+          "right_record": "demo:geo",
+          "origin": "synthetic_fixture",
+          "left_value": "demo:specimen-1",
+          "right_value": "demo:specimen-1",
+          "scope": "same_specimen",
+          "supports_causality": false
+        }
+      },
+      "previous_hash": "0897d92319a94dfad8699d40cf336db2d43d245684e907fecd472bca7a0ed61f",
+      "hash": "44c8423deb91be389d47e6f58a9a634ef80d5b4829e1ec59f7399580c9195354"
+    },
+    {
+      "sequence": 38,
+      "type": "node_added",
+      "details": {
+        "id": "check:taxon",
+        "kind": "verification",
+        "label": "Verify taxon linkage",
+        "status": "pending"
+      },
+      "previous_hash": "44c8423deb91be389d47e6f58a9a634ef80d5b4829e1ec59f7399580c9195354",
+      "hash": "33e9b942f9a569959d57129196d536cf08580473596b96ee2d589a59aac7f5da"
+    },
+    {
+      "sequence": 39,
+      "type": "edge_added",
+      "details": {
+        "source": "source:eol",
+        "target": "check:taxon",
+        "relation": "depends_on"
+      },
+      "previous_hash": "33e9b942f9a569959d57129196d536cf08580473596b96ee2d589a59aac7f5da",
+      "hash": "27f4b28f5e193825471d2e2272b74da90adb440e23e587310ab380ba8ed94a31"
+    },
+    {
+      "sequence": 40,
+      "type": "edge_added",
+      "details": {
+        "source": "source:geo",
+        "target": "check:taxon",
+        "relation": "depends_on"
+      },
+      "previous_hash": "27f4b28f5e193825471d2e2272b74da90adb440e23e587310ab380ba8ed94a31",
+      "hash": "d4333dbfffb974a792b01777538fbf74bb46232f9fb6c73093a06b17b2355f54"
+    },
+    {
+      "sequence": 41,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "check:taxon",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "reason": "Explicit matching taxon_id required; a taxon match cannot substitute for a specimen",
+          "evidence": {
+            "method": "explicit-field",
+            "field": "taxon_id",
+            "left_record": "demo:eol",
+            "right_record": "demo:geo",
+            "origin": "synthetic_fixture",
+            "left_value": "demo:coastal-plant",
+            "right_value": "demo:coastal-plant",
+            "scope": "taxon_context",
+            "supports_causality": false
+          },
+          "skill": "link.verify@0.1.0"
+        }
+      },
+      "previous_hash": "d4333dbfffb974a792b01777538fbf74bb46232f9fb6c73093a06b17b2355f54",
+      "hash": "c062f2590473f1de47d049afb4a0360972e1c82bd2e289b52935af4e89855b99"
+    },
+    {
+      "sequence": 42,
+      "type": "edge_added",
+      "details": {
+        "source": "source:eol",
+        "target": "source:geo",
+        "relation": "taxon_context",
+        "evidence": {
+          "method": "explicit-field",
+          "field": "taxon_id",
+          "left_record": "demo:eol",
+          "right_record": "demo:geo",
+          "origin": "synthetic_fixture",
+          "left_value": "demo:coastal-plant",
+          "right_value": "demo:coastal-plant",
+          "scope": "taxon_context",
+          "supports_causality": false
+        }
+      },
+      "previous_hash": "c062f2590473f1de47d049afb4a0360972e1c82bd2e289b52935af4e89855b99",
+      "hash": "46ea1072597ef0cd54456cd8e2b6e2366c2a3c019e253d92e2ccd14d99e1a0bc"
+    },
+    {
+      "sequence": 43,
+      "type": "node_added",
+      "details": {
+        "id": "check:site",
+        "kind": "verification",
+        "label": "Verify site linkage",
+        "status": "pending"
+      },
+      "previous_hash": "46ea1072597ef0cd54456cd8e2b6e2366c2a3c019e253d92e2ccd14d99e1a0bc",
+      "hash": "3005b010a873b3afbeb6a094779e09ff1a1bc044d9fc2e9f7c4f0be1f46e30cc"
+    },
+    {
+      "sequence": 44,
+      "type": "edge_added",
+      "details": {
+        "source": "source:alphaearth",
+        "target": "check:site",
+        "relation": "depends_on"
+      },
+      "previous_hash": "3005b010a873b3afbeb6a094779e09ff1a1bc044d9fc2e9f7c4f0be1f46e30cc",
+      "hash": "2e87e5fba22f34db74fad203755a180d1460b0e8c857ac8ef4f5ac2b09b80208"
+    },
+    {
+      "sequence": 45,
+      "type": "edge_added",
+      "details": {
+        "source": "source:geo",
+        "target": "check:site",
+        "relation": "depends_on"
+      },
+      "previous_hash": "2e87e5fba22f34db74fad203755a180d1460b0e8c857ac8ef4f5ac2b09b80208",
+      "hash": "83a39b4f0ac11c5b6a940a87d1de1414ae8609164136eb3898660a5590a3d71a"
+    },
+    {
+      "sequence": 46,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "check:site",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "reason": "Explicit matching site_id required; a taxon match cannot substitute for a specimen",
+          "evidence": {
+            "method": "explicit-field",
+            "field": "site_id",
+            "left_record": "demo:alphaearth",
+            "right_record": "demo:geo",
+            "origin": "synthetic_fixture",
+            "left_value": "demo:coastal-site-1",
+            "right_value": "demo:coastal-site-1",
+            "scope": "site_context",
+            "supports_causality": false
+          },
+          "skill": "link.verify@0.1.0"
+        }
+      },
+      "previous_hash": "83a39b4f0ac11c5b6a940a87d1de1414ae8609164136eb3898660a5590a3d71a",
+      "hash": "ad4a36d319b76a7a22e539ba8d3b76388adb5e8c6050fbdcf31f12cbbb05c659"
+    },
+    {
+      "sequence": 47,
+      "type": "edge_added",
+      "details": {
+        "source": "source:alphaearth",
+        "target": "source:geo",
+        "relation": "site_context",
+        "evidence": {
+          "method": "explicit-field",
+          "field": "site_id",
+          "left_record": "demo:alphaearth",
+          "right_record": "demo:geo",
+          "origin": "synthetic_fixture",
+          "left_value": "demo:coastal-site-1",
+          "right_value": "demo:coastal-site-1",
+          "scope": "site_context",
+          "supports_causality": false
+        }
+      },
+      "previous_hash": "ad4a36d319b76a7a22e539ba8d3b76388adb5e8c6050fbdcf31f12cbbb05c659",
+      "hash": "e2ae37b48393d735e875b4d3f62a0627c53d694bad191b584061dfab4455694c"
+    },
+    {
+      "sequence": 48,
+      "type": "node_added",
+      "details": {
+        "id": "check:time",
+        "kind": "verification",
+        "label": "Verify time linkage",
+        "status": "pending"
+      },
+      "previous_hash": "e2ae37b48393d735e875b4d3f62a0627c53d694bad191b584061dfab4455694c",
+      "hash": "d453ef96f77f590e71803e6f9002b5090ec796931e777635be7356c7d0dc8c22"
+    },
+    {
+      "sequence": 49,
+      "type": "edge_added",
+      "details": {
+        "source": "source:alphaearth",
+        "target": "check:time",
+        "relation": "depends_on"
+      },
+      "previous_hash": "d453ef96f77f590e71803e6f9002b5090ec796931e777635be7356c7d0dc8c22",
+      "hash": "fcb55542d4acc889b7699e69bd472fcea2586e1ef11375d2de8ef711c9c82463"
+    },
+    {
+      "sequence": 50,
+      "type": "node_status_changed",
+      "details": {
+        "node_id": "check:time",
+        "before": "pending",
+        "after": "completed",
+        "details": {
+          "reason": "Feature interval and availability must precede the historical forecast cutoff",
+          "evidence": {
+            "method": "explicit-field",
+            "field": "period_end",
+            "left_record": "demo:alphaearth",
+            "right_record": "demo:alphaearth",
+            "origin": "synthetic_fixture",
+            "left_value": "2020-12-31",
+            "right_value": "2020-12-31",
+            "scope": "historical_context",
+            "supports_causality": false,
+            "period_end": "2020-12-31",
+            "available_at": "2021-06-01",
+            "forecast_cutoff": "2022-01-01"
+          },
+          "skill": "link.verify@0.1.0"
+        }
+      },
+      "previous_hash": "fcb55542d4acc889b7699e69bd472fcea2586e1ef11375d2de8ef711c9c82463",
+      "hash": "9295f1460f7d569eee806244c267f91e957ce082c6ab47679dbc9164630fbb27"
+    },
+    {
+      "sequence": 51,
+      "type": "edge_added",
+      "details": {
+        "source": "source:alphaearth",
+        "target": "source:alphaearth",
+        "relation": "historical_context",
+        "evidence": {
+          "method": "explicit-field",
+          "field": "period_end",
+          "left_record": "demo:alphaearth",
+          "right_record": "demo:alphaearth",
+          "origin": "synthetic_fixture",
+          "left_value": "2020-12-31",
+          "right_value": "2020-12-31",
+          "scope": "historical_context",
+          "supports_causality": false,
+          "period_end": "2020-12-31",
+          "available_at": "2021-06-01",
+          "forecast_cutoff": "2022-01-01"
+        }
+      },
+      "previous_hash": "9295f1460f7d569eee806244c267f91e957ce082c6ab47679dbc9164630fbb27",
+      "hash": "34c058cece98c05c78c40a699a322885bef3c268729754f5594ef1795e1eeacf"
+    },
+    {
+      "sequence": 52,
+      "type": "node_added",
+      "details": {
+        "id": "result",
+        "kind": "result",
+        "label": "Metadata evidence map; biological claims withheld",
+        "status": "completed"
+      },
+      "previous_hash": "34c058cece98c05c78c40a699a322885bef3c268729754f5594ef1795e1eeacf",
+      "hash": "725a90d601f91ab83566189b17bc4c5a395056e7ca4ea4cb08aefa2aa82a9483"
+    },
+    {
+      "sequence": 53,
+      "type": "edge_added",
+      "details": {
+        "source": "source:eol",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      "previous_hash": "725a90d601f91ab83566189b17bc4c5a395056e7ca4ea4cb08aefa2aa82a9483",
+      "hash": "fc6273121dae866906b37698b110beceda647ddd2887617cc98c3ecef9f95385"
+    },
+    {
+      "sequence": 54,
+      "type": "edge_added",
+      "details": {
+        "source": "source:ncbi_genotype",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      "previous_hash": "fc6273121dae866906b37698b110beceda647ddd2887617cc98c3ecef9f95385",
+      "hash": "c7aa0f1d8b802a06dece3040d8479bd6753dda97da8b70e291d5ffefae5bfd1d"
+    },
+    {
+      "sequence": 55,
+      "type": "edge_added",
+      "details": {
+        "source": "source:geo",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      "previous_hash": "c7aa0f1d8b802a06dece3040d8479bd6753dda97da8b70e291d5ffefae5bfd1d",
+      "hash": "076869a692ef76b1f889e790d8e8271e721c69d49dba8b5e429fe3bc64d666b8"
+    },
+    {
+      "sequence": 56,
+      "type": "edge_added",
+      "details": {
+        "source": "source:alphaearth",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      "previous_hash": "076869a692ef76b1f889e790d8e8271e721c69d49dba8b5e429fe3bc64d666b8",
+      "hash": "5f5d21133f34fd7c87ed1c77b66c7b262dfacf39e0d5cb2251d7f777c265e58e"
+    },
+    {
+      "sequence": 57,
+      "type": "edge_added",
+      "details": {
+        "source": "source:pubmed",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      "previous_hash": "5f5d21133f34fd7c87ed1c77b66c7b262dfacf39e0d5cb2251d7f777c265e58e",
+      "hash": "cf79e487df7fadda34a8fdfc020f944dbbea8edbd5d329a7f9f77d0eba1aa8ba"
+    },
+    {
+      "sequence": 58,
+      "type": "edge_added",
+      "details": {
+        "source": "check:specimen",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      "previous_hash": "cf79e487df7fadda34a8fdfc020f944dbbea8edbd5d329a7f9f77d0eba1aa8ba",
+      "hash": "0c11f1dca1e32016845a03d8bbd89aa848d4d732ce6904abf3e57d9bd6800d74"
+    },
+    {
+      "sequence": 59,
+      "type": "edge_added",
+      "details": {
+        "source": "check:taxon",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      "previous_hash": "0c11f1dca1e32016845a03d8bbd89aa848d4d732ce6904abf3e57d9bd6800d74",
+      "hash": "3cca7177039e758574767e658b43b7f4533b6b817e5b7e28fe769813544aa6a0"
+    },
+    {
+      "sequence": 60,
+      "type": "edge_added",
+      "details": {
+        "source": "check:site",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      "previous_hash": "3cca7177039e758574767e658b43b7f4533b6b817e5b7e28fe769813544aa6a0",
+      "hash": "66d8c8268b1e5c1df62fd24606989f860da607a0e54dc79e1fcb6ad7583ba043"
+    },
+    {
+      "sequence": 61,
+      "type": "edge_added",
+      "details": {
+        "source": "check:time",
+        "target": "result",
+        "relation": "depends_on"
+      },
+      "previous_hash": "66d8c8268b1e5c1df62fd24606989f860da607a0e54dc79e1fcb6ad7583ba043",
+      "hash": "6031f6fd5b1d721c3d47062294b33726ea9630e87ce8b79a0207c215021668bf"
+    },
+    {
+      "sequence": 62,
+      "type": "run_finished",
+      "details": {
+        "status": "completed",
+        "scientific_claim_count": 0
+      },
+      "previous_hash": "6031f6fd5b1d721c3d47062294b33726ea9630e87ce8b79a0207c215021668bf",
+      "hash": "f5ccc442074bd3d20705a06e8ef07a50268927e70dcbfd811d55a49fb49afa46"
+    }
+  ],
+  "policies": [
+    {
+      "source_id": "eol",
+      "profile": {
+        "policy_id": "demo:policy:eol",
+        "version": "0.1.0",
+        "allowed_purposes": [
+          "metadata_research"
+        ],
+        "prohibited_purposes": [],
+        "allowed_operations": [
+          "metadata"
+        ],
+        "compute_locations": [
+          "source"
+        ],
+        "egress": [
+          "metadata"
+        ],
+        "max_bytes": 10000,
+        "max_retention_days": 30,
+        "attribution": [
+          "eol:synthetic_fixture"
+        ],
+        "authorization_required": false,
+        "negotiation_allowed": true
+      },
+      "request": {
+        "purpose": "metadata_research",
+        "operation": "metadata",
+        "compute_location": "source",
+        "output": "metadata",
+        "estimated_bytes": 1024,
+        "retention_days": 7,
+        "attribution": [
+          "eol:synthetic_fixture"
+        ]
+      },
+      "status": "allow",
+      "reasons": [
+        "Request satisfies the supplied synthetic policy for offline simulation."
+      ],
+      "obligations": {
+        "decision_scope": "synthetic_offline_fixture_only",
+        "live_access_granted": false,
+        "audit_required": true,
+        "policy_authority": "data_custodian",
+        "policy_id": "demo:policy:eol",
+        "policy_version": "0.1.0",
+        "compute_locations": [
+          "source"
+        ],
+        "allowed_egress": [
+          "metadata"
+        ],
+        "max_bytes": 10000,
+        "max_retention_days": 30,
+        "required_attribution": [
+          "eol:synthetic_fixture"
+        ],
+        "authorization_required": false
+      }
+    },
+    {
+      "source_id": "ncbi_genotype",
+      "profile": {
+        "policy_id": "demo:policy:ncbi_genotype",
+        "version": "0.1.0",
+        "allowed_purposes": [
+          "metadata_research"
+        ],
+        "prohibited_purposes": [],
+        "allowed_operations": [
+          "metadata"
+        ],
+        "compute_locations": [
+          "source"
+        ],
+        "egress": [
+          "metadata"
+        ],
+        "max_bytes": 10000,
+        "max_retention_days": 30,
+        "attribution": [
+          "ncbi_genotype:synthetic_fixture"
+        ],
+        "authorization_required": false,
+        "negotiation_allowed": true
+      },
+      "request": {
+        "purpose": "metadata_research",
+        "operation": "metadata",
+        "compute_location": "source",
+        "output": "metadata",
+        "estimated_bytes": 1024,
+        "retention_days": 7,
+        "attribution": [
+          "ncbi_genotype:synthetic_fixture"
+        ]
+      },
+      "status": "allow",
+      "reasons": [
+        "Request satisfies the supplied synthetic policy for offline simulation."
+      ],
+      "obligations": {
+        "decision_scope": "synthetic_offline_fixture_only",
+        "live_access_granted": false,
+        "audit_required": true,
+        "policy_authority": "data_custodian",
+        "policy_id": "demo:policy:ncbi_genotype",
+        "policy_version": "0.1.0",
+        "compute_locations": [
+          "source"
+        ],
+        "allowed_egress": [
+          "metadata"
+        ],
+        "max_bytes": 10000,
+        "max_retention_days": 30,
+        "required_attribution": [
+          "ncbi_genotype:synthetic_fixture"
+        ],
+        "authorization_required": false
+      }
+    },
+    {
+      "source_id": "geo",
+      "profile": {
+        "policy_id": "demo:policy:geo",
+        "version": "0.1.0",
+        "allowed_purposes": [
+          "metadata_research"
+        ],
+        "prohibited_purposes": [],
+        "allowed_operations": [
+          "metadata"
+        ],
+        "compute_locations": [
+          "source"
+        ],
+        "egress": [
+          "metadata"
+        ],
+        "max_bytes": 10000,
+        "max_retention_days": 30,
+        "attribution": [
+          "geo:synthetic_fixture"
+        ],
+        "authorization_required": false,
+        "negotiation_allowed": true
+      },
+      "request": {
+        "purpose": "metadata_research",
+        "operation": "metadata",
+        "compute_location": "source",
+        "output": "metadata",
+        "estimated_bytes": 1024,
+        "retention_days": 7,
+        "attribution": [
+          "geo:synthetic_fixture"
+        ]
+      },
+      "status": "allow",
+      "reasons": [
+        "Request satisfies the supplied synthetic policy for offline simulation."
+      ],
+      "obligations": {
+        "decision_scope": "synthetic_offline_fixture_only",
+        "live_access_granted": false,
+        "audit_required": true,
+        "policy_authority": "data_custodian",
+        "policy_id": "demo:policy:geo",
+        "policy_version": "0.1.0",
+        "compute_locations": [
+          "source"
+        ],
+        "allowed_egress": [
+          "metadata"
+        ],
+        "max_bytes": 10000,
+        "max_retention_days": 30,
+        "required_attribution": [
+          "geo:synthetic_fixture"
+        ],
+        "authorization_required": false
+      }
+    },
+    {
+      "source_id": "alphaearth",
+      "profile": {
+        "policy_id": "demo:policy:alphaearth",
+        "version": "0.1.0",
+        "allowed_purposes": [
+          "metadata_research"
+        ],
+        "prohibited_purposes": [],
+        "allowed_operations": [
+          "metadata"
+        ],
+        "compute_locations": [
+          "source"
+        ],
+        "egress": [
+          "metadata"
+        ],
+        "max_bytes": 10000,
+        "max_retention_days": 30,
+        "attribution": [
+          "alphaearth:synthetic_fixture"
+        ],
+        "authorization_required": false,
+        "negotiation_allowed": true
+      },
+      "request": {
+        "purpose": "metadata_research",
+        "operation": "metadata",
+        "compute_location": "source",
+        "output": "metadata",
+        "estimated_bytes": 1024,
+        "retention_days": 7,
+        "attribution": [
+          "alphaearth:synthetic_fixture"
+        ]
+      },
+      "status": "allow",
+      "reasons": [
+        "Request satisfies the supplied synthetic policy for offline simulation."
+      ],
+      "obligations": {
+        "decision_scope": "synthetic_offline_fixture_only",
+        "live_access_granted": false,
+        "audit_required": true,
+        "policy_authority": "data_custodian",
+        "policy_id": "demo:policy:alphaearth",
+        "policy_version": "0.1.0",
+        "compute_locations": [
+          "source"
+        ],
+        "allowed_egress": [
+          "metadata"
+        ],
+        "max_bytes": 10000,
+        "max_retention_days": 30,
+        "required_attribution": [
+          "alphaearth:synthetic_fixture"
+        ],
+        "authorization_required": false
+      }
+    },
+    {
+      "source_id": "pubmed",
+      "profile": {
+        "policy_id": "demo:policy:pubmed",
+        "version": "0.1.0",
+        "allowed_purposes": [
+          "metadata_research"
+        ],
+        "prohibited_purposes": [],
+        "allowed_operations": [
+          "metadata"
+        ],
+        "compute_locations": [
+          "source"
+        ],
+        "egress": [
+          "metadata"
+        ],
+        "max_bytes": 10000,
+        "max_retention_days": 30,
+        "attribution": [
+          "pubmed:synthetic_fixture"
+        ],
+        "authorization_required": false,
+        "negotiation_allowed": true
+      },
+      "request": {
+        "purpose": "metadata_research",
+        "operation": "metadata",
+        "compute_location": "source",
+        "output": "metadata",
+        "estimated_bytes": 1024,
+        "retention_days": 7,
+        "attribution": [
+          "pubmed:synthetic_fixture"
+        ]
+      },
+      "status": "allow",
+      "reasons": [
+        "Request satisfies the supplied synthetic policy for offline simulation."
+      ],
+      "obligations": {
+        "decision_scope": "synthetic_offline_fixture_only",
+        "live_access_granted": false,
+        "audit_required": true,
+        "policy_authority": "data_custodian",
+        "policy_id": "demo:policy:pubmed",
+        "policy_version": "0.1.0",
+        "compute_locations": [
+          "source"
+        ],
+        "allowed_egress": [
+          "metadata"
+        ],
+        "max_bytes": 10000,
+        "max_retention_days": 30,
+        "required_attribution": [
+          "pubmed:synthetic_fixture"
+        ],
+        "authorization_required": false
+      }
+    }
+  ],
+  "access_requests": [],
+  "claims": [],
+  "limitations": [
+    "Synthetic fixtures and invented policies only. Provider labels do not certify real access or data overlap.",
+    "Completion means a fixture metadata map was checked. No biological finding or validated forecast is produced.",
+    "Taxon, literature, and site context do not establish paired measurements, causal effects, or ecological outcomes.",
+    "No real source computation, DUA approval, signature, controlled access, or data transfer occurs in this run.",
+    "Hashes detect changes relative to a retained digest; they are not signatures or independent proof of authenticity.",
+    "Planning is rule based. An external model may use the MCP tools; model performance has not been evaluated."
+  ],
+  "metrics": {
+    "selected_sources": 5,
+    "inspected_sources": 5,
+    "blocked_or_failed_sources": 0,
+    "steps": 9,
+    "network_bytes": 0,
+    "scientific_claims": 0,
+    "verified_links": 4
+  },
+  "content_digest": "d51d41015f996101110f5076bdcd8125da750dcad78e3ead8c38af2cc291e2a9"
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schemas/executable_skill.schema.json",
+  "schema_version": "0.2.0",
+  "skill_id": "sewall.source-capability-assessment",
+  "version": "0.2.0",
+  "name": "Unconfigured source capability assessment",
+  "description": "Record that a source has no configured live connector and prepare a local, nonbinding access-request draft.",
+  "operation": "assess_source",
+  "implementation": "sewall.agent:source_assessment",
+  "planner_template": "{\"action\":\"assess_source\",\"source\":\"eol|alphaearth|ncbi_genotype\",\"reason\":\"why\"}",
+  "planner_guidance": [
+    "EOL and AlphaEarth are not configured for live retrieval. Genotype data access is outside this prototype.",
+    "Assessing those sources records missing capabilities and a local nonbinding request draft."
+  ],
+  "arguments": [
+    {"name": "source", "type": "string", "description": "Source lacking a configured connector.", "enum": ["eol", "alphaearth", "ncbi_genotype"]}
+  ],
+  "sources": ["None; no external request is made"],
+  "external_actions": false,
+  "evidence": {
+    "method": "capability_record",
+    "supports_causality": false,
+    "limitations": [
+      "A draft request is not sent, accepted or granted."
+    ]
+  },
+  "policy_constraints": {
+    "egress": "local_draft_only",
+    "may_grant_access": false,
+    "may_sign_agreements": false,
+    "attribution": "Name the source and the missing capability."
+  },
+  "validation": {"tests": ["tests/test_agent.py", "tests/test_skills.py"]}
+}

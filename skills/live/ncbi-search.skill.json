@@ -1,0 +1,38 @@
+{
+  "$schema": "../../schemas/executable_skill.schema.json",
+  "schema_version": "0.2.0",
+  "skill_id": "ncbi.metadata-search",
+  "version": "0.2.0",
+  "name": "NCBI public metadata search",
+  "description": "Search PubMed, GEO DataSets (gds) or BioProject with Entrez terms and fetch bounded public document summaries for the returned identifiers.",
+  "operation": "search",
+  "implementation": "sewall.agent:ncbi_search",
+  "planner_template": "{\"action\":\"search\",\"database\":\"pubmed|gds|bioproject\",\"query\":\"Entrez terms\",\"reason\":\"why\"}",
+  "planner_guidance": [
+    "Search only existing public metadata; each search also fetches bounded summaries.",
+    "If a search has zero hits, broaden it instead of repeating it. Start with the organism name alone when specific study-type terms have removed every result, then inspect returned metadata for relevance and refine with alternative terms.",
+    "Use search totals, translated queries, and source warnings to guide this change.",
+    "Changing only letter case or whitespace still counts as repeating a query."
+  ],
+  "arguments": [
+    {"name": "database", "type": "string", "description": "Entrez database.", "enum": ["pubmed", "gds", "bioproject"]},
+    {"name": "query", "type": "string", "description": "Plain Entrez search terms; no URLs or control characters.", "max_length": 1000}
+  ],
+  "sources": ["NCBI E-utilities ESearch and ESummary"],
+  "external_actions": true,
+  "evidence": {
+    "method": "explicit_source_fields",
+    "supports_causality": false,
+    "limitations": [
+      "Summaries are untrusted public metadata, not validated biological findings.",
+      "Search ranking and totals change as repositories update."
+    ]
+  },
+  "policy_constraints": {
+    "egress": "public_metadata_only",
+    "may_grant_access": false,
+    "may_sign_agreements": false,
+    "attribution": "Cite NCBI records by accession and retrieval time."
+  },
+  "validation": {"tests": ["tests/test_agent.py", "tests/test_skills.py"]}
+}

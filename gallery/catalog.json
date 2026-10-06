@@ -1,0 +1,24 @@
+{
+  "title": "Sewall.ai recorded runs",
+  "description": "Recorded Sewall.ai workflow runs, each verified offline before publication. Live runs queried public NCBI metadata through a fixed script, without a model. Synthetic runs use fixture records and simulated policies. Open a report to inspect the graph, every source record and every event. No run establishes a biological finding.",
+  "runs": [
+    {"slug": "live-bloom", "title": "Chesapeake bloom: public metadata map (live NCBI)", "manifest": "runs/live-bloom.json",
+     "note": "Scripted PubMed and BioProject searches plus GenBank inventories for two bloom-forming dinoflagellates. The script, not a model, chose the actions."},
+    {"slug": "live-safe-stop", "title": "Chesapeake bloom: controlled safe stop (live NCBI)", "manifest": "runs/live-safe-stop.json",
+     "note": "The same question with one labeled fault injected after the first GenBank inventory. The run stops, quarantines the affected nodes and withholds its summary."},
+    {"slug": "synthetic-coastal", "title": "Coastal plants: cross-scale graph (synthetic)", "manifest": "runs/synthetic-coastal.json",
+     "note": "Fixture records across genotype, expression, trait and environmental sources with deterministic replay."},
+    {"slug": "synthetic-missing-link", "title": "Coastal plants: missing link, run abstains (synthetic)", "manifest": "runs/synthetic-missing-link.json",
+     "note": "A taxon match cannot stand in for missing specimen evidence, so the run abstains instead of joining on a guess."},
+    {"slug": "synthetic-policy-denied", "title": "Coastal plants: denied policy, run abstains (synthetic)", "manifest": "runs/synthetic-policy-denied.json",
+     "note": "A simulated data-use policy prohibits the stated purpose. The affected source is blocked and the run abstains."},
+    {"slug": "synthetic-future-leakage", "title": "Coastal plants: temporal leakage, run abstains (synthetic)", "manifest": "runs/synthetic-future-leakage.json",
+     "note": "A feature interval or its availability date falls after the historical forecast cutoff, so the run abstains."},
+    {"slug": "safety-clean", "title": "Safety supervisor: clean run (synthetic)", "manifest": "runs/safety-clean.json",
+     "note": "The integrity supervisor completes without a critique."},
+    {"slug": "safety-critical-critique", "title": "Safety supervisor: critical critique (synthetic)", "manifest": "runs/safety-critical-critique.json",
+     "note": "A critical critique stops dispatch and withdraws dependent outputs."},
+    {"slug": "safety-tampered-evidence", "title": "Safety supervisor: tampered evidence (synthetic)", "manifest": "runs/safety-tampered-evidence.json",
+     "note": "Changed evidence fails its digest check and the run stops safely."}
+  ]
+}

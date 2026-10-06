@@ -12,7 +12,7 @@
     "run_id": {"type": "string", "minLength": 22, "maxLength": 22, "pattern": "^agent-[a-f0-9]{16}$"},
     "question": {"type": "string", "minLength": 1, "maxLength": 2000},
     "revision": {"type": "integer", "minimum": 1, "maximum": 10},
-    "status": {"enum": ["completed", "budget_exhausted", "failed", "no_evidence", "needs_review"]},
+    "status": {"enum": ["completed", "budget_exhausted", "failed", "no_evidence", "needs_review", "safe_stopped"]},
     "stop_reason": {"$ref": "#/$defs/text"},
     "inputs": {"$ref": "#/$defs/inputs"},
     "plan": {
@@ -22,7 +22,21 @@
         "planner": {"const": "llm_bounded_action_controller"},
         "selected_sources": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/sourceId"}},
         "scope": {"$ref": "#/$defs/text"},
-        "allowed_actions": {"const": ["search", "citations", "assess_source", "finish"]}
+        "allowed_actions": {"type": "array", "minItems": 2, "maxItems": 20, "uniqueItems": true,
+                            "items": {"type": "string", "pattern": "^[a-z][a-z_]{1,39}$"}, "contains": {"const": "finish"}},
+        "skills": {
+          "type": "array", "maxItems": 19, "description": "Registered Skill descriptors available to the planner; absent in manifests recorded before the Skill registry.",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["skill_id", "version", "operation", "descriptor_sha256"],
+            "properties": {
+              "skill_id": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"},
+              "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+              "operation": {"type": "string", "pattern": "^[a-z][a-z_]{1,39}$"},
+              "descriptor_sha256": {"$ref": "#/$defs/hash"}
+            }
+          }
+        }
       }
     },
     "parent_digest": {"anyOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]},
@@ -35,6 +49,7 @@
         "prior_question": {"type": ["string", "null"], "maxLength": 2000},
         "prior_content_digest": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/hash"}]},
         "previous_results_reused": {"const": false},
+        "monitor": {"type": ["string", "null"], "maxLength": 100, "description": "Name of the trusted integrity monitor, if any; built-in digest checks always run."},
         "runtime": {
           "type": "object", "additionalProperties": false,
           "required": ["slurm_job_id", "partition", "hostname", "python_version"],
@@ -82,7 +97,7 @@
     "hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[a-f0-9]{64}$"},
     "uid": {"type": "string", "pattern": "^[1-9][0-9]{0,19}$", "not": {"pattern": "\\s"}},
     "database": {"enum": ["pubmed", "gds", "bioproject"]},
-    "sourceId": {"enum": ["eol", "ncbi_genotype", "gds", "bioproject", "alphaearth", "pubmed"]},
+    "sourceId": {"enum": ["eol", "ncbi_genotype", "gds", "bioproject", "alphaearth", "pubmed", "nuccore"]},
     "recordId": {"type": "string", "pattern": "^ncbi:(pubmed|gds|bioproject):[1-9][0-9]{0,19}$", "not": {"pattern": "\\s"}},
     "sourceUrl": {
       "type": "string", "format": "uri",
@@ -108,7 +123,7 @@
         "id": {"$ref": "#/$defs/text"},
         "kind": {"enum": ["question", "planning", "action", "source", "policy", "access_request", "verification", "result"]},
         "label": {"$ref": "#/$defs/text"},
-        "status": {"enum": ["pending", "completed", "failed", "blocked", "unconfigured", "needs_review", "rejected", "budget_exhausted", "no_evidence"]},
+        "status": {"enum": ["pending", "completed", "failed", "blocked", "unconfigured", "needs_review", "rejected", "budget_exhausted", "no_evidence", "quarantined", "safe_stopped"]},
         "source_id": {"$ref": "#/$defs/sourceId"},
         "details": {"type": "object"}
       }

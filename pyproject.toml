@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sewall"
+dynamic = ["version"]
+description = "Sewall.ai: a bounded, inspectable agentic harness over public biological metadata"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+# The controller, Skills, NCBI adapters, replay and reports use the standard library only.
+dependencies = []
+
+[project.optional-dependencies]
+vertex = ["google-auth>=2.30,<3", "requests>=2.32,<3"]
+mcp = ["mcp==1.23.3"]
+validation = ["jsonschema>=4.18,<5"]
+earthengine = ["earthengine-api>=1.0,<2"]
+
+[project.scripts]
+sewall = "sewall.__main__:main"
+sewall-mcp = "sewall.mcp_server:main"
+
+[tool.setuptools]
+# Live Skill descriptors stay in skills/live in the source tree and ship inside the package.
+packages = ["sewall", "sewall.skills_live"]
+package-dir = {"sewall.skills_live" = "skills/live"}
+
+[tool.setuptools.package-data]
+"sewall.skills_live" = ["*.skill.json"]
+
+[tool.setuptools.dynamic]
+version = {attr = "sewall.__version__"}

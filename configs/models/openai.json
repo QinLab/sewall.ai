@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "gpt-5",
+  "max_output_tokens": 2048,
+  "timeout_seconds": 60,
+  "retries": 0
+}

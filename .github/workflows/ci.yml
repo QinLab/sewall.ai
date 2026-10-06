@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install with optional validation
+        run: python -m pip install ".[validation]"
+      # Unit tests mock every network and model call.
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Build wheel
+        run: |
+          python -m pip install build
+          python -m build --wheel --outdir dist
+      - name: Installed wheel smoke check
+        run: |
+          python -m venv /tmp/wheel-env
+          /tmp/wheel-env/bin/pip install dist/*.whl
+          PATH="/tmp/wheel-env/bin:$PATH" bash scripts/smoke_installed.sh /tmp/wheel-env/bin/python
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t sewall:ci .
+      - name: Offline demo in the image
+        run: docker run --rm sewall:ci --version && docker run --rm sewall:ci demo --out /tmp/demo

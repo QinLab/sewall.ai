@@ -147,5 +147,5 @@ integrity records, not custodian authentication.
 
 Generated manifests, HTML reports, probe receipts and scheduler logs remain local and are
 ignored by Git. Retain them with the code when archiving evidence. Filesystem space was
-sufficient for these small artifacts; `/scratch/qin_lab` is available for later temporary
+sufficient for these small artifacts; a cluster scratch area is available for later temporary
 caches if needed, subject to actual quota and retention checks.

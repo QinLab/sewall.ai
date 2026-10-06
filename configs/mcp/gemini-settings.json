@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "sewall": {
+      "command": "/ABSOLUTE/PATH/TO/sewall.ai/.venv/bin/sewall-mcp",
+      "args": [],
+      "timeout": 300000,
+      "trust": false
+    }
+  }
+}

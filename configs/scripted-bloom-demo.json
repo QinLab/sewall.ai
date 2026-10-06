@@ -1,0 +1,13 @@
+{
+  "name": "chesapeake-bloom-demo",
+  "description": "Fixed public-metadata steps for the Chesapeake harmful algal bloom demonstration. Runs without model keys.",
+  "steps": [
+    {"action": "search", "database": "pubmed", "query": "(Margalefidinium polykrikoides OR Cochlodinium polykrikoides) AND Chesapeake", "reason": "Find published reports of M. polykrikoides blooms in Chesapeake Bay waters"},
+    {"action": "taxon_inventory", "taxon": "Margalefidinium polykrikoides", "reason": "Count public sequence records and strains for the bloom-forming dinoflagellate"},
+    {"action": "taxon_inventory", "taxon": "Alexandrium monilatum", "reason": "Count public sequence records for the co-occurring dinoflagellate"},
+    {"action": "search", "database": "bioproject", "query": "Margalefidinium polykrikoides OR Cochlodinium polykrikoides", "reason": "Find public sequencing projects for the bloom-forming species"}
+  ],
+  "gaps": [
+    "Satellite chlorophyll evidence for bloom windows requires the planned Earth Engine Skills."
+  ]
+}

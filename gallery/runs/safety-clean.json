@@ -1,0 +1,453 @@
+{
+  "schema_version": "sewall-safety-1.0",
+  "mode": "synthetic_safety_demo",
+  "scenario": "clean",
+  "state": "COMPLETED",
+  "status": "completed",
+  "safety_notice": "SYNTHETIC CHECKS COMPLETED. This is a metadata-control demonstration, not a scientific success or a biological finding. Provisional text is not a validated conclusion.",
+  "dispatch_frozen": true,
+  "audit_events_are_historical_not_result_authority": true,
+  "same_run_resume_allowed": false,
+  "authorization_granted": false,
+  "claims": [],
+  "provisional_summaries": [
+    {
+      "task_id": "catalog",
+      "text": "Provisional synthetic metadata text for catalog.",
+      "status": "provisional_not_a_finding"
+    },
+    {
+      "task_id": "study",
+      "text": "Provisional synthetic metadata text for study.",
+      "status": "provisional_not_a_finding"
+    },
+    {
+      "task_id": "context",
+      "text": "Provisional synthetic metadata text for context.",
+      "status": "provisional_not_a_finding"
+    },
+    {
+      "task_id": "release",
+      "text": "Provisional synthetic metadata text for release.",
+      "status": "provisional_not_a_finding"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "catalog",
+      "dependencies": [],
+      "status": "VERIFIED",
+      "output": {
+        "metadata": [
+          {
+            "id": "fixture:catalog",
+            "title": "Synthetic catalog metadata",
+            "provenance": {
+              "source": "fixture:fixture:catalog",
+              "payload_sha256": "fb70cb32bc54b143baa59472b8508bc19c85f7c02f5fb0e8157bd3829ad5c95d"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "study",
+      "dependencies": [
+        "catalog"
+      ],
+      "status": "VERIFIED",
+      "output": {
+        "metadata": [
+          {
+            "id": "fixture:study",
+            "title": "Synthetic study metadata",
+            "provenance": {
+              "source": "fixture:fixture:study",
+              "payload_sha256": "40fde403ffec1a12aaa0de35a290d48e1294222889e1c11a2bd9ad0115c5302e"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "context",
+      "dependencies": [
+        "study"
+      ],
+      "status": "VERIFIED",
+      "output": {
+        "metadata": [
+          {
+            "id": "fixture:context",
+            "title": "Synthetic context metadata",
+            "provenance": {
+              "source": "fixture:fixture:context",
+              "payload_sha256": "4d7d0955fdcf6b88f8b3496e0a64f817dbf78ba86530a5bbd17a1be1d760ac13"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "release",
+      "dependencies": [
+        "context"
+      ],
+      "status": "VERIFIED",
+      "output": {
+        "metadata": [
+          {
+            "id": "fixture:release",
+            "title": "Synthetic release metadata",
+            "provenance": {
+              "source": "fixture:fixture:release",
+              "payload_sha256": "117ab8f86cb91323a77e6c63fd5b4181990e21691fcc31802ee3c97b4fcce97c"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "retained_evidence": [
+    {
+      "task_id": "catalog",
+      "use": "metadata_evidence_only",
+      "record": {
+        "id": "fixture:catalog",
+        "title": "Synthetic catalog metadata",
+        "provenance": {
+          "source": "fixture:fixture:catalog",
+          "payload_sha256": "fb70cb32bc54b143baa59472b8508bc19c85f7c02f5fb0e8157bd3829ad5c95d"
+        }
+      }
+    },
+    {
+      "task_id": "study",
+      "use": "metadata_evidence_only",
+      "record": {
+        "id": "fixture:study",
+        "title": "Synthetic study metadata",
+        "provenance": {
+          "source": "fixture:fixture:study",
+          "payload_sha256": "40fde403ffec1a12aaa0de35a290d48e1294222889e1c11a2bd9ad0115c5302e"
+        }
+      }
+    },
+    {
+      "task_id": "context",
+      "use": "metadata_evidence_only",
+      "record": {
+        "id": "fixture:context",
+        "title": "Synthetic context metadata",
+        "provenance": {
+          "source": "fixture:fixture:context",
+          "payload_sha256": "4d7d0955fdcf6b88f8b3496e0a64f817dbf78ba86530a5bbd17a1be1d760ac13"
+        }
+      }
+    },
+    {
+      "task_id": "release",
+      "use": "metadata_evidence_only",
+      "record": {
+        "id": "fixture:release",
+        "title": "Synthetic release metadata",
+        "provenance": {
+          "source": "fixture:fixture:release",
+          "payload_sha256": "117ab8f86cb91323a77e6c63fd5b4181990e21691fcc31802ee3c97b4fcce97c"
+        }
+      }
+    }
+  ],
+  "quarantined_outputs": [],
+  "critiques": [],
+  "dispatch_history": [
+    "catalog",
+    "study",
+    "context",
+    "release"
+  ],
+  "limitations": [
+    "Built-in scenarios use synthetic metadata only and call no external repositories or models.",
+    "Completed means the fixture passed its configured gates, not a scientific finding or universal safety guarantee.",
+    "The monitor is deterministic in this demonstration; it is not a validated live LLM research-integrity critic.",
+    "Registered callbacks are trusted Python code, not sandboxed. An in-flight callback cannot be forcibly stopped here.",
+    "Hashes detect changes relative to retained receipts; they are not signatures or independent source authentication.",
+    "The built-in scenarios perform no biological, genotype or sequence analysis, permission grants, agreements or external publication.",
+    "Custom registered callbacks are not runtime-metered. Their side effects and suitability require separate review.",
+    "A stopped run cannot resume. Remediation needs a separate reviewed run; this prototype cannot grant that approval."
+  ],
+  "external_calls": 0,
+  "external_call_accounting": "zero_by_fixture_construction",
+  "audit_events": [
+    {
+      "index": 0,
+      "event": "created",
+      "state": "READY",
+      "details": {
+        "task_ids": [
+          "catalog",
+          "study",
+          "context",
+          "release"
+        ],
+        "max_dispatches": 4
+      },
+      "previous_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sha256": "0c398d1471d980b406e5b2a9d97343ab5f8090a85c739eb7779af2521be71b7c"
+    },
+    {
+      "index": 1,
+      "event": "started",
+      "state": "RUNNING",
+      "details": {},
+      "previous_sha256": "0c398d1471d980b406e5b2a9d97343ab5f8090a85c739eb7779af2521be71b7c",
+      "sha256": "5a9a70dd454ca5b99d27939480f22303a173dce344b33c09aa2d2576247876d3"
+    },
+    {
+      "index": 2,
+      "event": "gate_passed",
+      "state": "RUNNING",
+      "details": {
+        "phase": "before",
+        "task_id": "catalog",
+        "integrity": "valid"
+      },
+      "previous_sha256": "5a9a70dd454ca5b99d27939480f22303a173dce344b33c09aa2d2576247876d3",
+      "sha256": "52cd346b2233cb0f4c2700219a66d60356b9918d64bf39feaf711eb6e631d82a"
+    },
+    {
+      "index": 3,
+      "event": "dispatch",
+      "state": "RUNNING",
+      "details": {
+        "task_id": "catalog",
+        "callback": "catalog"
+      },
+      "previous_sha256": "52cd346b2233cb0f4c2700219a66d60356b9918d64bf39feaf711eb6e631d82a",
+      "sha256": "9ac0323d994167a9db7372cbf6006e2fcd2c030cd10be1646553385dee1e262c"
+    },
+    {
+      "index": 4,
+      "event": "output_pending_review",
+      "state": "RUNNING",
+      "details": {
+        "task_id": "catalog",
+        "output_sha256": "0edbadf6a7b33100f85d221d2b35260654646e030c9aeaef17feea3770a7b423",
+        "summary_sha256": "939c9f9376740eba551b1305fad6147852fc077a8c59f17d79e756176cbe8fc2"
+      },
+      "previous_sha256": "9ac0323d994167a9db7372cbf6006e2fcd2c030cd10be1646553385dee1e262c",
+      "sha256": "a325b1ca645291caf9fcbf7bdb4357373226b5c61710192e7686a09b1dcbf7e9"
+    },
+    {
+      "index": 5,
+      "event": "gate_passed",
+      "state": "RUNNING",
+      "details": {
+        "phase": "after",
+        "task_id": "catalog",
+        "integrity": "valid"
+      },
+      "previous_sha256": "a325b1ca645291caf9fcbf7bdb4357373226b5c61710192e7686a09b1dcbf7e9",
+      "sha256": "475eac54e0b8de3752bfe3dd7d65961459d45568e821c6fa7ef5c98757d7ab26"
+    },
+    {
+      "index": 6,
+      "event": "output_verified",
+      "state": "RUNNING",
+      "details": {
+        "task_id": "catalog",
+        "scope": "configured_fixture_checks_only"
+      },
+      "previous_sha256": "475eac54e0b8de3752bfe3dd7d65961459d45568e821c6fa7ef5c98757d7ab26",
+      "sha256": "0b7389ddfd817f4e6204283c6607981186640aa0d4b5e2f0f739477ed6597137"
+    },
+    {
+      "index": 7,
+      "event": "gate_passed",
+      "state": "RUNNING",
+      "details": {
+        "phase": "before",
+        "task_id": "study",
+        "integrity": "valid"
+      },
+      "previous_sha256": "0b7389ddfd817f4e6204283c6607981186640aa0d4b5e2f0f739477ed6597137",
+      "sha256": "4c4ea7f8f15e527691abc42d36354fc1fd5468d95170659f49219851354f6a7e"
+    },
+    {
+      "index": 8,
+      "event": "dispatch",
+      "state": "RUNNING",
+      "details": {
+        "task_id": "study",
+        "callback": "study"
+      },
+      "previous_sha256": "4c4ea7f8f15e527691abc42d36354fc1fd5468d95170659f49219851354f6a7e",
+      "sha256": "0c0b31b613771a2e3a4e9410feb2ffdfa768d273cb6e2453b83fdf9d20560c6b"
+    },
+    {
+      "index": 9,
+      "event": "output_pending_review",
+      "state": "RUNNING",
+      "details": {
+        "task_id": "study",
+        "output_sha256": "6dcceae773110b4f3d26c5886101900053c9bb7c5eabc43481ad79e720cde179",
+        "summary_sha256": "c76217f35252cae6d3f028042cfe577b0f7d8bf43396b9cbc4c33603169c3db9"
+      },
+      "previous_sha256": "0c0b31b613771a2e3a4e9410feb2ffdfa768d273cb6e2453b83fdf9d20560c6b",
+      "sha256": "2219d0ef8560997f3df0844c80e18d47c91b15c9aaae49b2f16ffac113036148"
+    },
+    {
+      "index": 10,
+      "event": "gate_passed",
+      "state": "RUNNING",
+      "details": {
+        "phase": "after",
+        "task_id": "study",
+        "integrity": "valid"
+      },
+      "previous_sha256": "2219d0ef8560997f3df0844c80e18d47c91b15c9aaae49b2f16ffac113036148",
+      "sha256": "d1dce5791d7d862a771d5fd2c37499f8b1e2762c9894b830d6c7c59fa4c3a011"
+    },
+    {
+      "index": 11,
+      "event": "output_verified",
+      "state": "RUNNING",
+      "details": {
+        "task_id": "study",
+        "scope": "configured_fixture_checks_only"
+      },
+      "previous_sha256": "d1dce5791d7d862a771d5fd2c37499f8b1e2762c9894b830d6c7c59fa4c3a011",
+      "sha256": "fcadd4542e2bd4155d6575eefa5eadee9c6ae7b1a84b767b579e400c26efdc03"
+    },
+    {
+      "index": 12,
+      "event": "gate_passed",
+      "state": "RUNNING",
+      "details": {
+        "phase": "before",
+        "task_id": "context",
+        "integrity": "valid"
+      },
+      "previous_sha256": "fcadd4542e2bd4155d6575eefa5eadee9c6ae7b1a84b767b579e400c26efdc03",
+      "sha256": "2dd064cd4cd7970a1cce316ea32839f6ab94a2b1a1bcc4fc6f3600f8e72856f8"
+    },
+    {
+      "index": 13,
+      "event": "dispatch",
+      "state": "RUNNING",
+      "details": {
+        "task_id": "context",
+        "callback": "context"
+      },
+      "previous_sha256": "2dd064cd4cd7970a1cce316ea32839f6ab94a2b1a1bcc4fc6f3600f8e72856f8",
+      "sha256": "08f9e3647b9b81558a62af7668c23c9df520006322c25454d48263ad196a12cb"
+    },
+    {
+      "index": 14,
+      "event": "output_pending_review",
+      "state": "RUNNING",
+      "details": {
+        "task_id": "context",
+        "output_sha256": "8000bac059190ffd6b70f73832f831edc7fc60a8fbad1fdf7b864b71ba7fbf29",
+        "summary_sha256": "95f1557fffbd0be3296215d8ddcf2f70199248abf338eeb64d8265f86aa2592a"
+      },
+      "previous_sha256": "08f9e3647b9b81558a62af7668c23c9df520006322c25454d48263ad196a12cb",
+      "sha256": "ed0dc7f6c86ee28cb621c2c4f42896a62e1e05b474723902c6a6245d34eb5ca2"
+    },
+    {
+      "index": 15,
+      "event": "gate_passed",
+      "state": "RUNNING",
+      "details": {
+        "phase": "after",
+        "task_id": "context",
+        "integrity": "valid"
+      },
+      "previous_sha256": "ed0dc7f6c86ee28cb621c2c4f42896a62e1e05b474723902c6a6245d34eb5ca2",
+      "sha256": "3f9f164c4585ec59939cf9aea93a91d4c0bce09d5f80598231a170116f6f45bc"
+    },
+    {
+      "index": 16,
+      "event": "output_verified",
+      "state": "RUNNING",
+      "details": {
+        "task_id": "context",
+        "scope": "configured_fixture_checks_only"
+      },
+      "previous_sha256": "3f9f164c4585ec59939cf9aea93a91d4c0bce09d5f80598231a170116f6f45bc",
+      "sha256": "cb97720d3ea3c7ad0a821426261b2bdc2d13085e55077fa8c8a8f60425126ea5"
+    },
+    {
+      "index": 17,
+      "event": "gate_passed",
+      "state": "RUNNING",
+      "details": {
+        "phase": "before",
+        "task_id": "release",
+        "integrity": "valid"
+      },
+      "previous_sha256": "cb97720d3ea3c7ad0a821426261b2bdc2d13085e55077fa8c8a8f60425126ea5",
+      "sha256": "ec19d72794d731a6b653a196552eb1faaedc79dc8ac2f61894cd10841fb01ea2"
+    },
+    {
+      "index": 18,
+      "event": "dispatch",
+      "state": "RUNNING",
+      "details": {
+        "task_id": "release",
+        "callback": "release"
+      },
+      "previous_sha256": "ec19d72794d731a6b653a196552eb1faaedc79dc8ac2f61894cd10841fb01ea2",
+      "sha256": "62cb6dec29182fff3922f2083636ae67a7a4306b7dfb06742e7cbe42dabd88f4"
+    },
+    {
+      "index": 19,
+      "event": "output_pending_review",
+      "state": "RUNNING",
+      "details": {
+        "task_id": "release",
+        "output_sha256": "4240f43bb6ba0be87be57099513a0e841b09e0abab8c8bfe64fbdd1480f84336",
+        "summary_sha256": "9b53822edde83bb288661c2e974772595964227d5c95a02edcaa72cad5ecf73b"
+      },
+      "previous_sha256": "62cb6dec29182fff3922f2083636ae67a7a4306b7dfb06742e7cbe42dabd88f4",
+      "sha256": "6ae239a974daab0955c085409429cf314c3da2e4e2291bf0d5e69dff97c6b280"
+    },
+    {
+      "index": 20,
+      "event": "gate_passed",
+      "state": "RUNNING",
+      "details": {
+        "phase": "after",
+        "task_id": "release",
+        "integrity": "valid"
+      },
+      "previous_sha256": "6ae239a974daab0955c085409429cf314c3da2e4e2291bf0d5e69dff97c6b280",
+      "sha256": "d95801df0010e3c719838742db5d2af79df94dc01b0024128e66a310745e5125"
+    },
+    {
+      "index": 21,
+      "event": "output_verified",
+      "state": "RUNNING",
+      "details": {
+        "task_id": "release",
+        "scope": "configured_fixture_checks_only"
+      },
+      "previous_sha256": "d95801df0010e3c719838742db5d2af79df94dc01b0024128e66a310745e5125",
+      "sha256": "80d7ad0a28848e275172b9d622ac2bb51f2741ce2f11569e268324f760423e76"
+    },
+    {
+      "index": 22,
+      "event": "completed",
+      "state": "COMPLETED",
+      "details": {
+        "snapshot_sha256": "5602913122332b279d27bda2ecb953718b340fe3f89d6f72771d4e4b890011e5",
+        "verified_tasks": 4,
+        "biological_claims": 0
+      },
+      "previous_sha256": "80d7ad0a28848e275172b9d622ac2bb51f2741ce2f11569e268324f760423e76",
+      "sha256": "cc54e23e48fadaa1c3e0e5b5ad77854741e97abbe4b25ef8ffc2eac5fa508fc7"
+    }
+  ],
+  "audit_head": "cc54e23e48fadaa1c3e0e5b5ad77854741e97abbe4b25ef8ffc2eac5fa508fc7",
+  "snapshot_sha256": "15f9c80cd9bd89bf69a6101c8661f6bd96654c7a076f1497c8f1c8613d982f12"
+}

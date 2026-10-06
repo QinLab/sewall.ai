@@ -58,7 +58,8 @@ class AgentCLITests(unittest.TestCase):
         self.assertEqual(client.call_args_list[1].args[0].api_version, "v1beta1")
         self.assertEqual(run.call_args.args, ("Inspect public plant metadata", clients[0], clients[1]))
         self.assertEqual(run.call_args.kwargs, {"max_actions": 3, "max_model_calls": 5, "max_records": 7,
-                                               "per_search": 2, "max_seconds": 90, "previous": previous})
+                                               "per_search": 2, "max_seconds": 90, "previous": previous,
+                                               "monitor": None})
         save.assert_called_once_with(manifest, self.output_path)
 
     def test_incomplete_run_is_saved_and_returns_nonzero(self):
@@ -123,6 +124,9 @@ class VersionedModelConfigTests(unittest.TestCase):
 class _RegistrationOnlyServer:
     def __init__(self, *args, **kwargs):
         self.run = Mock(side_effect=AssertionError("Tests must not start MCP transport"))
+        self.settings = SimpleNamespace(host="127.0.0.1", port=8000, transport_security=SimpleNamespace(
+            allowed_hosts=["127.0.0.1:*", "localhost:*", "[::1]:*"],
+            allowed_origins=["http://127.0.0.1:*", "http://localhost:*", "http://[::1]:*"]))
 
     def tool(self, **kwargs):
         return lambda function: function
@@ -177,6 +181,52 @@ class AgentMCPBoundaryTests(unittest.TestCase):
         verify.assert_called_once_with({"saved": "trace"})
         guard.assert_not_called()
         client.assert_not_called()
+
+    def test_planned_research_checks_the_allocation_before_the_plan(self):
+        module = _mcp_functions_without_optional_sdk()
+        with patch("sewall.agent.require_cpu_allocation", side_effect=RuntimeError("CPU allocation required")), \
+                patch("sewall.agent.run_agent") as run:
+            with self.assertRaisesRegex(RuntimeError, "CPU allocation"):
+                module.run_planned_research("Public question", [{"action": "search"}])
+        run.assert_not_called()
+
+    def test_planned_research_runs_the_host_plan_as_a_labeled_script(self):
+        module = _mcp_functions_without_optional_sdk()
+        steps = [{"action": "search", "database": "pubmed", "query": "Zostera marina", "reason": "Find literature"}]
+        with patch("sewall.agent.require_cpu_allocation"), patch("sewall.llm.VertexClient") as vertex, \
+                patch("sewall.agent.run_agent", return_value={"status": "completed"}) as run:
+            self.assertEqual(module.run_planned_research("Public question", steps, max_actions=2), {"status": "completed"})
+        vertex.assert_not_called()
+        question, planner, reviewer = run.call_args.args
+        self.assertIs(planner, reviewer)
+        self.assertEqual(run.call_args.kwargs, {"max_actions": 2})
+        self.assertEqual((planner.script["origin"], planner.script["steps"]), ("mcp_host", steps))
+        with patch("sewall.agent.require_cpu_allocation"), self.assertRaises(ValueError):
+            module.run_planned_research("Public question", [])
+
+    def test_offline_tools_list_skills_and_verify_any_mode(self):
+        module = _mcp_functions_without_optional_sdk()
+        self.assertIn("taxon_inventory", {item["operation"] for item in module.list_skills()["skills"]})
+        demo = module.run_safety_demo("critical_critique")
+        self.assertEqual(module.verify_recorded_run(demo)["valid"], True)
+        demo["status"] = "completed"
+        self.assertEqual(module.verify_recorded_run(demo)["valid"], False)
+
+    def test_http_transport_binds_loopback_and_names_tunnel_hosts(self):
+        module = _mcp_functions_without_optional_sdk()
+        module.mcp.run = Mock()
+        module.main(["--transport", "streamable-http", "--port", "8123", "--allowed-host", "abc.example.app"])
+        module.mcp.run.assert_called_once_with(transport="streamable-http")
+        settings = module.mcp.settings
+        self.assertEqual((settings.host, settings.port), ("127.0.0.1", 8123))
+        self.assertIn("abc.example.app", settings.transport_security.allowed_hosts)
+        self.assertIn("https://abc.example.app", settings.transport_security.allowed_origins)
+        for argv in (["--port", "80"], ["--allowed-host", "evil.example/path"], ["--transport", "sse"]):
+            with self.subTest(argv=argv), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+                module.main(argv)
+        module.mcp.run.reset_mock()
+        module.main([])
+        module.mcp.run.assert_called_once_with(transport="stdio")
 
 
 if __name__ == "__main__":

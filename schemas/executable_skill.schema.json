@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sewall-discover:executable-skill:0.2.0",
+  "title": "Sewall.ai executable Skill descriptor 0.2.0",
+  "description": "A versioned contract binding one planner operation to an allowlisted implementation. A descriptor is data: it cannot add code, endpoints or permissions, and it may narrow but never widen the implementation's allowed argument values. sewall.skills.validate_descriptor enforces the same shape without jsonschema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "skill_id", "version", "name", "description", "operation", "implementation", "planner_template", "planner_guidance", "arguments", "sources", "external_actions", "evidence", "policy_constraints", "validation"],
+  "properties": {
+    "$schema": {"const": "../../schemas/executable_skill.schema.json"},
+    "schema_version": {"const": "0.2.0"},
+    "skill_id": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"},
+    "version": {"type": "string", "pattern": "^(0|[1-9][0-9]{0,3})\\.(0|[1-9][0-9]{0,3})\\.(0|[1-9][0-9]{0,3})$"},
+    "name": {"$ref": "#/$defs/text"},
+    "description": {"$ref": "#/$defs/text"},
+    "operation": {"type": "string", "pattern": "^[a-z][a-z_]{1,39}$", "not": {"const": "finish"}},
+    "implementation": {"$ref": "#/$defs/text"},
+    "planner_template": {"type": "string", "minLength": 1, "maxLength": 600},
+    "planner_guidance": {"type": "array", "maxItems": 20, "items": {"$ref": "#/$defs/shortText"}},
+    "arguments": {
+      "type": "array", "maxItems": 10,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["name", "type", "description"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1, "maxLength": 40, "not": {"enum": ["action", "reason"]}},
+          "type": {"enum": ["string", "record_id"]},
+          "description": {"$ref": "#/$defs/shortText"},
+          "enum": {"type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": {"$ref": "#/$defs/shortText"}},
+          "max_length": {"type": "integer", "minimum": 1, "maximum": 4000}
+        }
+      }
+    },
+    "sources": {"type": "array", "minItems": 1, "maxItems": 20, "items": {"$ref": "#/$defs/shortText"}},
+    "external_actions": {"type": "boolean"},
+    "evidence": {
+      "type": "object", "additionalProperties": false, "required": ["method", "supports_causality", "limitations"],
+      "properties": {
+        "method": {"type": "string", "minLength": 1, "maxLength": 200},
+        "supports_causality": {"const": false},
+        "limitations": {"type": "array", "minItems": 1, "maxItems": 20, "items": {"$ref": "#/$defs/shortText"}}
+      }
+    },
+    "policy_constraints": {
+      "type": "object", "additionalProperties": false, "required": ["egress", "may_grant_access", "may_sign_agreements", "attribution"],
+      "properties": {
+        "egress": {"enum": ["public_metadata_only", "local_draft_only"]},
+        "may_grant_access": {"const": false},
+        "may_sign_agreements": {"const": false},
+        "attribution": {"$ref": "#/$defs/shortText"}
+      }
+    },
+    "validation": {
+      "type": "object", "additionalProperties": false, "required": ["tests"],
+      "properties": {"tests": {"type": "array", "minItems": 1, "maxItems": 20, "items": {"$ref": "#/$defs/shortText"}}}
+    }
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "shortText": {"type": "string", "minLength": 1, "maxLength": 600}
+  }
+}

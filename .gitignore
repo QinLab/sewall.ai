@@ -10,3 +10,7 @@ slurm-sewall-*.err
 .DS_Store
 .env
 .env.*
+build/
+dist/
+*.egg-info/
+_site/

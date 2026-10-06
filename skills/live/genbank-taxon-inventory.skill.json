@@ -1,0 +1,39 @@
+{
+  "$schema": "../../schemas/executable_skill.schema.json",
+  "schema_version": "0.2.0",
+  "skill_id": "genbank.taxon-inventory",
+  "version": "0.1.0",
+  "name": "Inventory GenBank nucleotide records for a taxon",
+  "description": "Count public NCBI Nucleotide (GenBank) records for one taxon by marker gene and summarize a few records with their strain, location and collection-date qualifiers. No sequences are downloaded.",
+  "operation": "taxon_inventory",
+  "implementation": "sewall.agent:genbank_inventory",
+  "planner_template": "{\"action\":\"taxon_inventory\",\"taxon\":\"NCBI taxonomy ID or scientific name\",\"reason\":\"why\"}",
+  "planner_guidance": [
+    "Use taxon_inventory to learn which public sequence records exist for one organism: totals with transcriptome assembly (TSA) contigs counted separately, LSU, SSU, ITS and COI counts, and a few non-TSA record summaries.",
+    "Pass a numeric NCBI taxonomy ID from returned taxon_ids, or a scientific name such as Genus species; never a free-text query.",
+    "Inventory counts describe what has been deposited; they do not establish presence, abundance or identity at any site."
+  ],
+  "arguments": [
+    {"name": "taxon", "type": "string", "max_length": 100,
+     "description": "A numeric NCBI taxonomy ID, or a scientific name of one to three words starting with a capitalized genus."}
+  ],
+  "sources": ["NCBI Nucleotide (GenBank) through E-utilities ESearch and ESummary"],
+  "external_actions": true,
+  "evidence": {
+    "method": "title_keyword_record_counts",
+    "supports_causality": false,
+    "limitations": [
+      "Marker counts match title keywords and are approximate.",
+      "A single transcriptome assembly can add over 100,000 TSA records; compare total_excluding_tsa across taxa.",
+      "Organism search includes descendant taxa and NCBI synonyms.",
+      "Strain, location and date qualifiers are submitter metadata and are often missing."
+    ]
+  },
+  "policy_constraints": {
+    "egress": "public_metadata_only",
+    "may_grant_access": false,
+    "may_sign_agreements": false,
+    "attribution": "Cite GenBank accessions for any record discussed. NCBI disclaimer: https://www.ncbi.nlm.nih.gov/About/disclaimer.html"
+  },
+  "validation": {"tests": ["tests/test_genbank.py", "tests/test_skills.py"]}
+}

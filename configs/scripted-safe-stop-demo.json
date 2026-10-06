@@ -1,0 +1,15 @@
+{
+  "name": "chesapeake-safe-stop-demo",
+  "description": "The Chesapeake bloom steps with one injected integrity fault after the first GenBank inventory. Demonstrates a controlled safe stop. Runs without model keys.",
+  "steps": [
+    {"action": "search", "database": "pubmed", "query": "(Margalefidinium polykrikoides OR Cochlodinium polykrikoides) AND Chesapeake", "reason": "Find published reports of M. polykrikoides blooms in Chesapeake Bay waters"},
+    {"action": "taxon_inventory", "taxon": "Margalefidinium polykrikoides", "reason": "Count public sequence records and strains for the bloom-forming dinoflagellate"},
+    {"action": "taxon_inventory", "taxon": "Alexandrium monilatum", "reason": "Count public sequence records for the co-occurring dinoflagellate"}
+  ],
+  "critiques": [
+    {"after_action": 2, "type": "missing_provenance", "reason": "the inventory is treated as lacking verified provenance so the stop path can be inspected"}
+  ],
+  "gaps": [
+    "This run demonstrates the safe-stop path; its stop is caused by an injected fault, not a real integrity failure."
+  ]
+}

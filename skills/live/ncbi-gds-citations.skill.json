@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schemas/executable_skill.schema.json",
+  "schema_version": "0.2.0",
+  "skill_id": "ncbi.gds-citations",
+  "version": "0.2.0",
+  "name": "Follow explicit GEO study publications",
+  "description": "Retrieve PubMed summaries for publication identifiers explicitly listed in a returned GEO DataSets record.",
+  "operation": "citations",
+  "implementation": "sewall.agent:gds_citations",
+  "planner_template": "{\"action\":\"citations\",\"record_id\":\"an existing ncbi:gds:UID\",\"reason\":\"why\"}",
+  "planner_guidance": [
+    "The citations action follows only publication IDs explicitly listed in a returned GDS record.",
+    "Prefer following those explicit study-publication links when relevant to the question."
+  ],
+  "arguments": [
+    {"name": "record_id", "type": "record_id", "description": "A returned GEO DataSets record identifier."}
+  ],
+  "sources": ["NCBI E-utilities ESummary"],
+  "external_actions": true,
+  "evidence": {
+    "method": "explicit_source_field",
+    "supports_causality": false,
+    "limitations": [
+      "A listed publication describes a study; it is not independent validation of that study."
+    ]
+  },
+  "policy_constraints": {
+    "egress": "public_metadata_only",
+    "may_grant_access": false,
+    "may_sign_agreements": false,
+    "attribution": "Cite the GEO record field that lists each publication."
+  },
+  "validation": {"tests": ["tests/test_agent.py", "tests/test_skills.py"]}
+}

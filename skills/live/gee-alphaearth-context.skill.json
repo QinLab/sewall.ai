@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schemas/executable_skill.schema.json",
+  "schema_version": "0.2.0",
+  "skill_id": "gee.alphaearth-context",
+  "version": "0.1.0",
+  "name": "AlphaEarth annual landscape context over a named site",
+  "description": "Average the 64 AlphaEarth Foundations satellite embedding bands for one year over a named site inside Google Earth Engine. Returns one summary vector with dataset and model versions; no imagery is downloaded.",
+  "operation": "alphaearth_context",
+  "implementation": "sewall.agent:earthengine_alphaearth",
+  "planner_template": "{\"action\":\"alphaearth_context\",\"site\":\"lafayette-river\",\"year\":\"YYYY\",\"reason\":\"why\"}",
+  "planner_guidance": [
+    "Use alphaearth_context for annual landscape context at a named site, for example to compare one year with another.",
+    "Pass a completed year from 2017 onward. A year without a published layer returns zero images, which is a coverage gap.",
+    "Embedding dimensions are learned features, not physical measurements, and an annual layer cannot resolve a bloom or any other short event."
+  ],
+  "arguments": [
+    {"name": "site", "type": "string", "enum": ["lafayette-river"],
+     "description": "A named study site. Each site is a fixed approximate bounding box recorded in the result."},
+    {"name": "year", "type": "string", "max_length": 4, "description": "A completed calendar year, YYYY, from 2017."}
+  ],
+  "sources": ["Google AlphaEarth Foundations Satellite Embedding V1, Earth Engine collection GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL"],
+  "external_actions": true,
+  "evidence": {
+    "method": "annual_mean_embedding_over_site",
+    "supports_causality": false,
+    "limitations": [
+      "Embedding dimensions are learned features, not individual physical measurements.",
+      "The mean of unit-length embeddings is shorter than one; its length reflects how varied the site is.",
+      "An annual layer cannot resolve daily or seasonal events.",
+      "The site is an approximate bounding box that mixes water, shoreline and land."
+    ]
+  },
+  "policy_constraints": {
+    "egress": "public_metadata_only",
+    "may_grant_access": false,
+    "may_sign_agreements": false,
+    "attribution": "The AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind. Licensed CC BY 4.0. Earth Engine use requires a registered Cloud project and is subject to Earth Engine terms."
+  },
+  "validation": {"tests": ["tests/test_earthengine.py", "tests/test_skills.py"]}
+}

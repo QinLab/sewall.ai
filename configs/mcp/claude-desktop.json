@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "sewall": {
+      "command": "/ABSOLUTE/PATH/TO/sewall.ai/.venv/bin/sewall-mcp",
+      "args": []
+    }
+  }
+}
