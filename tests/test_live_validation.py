@@ -75,7 +75,9 @@ class ValidationInputTests(unittest.TestCase):
     def test_cpu_guard_blocks_receipt_creation_without_an_allocation(self):
         output = Path(self.directory.name) / "receipt.json"
         stderr = io.StringIO()
-        with patch.dict(os.environ, {}, clear=True), redirect_stderr(stderr):
+        # Simulate a Slurm host so the guard applies on workstations and CI runners too.
+        with patch.dict(os.environ, {}, clear=True), patch("sewall.agent._on_slurm_cluster", return_value=True), \
+                redirect_stderr(stderr):
             with self.assertRaises(SystemExit) as error:
                 validation.main([str(self.path), "--out", str(output)])
         self.assertEqual(error.exception.code, 2)
