@@ -1,5 +1,8 @@
 # Sewall.ai live-model MVP validation
 
+> Historical record of an earlier internal layout and action set, superseded by later
+> releases. Paths, test counts and the provider list are not current.
+
 September 10, 2026. These observations establish software and public-metadata interface
 behavior, not biological findings or production readiness. The earlier
 [fixture validation](validation-2026-09-10.md) remains a separate historical record.

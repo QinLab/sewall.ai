@@ -3,8 +3,11 @@
 A script is a fixed list of Skill actions. The controller checks scripted
 actions exactly as it checks model proposals. The scripted reviewer reports
 what was retrieved and makes no assessment of content. A value of the form
-"$record:DATABASE:N" names the Nth returned record from that database; a step
-whose placeholder cannot be resolved is skipped.
+"$record:DATABASE:N" names the Nth returned record from that database. A step
+whose placeholder cannot be resolved is passed on unresolved, so the controller
+rejects it and the run fails rather than finishing with a step missing. Steps
+left when the action budget runs out are still proposed, so the controller
+records the run as budget_exhausted rather than completed.
 
 An optional "origin" of "mcp_host" records that an MCP host model wrote the
 steps before execution; the default "fixed" means a person wrote them.
@@ -77,20 +80,16 @@ class ScriptedClient:
             if match:
                 ids = [record["id"] for record in records if record.get("database") == match.group(1)]
                 index = int(match.group(2))
-                if index >= len(ids):
-                    return None
-                value = ids[index]
+                if index < len(ids):
+                    value = ids[index]
             resolved[key] = value
         return resolved
 
     def _plan(self, payload):
         records = payload.get("records", [])
-        if payload.get("budget", {}).get("remaining_actions", 0) > 0:
-            while self._next < len(self.script["steps"]):
-                step = self._resolve(self.script["steps"][self._next], records)
-                self._next += 1
-                if step is not None:
-                    return step
+        if self._next < len(self.script["steps"]):
+            self._next += 1
+            return self._resolve(self.script["steps"][self._next - 1], records)
         gaps = list(dict.fromkeys([*self.script.get("gaps", []), *_GAPS[self.script.get("origin", "fixed")]]))
         return {"action": "finish", "reason": "Scripted steps are complete", "proposed_links": [],
                 "record_ids": [record["id"] for record in records][:15], "gaps": gaps[:12]}

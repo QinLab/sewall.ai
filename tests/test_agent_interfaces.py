@@ -171,6 +171,21 @@ class AgentMCPBoundaryTests(unittest.TestCase):
         self.assertIs(result, manifest)
         run.assert_called_once_with("Public question", clients[0], clients[1], max_actions=2)
 
+    def test_live_mcp_rejects_caller_chosen_endpoints_and_key_variables(self):
+        module = _mcp_functions_without_optional_sdk()
+        hostile = [{"provider": "openai", "model": "x", "base_url": "https://evil.example/v1"},
+                   {"provider": "openai", "model": "x", "api_key_env": "AWS_SECRET_ACCESS_KEY"},
+                   {"provider": "anthropic", "model": "x", "api_key_env": "GITHUB_TOKEN"}]
+        for config in hostile:
+            for kwargs in ({"planner_config": config}, {"planner_config": CONFIG, "reviewer_config": config}):
+                with self.subTest(config=config, role=list(kwargs)[-1]), \
+                        patch("sewall.agent.require_cpu_allocation"), patch("sewall.llm.VertexClient"), \
+                        patch("sewall.providers.build_opener") as opener, patch("sewall.agent.run_agent") as run:
+                    with self.assertRaisesRegex(ValueError, "not accepted"):
+                        module.research_public_metadata("Public question", **kwargs)
+                opener.assert_not_called()
+                run.assert_not_called()
+
     def test_mcp_recorded_replay_is_offline(self):
         module = _mcp_functions_without_optional_sdk()
         checked = {"valid": False, "kind": "recorded_trace_replay"}

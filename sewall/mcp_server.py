@@ -73,15 +73,17 @@ def discover_ncbi_metadata(database: str, query: str, limit: int = 5) -> dict:
     return search_metadata(database, query, limit=limit)
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True, destructiveHint=False,
+# Not read-only: it spends the server owner's model credits and sends data to model providers.
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=False, destructiveHint=False,
                                      idempotentHint=False, openWorldHint=True))
 def research_public_metadata(question: str, planner_config: dict,
                              reviewer_config: dict | None = None, max_actions: int = 4) -> dict:
     """LIVE model-driven metadata research with explicit model configurations.
 
     A config with "provider": "anthropic" or "openai" reads its API key from the server's
-    environment; a config without a provider uses Vertex AI. On a Slurm cluster this
-    requires a CPU compute-node allocation.
+    environment; a config without a provider uses Vertex AI. base_url and api_key_env are
+    rejected, so requests go only to each provider's default endpoint with its default key.
+    On a Slurm cluster this requires a CPU compute-node allocation.
 
     Sends the question and selected public metadata to the configured models. No private
     project files, controlled records, agreements, or arbitrary tools are sent or executed.
@@ -89,8 +91,8 @@ def research_public_metadata(question: str, planner_config: dict,
     from .agent import require_cpu_allocation, run_agent
     from .providers import client_from_config
     require_cpu_allocation()
-    planner = client_from_config(planner_config)
-    reviewer = client_from_config(reviewer_config) if reviewer_config else planner
+    planner = client_from_config(planner_config, allow_endpoint_fields=False)
+    reviewer = client_from_config(reviewer_config, allow_endpoint_fields=False) if reviewer_config else planner
     return run_agent(question, planner, reviewer, max_actions=max_actions)
 
 
@@ -114,7 +116,8 @@ def run_planned_research(question: str, steps: list[dict], max_actions: int = 4)
     """LIVE public metadata research from a plan of Skill actions written by the calling model.
 
     Each step is {"action": OPERATION, "reason": TEXT, ...Skill arguments as strings}; see
-    list_skills. A value "$record:DATABASE:N" names the Nth record returned from DATABASE.
+    list_skills. A value "$record:DATABASE:N" names the Nth record returned from DATABASE; if
+    no such record exists the run fails. Steps beyond max_actions end the run as budget_exhausted.
     The controller checks every step against the Skill registry, policies and budgets, and
     returns a replayable manifest. No separate model key is used, and no model assesses the
     retrieved metadata. On a Slurm cluster this requires a CPU compute-node allocation.

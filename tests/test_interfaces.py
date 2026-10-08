@@ -177,6 +177,7 @@ class MCPStdioIntegrationTests(unittest.IsolatedAsyncioTestCase):
                         research_tool = tools_by_name["research_public_metadata"]
                         self.assertTrue(research_tool.annotations.openWorldHint)
                         self.assertFalse(research_tool.annotations.idempotentHint)
+                        self.assertFalse(research_tool.annotations.readOnlyHint)
                         self.assertFalse(tools_by_name["verify_public_metadata_run"].annotations.openWorldHint)
                         # FastMCP derives a Pydantic argument model. model_config is
                         # reserved by Pydantic and prevents the entire server starting.

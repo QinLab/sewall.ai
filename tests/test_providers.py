@@ -42,9 +42,10 @@ class Transport:
 
     def __init__(self, document=None, url=ANTHROPIC_URL, error=None):
         self.document, self.url, self.error = document, url, error
-        self.requests, self.headers_seen = [], []
+        self.requests, self.headers_seen, self.handlers = [], [], []
 
     def __call__(self, *handlers):
+        self.handlers.append(handlers)
         opener = Mock()
         opener.open.side_effect = self.open
         return opener
@@ -77,6 +78,11 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(local.endpoint, "http://127.0.0.1:11434/v1/chat/completions")
         self.assertTrue(local.local)
         self.assertEqual(ProviderConfig.from_dict({"provider": "anthropic", "model": "c", "api_key_env": "LAB_KEY"}).key_variable, "LAB_KEY")
+        # A custom endpoint never inherits the default key variable.
+        self.assertIsNone(local.key_variable)
+        remote = ProviderConfig.from_dict({"provider": "openai", "model": "m", "base_url": "https://lab.example/v1"})
+        self.assertIsNone(remote.key_variable)
+        self.assertEqual(ProviderConfig.from_dict({**remote.to_dict(), "api_key_env": "LAB_KEY"}).key_variable, "LAB_KEY")
 
     def test_rejects_keys_urls_and_unbounded_values(self):
         invalid = [
@@ -109,6 +115,13 @@ class ConfigTests(unittest.TestCase):
         for bad in ({"provider": "other", "model": "x"}, "anthropic", {"provider": "anthropic", "model": "c", "project": "p"}):
             with self.subTest(bad=bad), self.assertRaises(ValueError):
                 client_from_config(bad)
+        for field, value in (("base_url", "https://lab.example/v1"), ("api_key_env", "LAB_KEY")):
+            config = {"provider": "openai", "model": "gpt-example", field: value}
+            self.assertIsInstance(client_from_config(config), OpenAIClient)
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "not accepted"):
+                client_from_config(config, allow_endpoint_fields=False)
+        self.assertIsInstance(client_from_config({"provider": "openai", "model": "gpt-example"},
+                                                 allow_endpoint_fields=False), OpenAIClient)
         recorded = recorded_config(openai(api_key_env="LAB_KEY"))
         self.assertEqual(recorded["api_key_env"], "LAB_KEY")
         self.assertEqual(recorded_config(Mock(config="other")), None)
@@ -164,6 +177,35 @@ class TransportTests(unittest.TestCase):
         self.assertEqual(body["max_tokens"], 1024)
         self.assertNotIn("max_completion_tokens", body)
         self.assertNotIn("Authorization", transport.headers_seen[0])
+
+    def test_custom_endpoint_never_receives_the_default_key(self):
+        for base_url, url in (("http://127.0.0.1:8001/v1", "http://127.0.0.1:8001/v1/chat/completions"),
+                              ("https://lab.example/v1", "https://lab.example/v1/chat/completions")):
+            transport = Transport(gpt(), url=url)
+            with self.subTest(base_url=base_url), patch.dict(os.environ, {"OPENAI_API_KEY": SECRET}), \
+                    patch("sewall.providers.build_opener", transport):
+                openai(base_url=base_url).complete_json("Plan.", {"q": 1})
+            self.assertNotIn("Authorization", transport.headers_seen[0])
+        transport = Transport(gpt(), url="http://127.0.0.1:8001/v1/chat/completions")
+        with patch.dict(os.environ, {"OPENAI_API_KEY": SECRET, "VLLM_KEY": "local-key"}), \
+                patch("sewall.providers.build_opener", transport):
+            openai(base_url="http://127.0.0.1:8001/v1", api_key_env="VLLM_KEY").complete_json("Plan.", {"q": 1})
+        self.assertEqual(transport.headers_seen[0]["Authorization"], "Bearer local-key")
+
+    def test_loopback_requests_bypass_proxies(self):
+        from urllib.request import ProxyHandler
+        local = Transport(gpt(), url="http://127.0.0.1:8001/v1/chat/completions")
+        remote = Transport(gpt(), url=OPENAI_URL)
+        with patch.dict(os.environ, {"OPENAI_API_KEY": SECRET}):
+            with patch("sewall.providers.build_opener", local):
+                openai(base_url="http://127.0.0.1:8001/v1").complete_json("Plan.", {"q": 1})
+            with patch("sewall.providers.build_opener", remote):
+                openai().complete_json("Plan.", {"q": 1})
+        proxies = [h for h in local.handlers[0] if isinstance(h, ProxyHandler)]
+        self.assertEqual(len(proxies), 1)
+        self.assertEqual(proxies[0].proxies, {})
+        # Remote HTTPS keeps the default proxy behavior that sites may require.
+        self.assertFalse(any(isinstance(h, ProxyHandler) for h in remote.handlers[0]))
 
     def test_missing_or_malformed_key_fails_before_any_request(self):
         transport = Transport(claude())

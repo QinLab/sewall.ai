@@ -1,7 +1,9 @@
 # Sewall.ai
 
-Sewall.ai is a research prototype of a federated, policy-aware, model-agnostic agentic data
-harness for biology. Existing public datasets stay with their repositories and custodians.
+Sewall.ai is a research prototype toward a federated, policy-aware, model-agnostic agentic
+data harness for biology. Existing public datasets stay with their repositories and custodians.
+This release runs over public NCBI metadata and Earth Engine summaries; federation with data
+custodians is not yet implemented.
 Bounded agents plan and review research over those holdings through versioned scientific
 Skills. Every action and source response is recorded, and every result can be inspected and
 replayed offline. The prototype demonstrates software behavior on public metadata and
@@ -49,9 +51,11 @@ docker build -t sewall . && docker run --rm sewall demo --out /tmp/demo
   unsupported links, repeated requests and unknown actions, and enforces budgets for actions,
   model calls, records and time.
 - **Keyless scripted planner.** A fixed action script drives the same controller, with every
-  step checked exactly as a model proposal would be.
+  step checked exactly as a model proposal would be. A script cut short by the action budget
+  ends as `budget_exhausted`, and a step whose `$record:` reference finds no record fails the
+  run; neither is reported as completed.
 - **Compute where the data are held.** Earth Engine Skills reduce satellite imagery inside
-  Earth Engine and return only small summaries.
+  Earth Engine and return only small summaries (tested with simulated responses only).
 - **Research-integrity safe stop.** Integrity gates run before and after every action. A
   critical critique quarantines affected outputs, withholds the review and records the run as
   "stopped, not successful."
@@ -91,7 +95,10 @@ variable named by `api_key_env`. A configuration names the variable and never ho
 no key is written to a manifest or an error message. Each call is one HTTPS request with
 redirects refused and no retry. OpenAI-compatible servers such as vLLM or Ollama are reached
 with `base_url` (see `configs/models/ollama.json`); plain HTTP is accepted only on the loopback
-interface. A file without a `provider` field is a Vertex AI configuration using Application
+interface, and loopback requests bypass any configured proxy. A configuration with `base_url`
+sends a key only from a variable it names in `api_key_env`, so `OPENAI_API_KEY` never reaches
+another server. The MCP tool `research_public_metadata` rejects `base_url` and `api_key_env`,
+so an MCP host cannot redirect the server owner's keys. A file without a `provider` field is a Vertex AI configuration using Application
 Default Credentials (see `configs/example-gemini.json`).
 
 The model names in the examples are illustrations; check each provider's current model list.

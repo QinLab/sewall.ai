@@ -6,23 +6,23 @@ withdraw unsafe dependent outputs, preserve the audit and tell the scientist tha
 did not succeed. It is not an assurance of universal scientific safety or an autonomous
 authorization system.
 
-Validation: Slurm CPU job 35200 passed all 186 regression tests with no skips and saved
-one clean plus seven safe-stopped demonstrations. Open the demonstration index (a local run artifact, not included in this repository)
-or inspect the validation receipt (a local run artifact, not included in this repository).
-The receipt includes tested source hashes. These results concern software behavior under
-synthetic faults, not scientific validity or detection of every integrity problem.
+Historical note (September 2026): during development, one internal Slurm CPU job ran the
+regression suite of that time (186 tests, no skips) and saved one clean plus seven
+safe-stopped demonstrations. Those artifacts are not part of this repository. The results
+concern software behavior under synthetic faults, not scientific validity or detection of
+every integrity problem.
 
 ## Run the deterministic scenarios
 
-Run on an allocated Slurm CPU compute node from `prototype/`, with the project's normal
-Python environment. Do not run computation on the login node.
+From the repository root, after `pip install .`:
 
 ```bash
-module load python3
-crun -p "$PWD/.waterfield-env" python3 -m sewall safety-demo --scenario critical_critique --out output/safety-critical
-crun -p "$PWD/.waterfield-env" python3 -m sewall safety-demo --scenario clean --out output/safety-clean
-crun -p "$PWD/.waterfield-env" python3 -m unittest discover -s tests -p 'test_safety*.py'
+sewall safety-demo --scenario critical_critique --out output/safety-critical
+sewall safety-demo --scenario clean --out output/safety-clean
+python3 -m unittest discover -s tests -t tests -p 'test_safety*.py'
 ```
+
+On a shared Slurm cluster, run these inside a compute allocation rather than on a login node.
 
 The CLI writes `manifest.json` and an escaped standalone `report.html`. A completed fixture
 returns exit code 0. A safe stop intentionally returns exit code 1; it is a successful test

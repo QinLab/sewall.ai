@@ -78,15 +78,14 @@ the server to the public internet. Anyone who learns a public forwarding URL can
 including the live tools, which make NCBI requests from your machine. Stop the forwarder when
 you are done.
 
-### Waterfield (ODU)
+### Slurm clusters
 
-Live tools refuse to run on a login node. Launch the server inside a CPU allocation from the
-absolute `prototype/` directory:
+On a Slurm host, live tools refuse to run outside a compute allocation. Launch the server
+inside a CPU allocation from the absolute path of the repository root, for example:
 
 ```bash
-srun --partition=cpu-30 --nodelist=wf-c3d-standard-30-1 \
-  --nodes=1 --ntasks=1 --cpus-per-task=2 --time=00:15:00 \
-  bash scripts/cpu_job.sh mcp
+srun --partition=YOUR-CPU-PARTITION --nodes=1 --ntasks=1 --cpus-per-task=2 --time=00:15:00 \
+  sewall-mcp
 ```
 
 Configure `srun` as the host's command with these arguments. On a machine without Slurm the

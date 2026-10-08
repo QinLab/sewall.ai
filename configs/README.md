@@ -7,7 +7,8 @@ limits only, never credentials.
   request time from `ANTHROPIC_API_KEY` or `OPENAI_API_KEY`, or from a variable named by
   `api_key_env`. Fields are validated by `sewall.providers.ProviderConfig`.
 - `models/ollama.json`: an OpenAI-compatible server on the loopback interface (`base_url`);
-  no key is needed.
+  no key is needed. A configuration with `base_url` sends a key only from a variable named in
+  `api_key_env`; it never sends the default `OPENAI_API_KEY`.
 - `example-gemini.json`, `example-llama.json`: Vertex AI. Set `project` to your own Google
   Cloud project; the client uses Application Default Credentials only. Fields are validated by
   `sewall.llm.ModelConfig`.

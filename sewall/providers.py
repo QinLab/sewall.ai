@@ -4,7 +4,10 @@ API keys come from environment variables named in the configuration and are
 read only at request time. Keys never enter a configuration, an audit record or
 an error message. Each call makes one HTTPS request with redirects refused and
 no retry. OpenAI-compatible servers (vLLM, Ollama) are reachable through
-base_url; plain HTTP is accepted only on the loopback interface.
+base_url; plain HTTP is accepted only on the loopback interface. A configuration
+with base_url sends a key only from a variable it names in api_key_env, so the
+default OPENAI_API_KEY never reaches another server. Loopback requests bypass
+any configured proxy.
 
 REST contracts consulted 2026-10-05 from provider documentation:
 https://docs.anthropic.com/en/api/messages
@@ -21,7 +24,7 @@ import re
 import time
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
-from urllib.request import Request, build_opener
+from urllib.request import ProxyHandler, Request, build_opener
 
 from . import llm
 from .llm import LLMError, MAX_REQUEST_BYTES, MAX_RESPONSE_BYTES, ModelConfig, _NoRedirect, _parse_object
@@ -93,8 +96,11 @@ class ProviderConfig:
         return asdict(self)
 
     @property
-    def key_variable(self) -> str:
-        return self.api_key_env or PROVIDERS[self.provider]["api_key_env"]
+    def key_variable(self) -> str | None:
+        # A custom endpoint never inherits the provider's default key variable.
+        if self.api_key_env or self.base_url:
+            return self.api_key_env
+        return PROVIDERS[self.provider]["api_key_env"]
 
     @property
     def endpoint(self) -> str:
@@ -122,6 +128,8 @@ def _check_base_url(value):
 
 
 def _api_key(config: ProviderConfig) -> str | None:
+    if config.key_variable is None:
+        return None
     key = os.environ.get(config.key_variable)
     if not key:
         if config.local:
@@ -198,7 +206,9 @@ class _ProviderClient:
                 request.add_header(name, value)
         del key
         try:
-            with build_opener(_NoRedirect()).open(request, timeout=self.config.timeout_seconds) as response:
+            # A proxy would see a plain-HTTP loopback request, key included, in cleartext.
+            handlers = [_NoRedirect(), ProxyHandler({})] if self.config.local else [_NoRedirect()]
+            with build_opener(*handlers).open(request, timeout=self.config.timeout_seconds) as response:
                 if response.geturl() != endpoint:
                     raise LLMError(f"{self.label} response changed the requested URL")
                 if response.getcode() != 200:
@@ -324,10 +334,20 @@ class OpenAIClient(_ProviderClient):
 CLIENTS = {"anthropic": AnthropicClient, "openai": OpenAIClient}
 
 
-def client_from_config(value: dict):
-    """Build a model client: a provider field selects Anthropic or OpenAI; otherwise Vertex AI."""
+# Fields that choose where a request goes or which secret it carries.
+ENDPOINT_FIELDS = ("base_url", "api_key_env")
+
+
+def client_from_config(value: dict, allow_endpoint_fields: bool = True):
+    """Build a model client: a provider field selects Anthropic or OpenAI; otherwise Vertex AI.
+
+    Callers that receive configurations from an untrusted party (the MCP server) pass
+    allow_endpoint_fields=False, so the party cannot name the destination or the key variable.
+    """
     if not isinstance(value, dict):
         raise ValueError("model configuration must be an object")
+    if not allow_endpoint_fields and any(field in value for field in ENDPOINT_FIELDS):
+        raise ValueError("base_url and api_key_env are not accepted here; use the provider's default endpoint")
     provider = value.get("provider")
     # Looked up at call time so tests can substitute the Vertex client.
     if provider is None:

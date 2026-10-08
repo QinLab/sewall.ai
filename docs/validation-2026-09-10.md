@@ -1,5 +1,8 @@
 # Sewall.ai MVP validation record
 
+> Historical record of an earlier internal layout and action set, superseded by later
+> releases. Paths, test counts and the provider list are not current.
+
 Validation date: September 10, 2026. These are software and interface checks, not scientific
 validation of any scientific hypothesis.
 

@@ -219,20 +219,28 @@ class ScriptedPlannerTests(unittest.TestCase):
         self.assertFalse(any("not chosen by a model" in gap for gap in gaps))
         self.assertTrue(verify_agent_manifest(manifest)["valid"])
 
-    def test_unresolved_placeholder_step_is_skipped(self):
+    def test_unresolved_placeholder_fails_the_run(self):
         manifest = self.run_script([{"action": "citations", "record_id": "$record:gds:0", "reason": "No GDS yet"},
                                     search("pubmed", "coastal plants")])
-        self.assertEqual([item["action"]["action"] for item in manifest["actions"]], ["search"])
+        self.assertEqual((manifest["status"], manifest["stop_reason"]), ("failed", "invalid_model_action"))
+        self.assertEqual(manifest["actions"], [])
+        self.assertEqual(self.sources.searches, [])
+        self.assertTrue(verify_agent_manifest(manifest)["valid"])
 
     def test_scripted_actions_get_the_same_guards(self):
         manifest = self.run_script([{"action": "search", "database": "snp", "query": "x", "reason": "Not allowed"}])
         self.assertEqual(manifest["stop_reason"], "invalid_model_action")
         self.assertEqual(self.sources.searches, [])
 
-    def test_action_budget_ends_script_with_finish(self):
+    def test_action_budget_truncation_is_not_reported_as_completed(self):
         manifest = self.run_script([search("gds", "a"), search("pubmed", "b"), search("bioproject", "c")], max_actions=2)
         self.assertEqual(len(manifest["actions"]), 2)
-        self.assertEqual(manifest["stop_reason"], "planner_finished")
+        self.assertEqual((manifest["status"], manifest["stop_reason"]), ("budget_exhausted", "action_budget_exhausted"))
+        blocked = [event["details"] for event in manifest["events"] if event["type"] == "action_blocked"]
+        self.assertEqual(blocked[-1]["action"]["database"], "bioproject")
+        self.assertTrue(verify_agent_manifest(manifest)["valid"])
+        manifest = self.run_script([search("gds", "a"), search("pubmed", "b")], max_actions=2)
+        self.assertEqual(manifest["status"], "completed")
 
     def test_script_validation(self):
         for bad in ({}, {"name": "Bad Name", "steps": [search()]}, {"name": "ok", "steps": []},
