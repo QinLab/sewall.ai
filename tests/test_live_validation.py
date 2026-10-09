@@ -195,9 +195,10 @@ class LiveValidationTests(unittest.TestCase):
                 update_digest(manifest)
                 self.save(manifest)
                 result = validation._validate(self.path, self.validator, False)
-                self.assertTrue(result["recorded_trace_valid"], result)
+                # Offline replay derives token totals from the recorded calls.
+                self.assertFalse(result["recorded_trace_valid"], result)
                 self.assertFalse(result["valid"])
-                self.assertIn(f"Reported {field} differs", result["error"])
+                self.assertIn("metrics differ", result["recorded_trace"]["reason"])
 
     def test_reported_record_and_call_counts_cannot_be_rehashed_into_acceptance(self):
         for field in ("records", "model_calls"):

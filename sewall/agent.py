@@ -38,6 +38,11 @@ _PROPAGATES = {"depends_on", "produces"}
 _STOPPED_EVENTS = {"model_call_started", "model_call_finished", "action_completed", "record_retrieved",
                    "source_response", "metadata_summary_checked"}
 _MODEL_PAYLOAD_BYTES = 28_000
+# September 2026 manifests predate the Skill registry and record no Skill digests.
+_LEGACY_ACTIONS = ["search", "citations", "assess_source", "finish"]
+_SKILL_ENTRY = {"skill_id", "version", "operation", "descriptor_sha256"}
+_PLAN_FIELDS = {"planner", "selected_sources", "scope", "allowed_actions"}
+_TOKEN_FIELDS = ("input_tokens", "output_tokens", "total_tokens", "thinking_tokens")
 
 PLANNER_HEADER = """You are the Sewall.ai public metadata planning agent.
 You map existing public citation and study metadata to the scientist's question.
@@ -977,12 +982,36 @@ def verify_agent_manifest(manifest: dict) -> dict:
         elif parent is not None or manifest["context"]["prior_question"] is not None:
             raise ValueError("Unexpected parent for first revision")
         plan = manifest["plan"]
-        if "skills" in plan and [item["operation"] for item in plan["skills"]] + ["finish"] != plan["allowed_actions"]:
-            raise ValueError("Recorded Skills differ from allowed actions")
-        nodes, edges, records, calls, actions, summaries, stops = {}, [], [], [], [], [], []
-        previous_hash = "0" * 64
+        if "skills" in plan:
+            skills = plan["skills"]
+            if (set(plan) != _PLAN_FIELDS | {"skills"} or not isinstance(skills, list)
+                    or any(not isinstance(item, dict) or set(item) != _SKILL_ENTRY
+                           or not isinstance(item["descriptor_sha256"], str) or not _HEX.fullmatch(item["descriptor_sha256"])
+                           for item in skills)
+                    or len({item["operation"] for item in skills}) != len(skills)
+                    or [item["operation"] for item in skills] + ["finish"] != plan["allowed_actions"]):
+                raise ValueError("Recorded Skills differ from allowed actions")
+        elif set(plan) != _PLAN_FIELDS or plan["allowed_actions"] != _LEGACY_ACTIONS or "integrity_gates" in manifest["metrics"]:
+            raise ValueError("Manifest records no Skill digests for its allowed actions")
         if not isinstance(manifest["events"], list) or not manifest["events"]:
             raise ValueError("Empty event trace")
+        if manifest["run_id"] != "agent-" + digest({"inputs": manifest["inputs"], "parent": parent, "events": manifest["events"]})[:16]:
+            raise ValueError("Run ID does not match the recorded trace")
+        # The header was recorded in the first hash-chained events, before any source was selected.
+        first = manifest["events"][0]
+        if (first["type"] != "plan_created" or set(first["details"]) != {"inputs", "context", "plan"}
+                or first["details"]["inputs"] != manifest["inputs"] or first["details"]["context"] != manifest["context"]
+                or first["details"]["plan"] != {**plan, "selected_sources": []}):
+            raise ValueError("Saved inputs, context or plan differ from the recorded plan event")
+        if manifest["history"]:
+            revised = manifest["events"][1] if len(manifest["events"]) > 1 else {}
+            expected = {**manifest["context"], "new_question": manifest["question"],
+                        "invalidation": revised.get("details", {}).get("invalidation")}
+            if revised.get("type") != "question_revised" or revised["details"] != expected or not isinstance(expected["invalidation"], str):
+                raise ValueError("Saved revision differs from the recorded revision event")
+        nodes, edges, records, calls, actions, summaries, stops = {}, [], [], [], [], [], []
+        added, responses, counts = [], [], {"link_rejected": 0, "integrity_gate": 0}
+        previous_hash = "0" * 64
         for sequence, event in enumerate(manifest["events"], 1):
             if event["sequence"] != sequence or event["previous_hash"] != previous_hash or digest({key: value for key, value in event.items() if key != "hash"}) != event["hash"]:
                 raise ValueError("Event hash chain mismatch")
@@ -990,10 +1019,15 @@ def verify_agent_manifest(manifest: dict) -> dict:
             kind, details = event["type"], event["details"]
             if stops and kind in _STOPPED_EVENTS:
                 raise ValueError("Dispatch or review continued after a safe stop")
+            if kind in counts:
+                counts[kind] += 1
             if kind == "node_added":
                 if details["id"] in nodes:
                     raise ValueError("Duplicate event node")
                 nodes[details["id"]] = deepcopy(details)
+                added.append(details)
+            elif kind == "source_response":
+                responses.append(details)
             elif kind == "node_status_changed":
                 node = nodes[details["node_id"]]
                 if node["status"] != details["before"]:
@@ -1051,6 +1085,44 @@ def verify_agent_manifest(manifest: dict) -> dict:
                 raise ValueError("Saved knowledge link lacks matching explicit metadata")
         if manifest["metadata_summary"] is not None:
             _summary(manifest["metadata_summary"], indexed)
+        policies = [node["details"] for node in added if node["kind"] == "policy"]
+        if (policies != manifest["policies"] or [node["id"] for node in added if node["kind"] == "policy"]
+                != ["policy:" + source for source in plan["selected_sources"]]
+                or any(item["source_id"] != source or item["live_access_granted"] is not False
+                       for item, source in zip(policies, plan["selected_sources"]))):
+            raise ValueError("Saved access policies or selected sources differ from the recorded trace")
+        drafts = [node["details"] for node in added if node["kind"] == "access_request"]
+        if drafts != manifest["access_requests"] or any(
+                item["status"] != "draft_only" or item["terms_accepted"] is not False
+                or item["live_access_granted"] is not False or item["external_actions_performed"] != [] for item in drafts):
+            raise ValueError("Saved access requests differ from the recorded trace or claim access")
+        if not isinstance(manifest["limitations"], list) or not manifest["limitations"] or not all(
+                isinstance(item, str) and item.strip() for item in manifest["limitations"]):
+            raise ValueError("Saved limitations are missing")
+        metrics, network_bytes, minimum_requests = manifest["metrics"], 0, 0
+        for response in responses:
+            if response["utility"] == "esummary":
+                network_bytes += response["provenance"].get("response_bytes", 0)
+                minimum_requests += 1
+            else:
+                network_bytes += response["response"].get("response_bytes", 0)
+                minimum_requests += (sum(item.get("attempts", 1) for item in response["response"]["requests"])
+                                     if response["utility"] == "nuccore_inventory" else 1)
+        tokens = {key: sum(value for call in calls for name, value in call.get("trace", {}).get("usage", {}).items()
+                           if name == key and type(value) is int) for key in _TOKEN_FIELDS}
+        derived = {"selected_sources": len(policies), "inspected_sources": len({record["database"] for record in records}),
+                   "verified_links": sum("evidence" in edge for edge in edges), "rejected_links": counts["link_rejected"],
+                   "network_bytes": network_bytes, "scientific_claims": 0, **tokens,
+                   "token_usage_missing_calls": sum(call.get("trace", {}).get("usage", {}).get("total_tokens") is None for call in calls)}
+        if "integrity_gates" in metrics or "integrity_critiques" in metrics:
+            derived.update(integrity_gates=counts["integrity_gate"],
+                           integrity_critiques=len(stops[0]["critiques"]) if stops else 0)
+        if any(metrics[name] != value for name, value in derived.items()):
+            raise ValueError("Saved metrics differ from the recorded trace")
+        failed = sum(item["status"] in ("blocked", "failed") for item in actions)
+        if (type(metrics["source_requests"]) is not int or metrics["source_requests"] < minimum_requests
+                or type(metrics["blocked_or_failed_actions"]) is not int or not 0 <= metrics["blocked_or_failed_actions"] <= failed):
+            raise ValueError("Saved request or failure counts differ from the recorded trace")
         final = manifest["events"][-1]
         if final["type"] != "run_finished" or final["details"] != {"status": manifest["status"], "stop_reason": manifest["stop_reason"], "scientific_claim_count": 0}:
             raise ValueError("Final event does not match run status")

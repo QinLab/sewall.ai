@@ -17,7 +17,7 @@ authors:
   - given-names: Hong
     family-names: Qin
     affiliation: "Old Dominion University"
-version: 0.1.1
+version: 0.1.2
 date-released: 2026-10-08
 license: Apache-2.0
 repository-code: "https://github.com/QinLab/sewall.ai"

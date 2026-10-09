@@ -335,6 +335,62 @@ class AgentTests(unittest.TestCase):
         self.assertFalse(checked["valid"])
         self.assertIn("reduction", checked["reason"])
 
+    def test_replay_binds_header_fields_to_the_recorded_trace(self):
+        planner = Client(search(), {"action": "assess_source", "source": "eol", "reason": "Inspect capability"},
+                         finish(["ncbi:gds:1"]))
+        result = self.run_agent(planner, Client(review(["ncbi:gds:1"])))
+        self.assertTrue(verify_agent_manifest(result)["valid"])
+
+        def relabel(manifest):
+            manifest["question"] = manifest["inputs"]["question"] = "A different question"
+
+        def budget(manifest):
+            manifest["inputs"]["max_records"] = 15
+
+        def runtime(manifest):
+            manifest["context"]["runtime"]["hostname"] = "elsewhere"
+
+        def scope(manifest):
+            manifest["plan"]["scope"] = "Controlled-access genotype data"
+
+        def sources(manifest):
+            manifest["plan"]["selected_sources"].append("ncbi_genotype")
+
+        def allowed(manifest):
+            manifest["plan"]["allowed_actions"].remove("assess_source")
+            manifest["plan"]["skills"] = [item for item in manifest["plan"]["skills"] if item["operation"] != "assess_source"]
+
+        def skill_digest(manifest):
+            manifest["plan"]["skills"][0]["descriptor_sha256"] = "0" * 64
+
+        def legacy(manifest):
+            del manifest["plan"]["skills"]
+
+        def granted(manifest):
+            manifest["policies"][0]["live_access_granted"] = True
+
+        def terms(manifest):
+            manifest["access_requests"][0]["terms_accepted"] = True
+
+        def dropped(manifest):
+            manifest["access_requests"] = []
+
+        def run_id(manifest):
+            manifest["run_id"] = "agent-" + "0" * 16
+
+        tampers = [relabel, budget, runtime, scope, sources, allowed, skill_digest, legacy, granted, terms, dropped, run_id]
+        for name in ("verified_links", "network_bytes", "total_tokens", "integrity_gates", "inspected_sources"):
+            tampers.append(lambda manifest, name=name: manifest["metrics"].update({name: manifest["metrics"][name] + 1}))
+        tampers.append(lambda manifest: manifest["metrics"].update(source_requests=0))
+        tampers.append(lambda manifest: manifest["metrics"].update(blocked_or_failed_actions=2))
+        tampers.append(lambda manifest: manifest.update(limitations=[]))
+        for tamper in tampers:
+            tampered = deepcopy(result)
+            tamper(tampered)
+            tampered["content_digest"] = digest({key: value for key, value in tampered.items() if key != "content_digest"})
+            with self.subTest(tamper=getattr(tamper, "__name__", "metric")):
+                self.assertFalse(verify_agent_manifest(tampered)["valid"])
+
     def test_offline_trace_replay_makes_no_model_or_network_calls(self):
         result = self.run_agent(Client(search(), finish(["ncbi:gds:1"])), Client(review(["ncbi:gds:1"])))
         with patch("sewall.agent.search_metadata", side_effect=AssertionError("network")), patch("sewall.agent.fetch_metadata", side_effect=AssertionError("network")):

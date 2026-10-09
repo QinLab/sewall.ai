@@ -60,7 +60,9 @@ docker build -t sewall . && docker run --rm sewall demo --out /tmp/demo
   critical critique quarantines affected outputs, withholds the review and records the run as
   "stopped, not successful."
 - **Offline replay.** `agent-replay` checks digests, rebuilds the graph from recorded events
-  and rechecks evidence links without repeating model inference or source queries.
+  and rechecks evidence links without repeating model inference or source queries. The saved
+  question, budgets, plan, Skill digests, access policies, request drafts and metrics must
+  match the hash-chained events.
 - **MCP tools.** Any MCP-compatible host (Claude, Gemini CLI, ChatGPT, open-weight models) can
   drive the same bounded controller.
 
