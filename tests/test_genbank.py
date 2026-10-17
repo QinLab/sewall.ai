@@ -58,6 +58,7 @@ class InventoryTransportTests(unittest.TestCase):
     def setUp(self):
         self.builder = patch("sewall.genbank.build_opener").start()
         self.sleep = patch("sewall.ncbi.time.sleep").start()
+        patch.dict(os.environ, {"NCBI_API_KEY": ""}).start()
         self.addCleanup(patch.stopall)
 
     def respond(self, *documents, redirect=None):

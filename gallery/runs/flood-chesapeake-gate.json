@@ -1,0 +1,318 @@
+{
+  "schema_version": "0.1.0",
+  "kind": "sewall_risk_gate",
+  "manifest_digest": "16b27ebc34c81ba84b892725ac304204cf78c74d761e9ba2843390678c79b3de",
+  "forum_digest": null,
+  "catalog_digest": "4b33d58cda8d41d953d1bc6b0ff1ede4fd98ab41d90f9ea2ca5523bdcb060453",
+  "thresholds": {
+    "hold_rpn": 150,
+    "limit_rpn": 20,
+    "high_severity": 8,
+    "likely": 6,
+    "min_scenes": 3
+  },
+  "gates": [
+    {
+      "id": "G0-manifest",
+      "passed": true,
+      "detail": "manifest verifies"
+    },
+    {
+      "id": "G1-run-status",
+      "passed": true,
+      "detail": "run status no_evidence (no_public_records_retrieved)"
+    },
+    {
+      "id": "G2-containment",
+      "passed": true,
+      "detail": "0 outputs quarantined or blocked by the supervisor"
+    },
+    {
+      "id": "G3-peer-review",
+      "passed": false,
+      "detail": "no forum supplied; detection ratings raised for every output"
+    },
+    {
+      "id": "G4-risk",
+      "passed": true,
+      "detail": "0 outputs held for validation"
+    }
+  ],
+  "items": [
+    {
+      "node": "floodsensors:norfolk:2026-10-15T12:03:00Z",
+      "action": 1,
+      "operation": "flood_sensors",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM01",
+          "mode": "stale sensor reading",
+          "effect": "an old water level is read as current",
+          "severity": 8,
+          "occurrence": 2,
+          "detection": 3,
+          "rpn": 48,
+          "evidence": "2 of 44 readings are older than two hours",
+          "mitigation": "Re-query the area and release only readings newer than two hours."
+        },
+        {
+          "id": "FM02",
+          "mode": "sensor out of service",
+          "effect": "a gap is read as no flooding",
+          "severity": 5,
+          "occurrence": 2,
+          "detection": 4,
+          "rpn": 40,
+          "evidence": "3 of 26 NWS gauges and NOAA stations have no current reading",
+          "mitigation": "Report out-of-service and non-current gauges as gaps, never as no flooding."
+        },
+        {
+          "id": "FM04",
+          "mode": "no flood threshold",
+          "effect": "a level is shown without a flood status",
+          "severity": 4,
+          "occurrence": 5,
+          "detection": 3,
+          "rpn": 60,
+          "evidence": "22 of 47 sensors have no flood threshold (all USGS series lack one)",
+          "mitigation": "Release these levels as readings only, without a flood category."
+        },
+        {
+          "id": "FM05",
+          "mode": "provisional data",
+          "effect": "a preliminary value is treated as final",
+          "severity": 3,
+          "occurrence": 10,
+          "detection": 3,
+          "rpn": 90,
+          "evidence": "23 of 24 NOAA and USGS values are provisional",
+          "mitigation": "State that the values are provisional and may be revised by the agency."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 90
+    },
+    {
+      "node": "floodsensors:lafayette-river:2026-10-15T12:03:04Z",
+      "action": 2,
+      "operation": "flood_sensors",
+      "reviewed": false,
+      "modes": [],
+      "decision": "release",
+      "max_rpn": 0
+    },
+    {
+      "node": "floodsensors:hampton-newport-news:2026-10-15T12:03:05Z",
+      "action": 3,
+      "operation": "flood_sensors",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM01",
+          "mode": "stale sensor reading",
+          "effect": "an old water level is read as current",
+          "severity": 8,
+          "occurrence": 2,
+          "detection": 3,
+          "rpn": 48,
+          "evidence": "1 of 18 readings are older than two hours",
+          "mitigation": "Re-query the area and release only readings newer than two hours."
+        },
+        {
+          "id": "FM04",
+          "mode": "no flood threshold",
+          "effect": "a level is shown without a flood status",
+          "severity": 4,
+          "occurrence": 6,
+          "detection": 3,
+          "rpn": 72,
+          "evidence": "10 of 18 sensors have no flood threshold (all USGS series lack one)",
+          "mitigation": "Release these levels as readings only, without a flood category."
+        },
+        {
+          "id": "FM05",
+          "mode": "provisional data",
+          "effect": "a preliminary value is treated as final",
+          "severity": 3,
+          "occurrence": 10,
+          "detection": 3,
+          "rpn": 90,
+          "evidence": "8 of 8 NOAA and USGS values are provisional",
+          "mitigation": "State that the values are provisional and may be revised by the agency."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 90
+    },
+    {
+      "node": "floodsensors:york-river-lower:2026-10-15T12:03:05Z",
+      "action": 4,
+      "operation": "flood_sensors",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM01",
+          "mode": "stale sensor reading",
+          "effect": "an old water level is read as current",
+          "severity": 8,
+          "occurrence": 4,
+          "detection": 3,
+          "rpn": 96,
+          "evidence": "2 of 5 readings are older than two hours",
+          "mitigation": "Re-query the area and release only readings newer than two hours."
+        },
+        {
+          "id": "FM02",
+          "mode": "sensor out of service",
+          "effect": "a gap is read as no flooding",
+          "severity": 5,
+          "occurrence": 3,
+          "detection": 4,
+          "rpn": 60,
+          "evidence": "1 of 4 NWS gauges and NOAA stations have no current reading",
+          "mitigation": "Report out-of-service and non-current gauges as gaps, never as no flooding."
+        },
+        {
+          "id": "FM04",
+          "mode": "no flood threshold",
+          "effect": "a level is shown without a flood status",
+          "severity": 4,
+          "occurrence": 4,
+          "detection": 3,
+          "rpn": 48,
+          "evidence": "2 of 6 sensors have no flood threshold (all USGS series lack one)",
+          "mitigation": "Release these levels as readings only, without a flood category."
+        },
+        {
+          "id": "FM05",
+          "mode": "provisional data",
+          "effect": "a preliminary value is treated as final",
+          "severity": 3,
+          "occurrence": 7,
+          "detection": 3,
+          "rpn": 63,
+          "evidence": "2 of 3 NOAA and USGS values are provisional",
+          "mitigation": "State that the values are provisional and may be revised by the agency."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 96
+    },
+    {
+      "node": "floodsensors:annapolis:2026-10-15T12:03:06Z",
+      "action": 5,
+      "operation": "flood_sensors",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM05",
+          "mode": "provisional data",
+          "effect": "a preliminary value is treated as final",
+          "severity": 3,
+          "occurrence": 10,
+          "detection": 3,
+          "rpn": 90,
+          "evidence": "1 of 1 NOAA and USGS values are provisional",
+          "mitigation": "State that the values are provisional and may be revised by the agency."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 90
+    },
+    {
+      "node": "floodsensors:baltimore:2026-10-15T12:03:07Z",
+      "action": 6,
+      "operation": "flood_sensors",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM01",
+          "mode": "stale sensor reading",
+          "effect": "an old water level is read as current",
+          "severity": 8,
+          "occurrence": 2,
+          "detection": 3,
+          "rpn": 48,
+          "evidence": "3 of 20 readings are older than two hours",
+          "mitigation": "Re-query the area and release only readings newer than two hours."
+        },
+        {
+          "id": "FM02",
+          "mode": "sensor out of service",
+          "effect": "a gap is read as no flooding",
+          "severity": 5,
+          "occurrence": 2,
+          "detection": 4,
+          "rpn": 40,
+          "evidence": "3 of 15 NWS gauges and NOAA stations have no current reading",
+          "mitigation": "Report out-of-service and non-current gauges as gaps, never as no flooding."
+        },
+        {
+          "id": "FM04",
+          "mode": "no flood threshold",
+          "effect": "a level is shown without a flood status",
+          "severity": 4,
+          "occurrence": 7,
+          "detection": 3,
+          "rpn": 84,
+          "evidence": "15 of 23 sensors have no flood threshold (all USGS series lack one)",
+          "mitigation": "Release these levels as readings only, without a flood category."
+        },
+        {
+          "id": "FM05",
+          "mode": "provisional data",
+          "effect": "a preliminary value is treated as final",
+          "severity": 3,
+          "occurrence": 7,
+          "detection": 3,
+          "rpn": 63,
+          "evidence": "6 of 9 NOAA and USGS values are provisional",
+          "mitigation": "State that the values are provisional and may be revised by the agency."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 84
+    },
+    {
+      "node": "result",
+      "action": null,
+      "operation": "run_result",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM15",
+          "mode": "no literature evidence",
+          "effect": "nothing ties the outputs to published work",
+          "severity": 4,
+          "occurrence": 10,
+          "detection": 3,
+          "rpn": 120,
+          "evidence": "the run retrieved no literature or sequence records",
+          "mitigation": "Add a literature search to the plan before drawing conclusions."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 120
+    }
+  ],
+  "decision": "release_with_limitations",
+  "released": [
+    "floodsensors:norfolk:2026-10-15T12:03:00Z",
+    "floodsensors:lafayette-river:2026-10-15T12:03:04Z",
+    "floodsensors:hampton-newport-news:2026-10-15T12:03:05Z",
+    "floodsensors:york-river-lower:2026-10-15T12:03:05Z",
+    "floodsensors:annapolis:2026-10-15T12:03:06Z",
+    "floodsensors:baltimore:2026-10-15T12:03:07Z",
+    "result"
+  ],
+  "held": [],
+  "blocked": [],
+  "limitations": [
+    "Severity, detection ratings and thresholds are prototype settings chosen by hand; they are not calibrated against observed failures.",
+    "An RPN ranks outputs for attention; it is not a probability that an output is invalid.",
+    "The catalog covers the failure modes this prototype knows about. An output can fail in a way no mode describes.",
+    "A release decision concerns retrieved evidence. The gate validates no biological claim."
+  ],
+  "content_digest": "e4d63fa114b6705957f845d4eac15a795a5743817559e83639422e5fdd7f9a1b"
+}

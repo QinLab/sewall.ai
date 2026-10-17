@@ -14,7 +14,7 @@
     "Embedding dimensions are learned features, not physical measurements, and an annual layer cannot resolve a bloom or any other short event."
   ],
   "arguments": [
-    {"name": "site", "type": "string", "enum": ["lafayette-river"],
+    {"name": "site", "type": "string", "enum": ["lafayette-river", "york-river-lower"],
      "description": "A named study site. Each site is a fixed approximate bounding box recorded in the result."},
     {"name": "year", "type": "string", "max_length": 4, "description": "A completed calendar year, YYYY, from 2017."}
   ],

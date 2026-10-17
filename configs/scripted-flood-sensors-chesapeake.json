@@ -1,0 +1,17 @@
+{
+  "name": "flood-sensors-chesapeake",
+  "description": "Live public flood sensor readings for six named Chesapeake Bay areas, from Norfolk to Baltimore, at run time. Runs without model keys.",
+  "steps": [
+    {"action": "flood_sensors", "area": "norfolk", "reason": "Current water levels and flood categories around Norfolk and the Elizabeth River"},
+    {"action": "flood_sensors", "area": "lafayette-river", "reason": "Gauges inside the Lafayette River study box shared with the Earth Engine Skills"},
+    {"action": "flood_sensors", "area": "hampton-newport-news", "reason": "Current water levels on the Hampton and Newport News waterfront"},
+    {"action": "flood_sensors", "area": "york-river-lower", "reason": "Current water levels on the lower York River"},
+    {"action": "flood_sensors", "area": "annapolis", "reason": "Current water levels at Annapolis and the Severn River"},
+    {"action": "flood_sensors", "area": "baltimore", "reason": "Current water levels in Baltimore Harbor"}
+  ],
+  "gaps": [
+    "Readings are the latest provisional values at run time, not a time series or a forecast.",
+    "Datums differ across NOAA NWPS, CO-OPS and USGS, so values are compared only with each sensor's own thresholds.",
+    "Street-level and community sensor networks such as StormSense are not queried."
+  ]
+}

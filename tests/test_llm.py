@@ -4,6 +4,7 @@ import copy
 import hashlib
 import io
 import json
+import os
 import subprocess
 from types import ModuleType
 import unittest
@@ -59,6 +60,22 @@ class ModelConfigTests(unittest.TestCase):
         self.assertEqual(config(location="global").endpoint.split("/")[2], "aiplatform.googleapis.com")
         self.assertTrue(config(api="openai", model="google/gemini-example").endpoint.endswith("/endpoints/openapi/chat/completions"))
         self.assertTrue(config(api="openai", endpoint_id="1234").endpoint.endswith("/endpoints/1234/chat/completions"))
+
+    def test_project_from_environment_and_redacted_record(self):
+        base = {"location": "us-central1", "model": "gemini-example"}
+        with patch.dict(os.environ, {"LAB_PROJECT": "example-project"}):
+            self.assertEqual(ModelConfig.from_dict({**base, "project_env": "LAB_PROJECT"}), config())
+        with patch.dict(os.environ, {}, clear=True), self.assertRaisesRegex(ValueError, "not set"):
+            ModelConfig.from_dict({**base, "project_env": "LAB_PROJECT"})
+        for bad in ({"project_env": "lab-project"}, {"project_env": "LAB_PROJECT", "project": "example-project"}):
+            with self.subTest(bad=bad), patch.dict(os.environ, {"LAB_PROJECT": "example-project"}), \
+                    self.assertRaises(ValueError):
+                ModelConfig.from_dict({**base, **bad})
+        record = config().record()
+        self.assertNotIn("project", record)
+        self.assertEqual(record["project_sha256"], hashlib.sha256(b"example-project").hexdigest()[:16])
+        self.assertNotIn("example-project", json.dumps(record) + config().recorded_endpoint)
+        self.assertIn("/projects/<redacted>/locations/us-central1/", config().recorded_endpoint)
 
     def test_rejects_implicit_projects_urls_credentials_and_unbounded_config(self):
         invalid = [

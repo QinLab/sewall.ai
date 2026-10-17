@@ -3,6 +3,7 @@
 import hashlib
 import io
 import json
+import os
 import unittest
 from unittest.mock import patch
 from urllib.error import HTTPError, URLError
@@ -34,6 +35,7 @@ class NCBISearchTests(unittest.TestCase):
     def setUp(self):
         self.builder = patch("sewall.ncbi.build_opener").start()
         self.sleep = patch("sewall.ncbi.time.sleep").start()
+        patch.dict(os.environ, {"NCBI_API_KEY": ""}).start()
         self.addCleanup(patch.stopall)
 
     def respond(self, result, *, redirect=None):
@@ -66,6 +68,17 @@ class NCBISearchTests(unittest.TestCase):
         self.assertEqual(result["raw_sha256"], hashlib.sha256(raw).hexdigest())
         self.assertEqual(result["kind"], "public_metadata_identifiers_only")
         self.assertIsInstance(self.builder.call_args.args[0], _NoRedirect)
+
+    def test_api_key_is_sent_but_not_recorded_and_shortens_spacing(self):
+        self.respond({"esearchresult": {"count": "0", "idlist": []}})
+        with patch.dict(os.environ, {"NCBI_API_KEY": "secret-key"}), \
+                patch("sewall.ncbi._LAST_REQUEST_AT", 100.0), \
+                patch("sewall.ncbi.time.monotonic", return_value=100.1):
+            result = search_metadata("pubmed", "oak")
+        request = self.builder.return_value.open.call_args.args[0]
+        self.assertEqual(parse_qs(urlparse(request.full_url).query)["api_key"], ["secret-key"])
+        self.assertNotIn("secret", json.dumps(result))
+        self.assertAlmostEqual(self.sleep.call_args.args[0], 0.02)
 
     def test_empty_result_is_valid_and_not_fabricated(self):
         self.respond({"esearchresult": {"count": "0", "idlist": []}})

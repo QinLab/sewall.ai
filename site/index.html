@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sewall.ai</title>
+<meta name="description" content="A replayable research controller for public biological and environmental data. Models propose; a deterministic controller checks, runs bounded public Skills and records a hash-chained manifest.">
+<style>
+:root{--bg:#fbfaf7;--fg:#1d1f21;--muted:#5b6168;--card:#ffffff;--line:#e3e0d8;--accent:#0072b2;--accent2:#009e73;--code:#f1efe9}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#15171a;--fg:#e8e6e1;--muted:#a3a8ae;--card:#1e2125;--line:#33373c;--accent:#56b4e9;--accent2:#3fc79e;--code:#262a2f}}
+:root[data-theme="dark"]{--bg:#15171a;--fg:#e8e6e1;--muted:#a3a8ae;--card:#1e2125;--line:#33373c;--accent:#56b4e9;--accent2:#3fc79e;--code:#262a2f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:0 16px 64px}
+header{padding:56px 0 24px;border-bottom:1px solid var(--line)}
+h1{font-size:2.4rem;margin:0 0 8px;letter-spacing:-.02em}
+h2{font-size:1.4rem;margin:48px 0 12px}
+h3{font-size:1.05rem;margin:0 0 6px}
+p{margin:0 0 12px}
+.lede{font-size:1.15rem;color:var(--muted);max-width:44em}
+a{color:var(--accent)}
+.buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.btn{display:inline-block;padding:9px 16px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);text-decoration:none;font-weight:600}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+.card p{color:var(--muted);margin:0;font-size:.95rem}
+figure{margin:20px 0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
+figure .img{background:#fff;border-radius:6px;padding:6px}
+figure img{display:block;width:100%;height:auto}
+figcaption{color:var(--muted);font-size:.9rem;margin-top:10px}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.figs figure{margin:0}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;font-size:.88rem}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+ul{padding-left:1.2em}
+footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+@media (max-width:520px){h1{font-size:1.9rem}header{padding-top:32px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Sewall.ai</h1>
+  <p class="lede">A replayable research controller for public biological and environmental data.
+  A model, a script or an MCP host proposes each step. One deterministic controller checks it,
+  runs a bounded public Skill, and records every request and result in a hash-chained manifest
+  that anyone can replay offline.</p>
+  <div class="buttons">
+    <a class="btn primary" href="gallery/">Recorded-run gallery</a>
+    <a class="btn" href="https://github.com/QinLab/sewall.ai">Source on GitHub</a>
+    <a class="btn" href="https://github.com/QinLab/sewall.ai/blob/main/docs/mcp-quickstart.md">MCP quickstart</a>
+  </div>
+</header>
+
+<h2>How a run works</h2>
+<figure>
+  <div class="img"><img src="figures/fig1-architecture.png" alt="Architecture: planners propose actions to one deterministic controller, which checks them against the Skill registry, policies, budgets and integrity gates, calls bounded public Skills and writes a hash-chained manifest, an HTML report and an offline replay" loading="lazy"></div>
+  <figcaption>Every planner (MCP host model, provider model or scripted plan) proposes actions to
+  one deterministic controller. The controller checks them against the Skill registry, access
+  policies, budgets and integrity gates, calls bounded public Skills, and writes a hash-chained
+  manifest, an HTML report and an offline replay. Custodian federation is not implemented.</figcaption>
+</figure>
+
+<div class="grid">
+  <div class="card"><h3>Bounded Skills</h3><p>Versioned Skills query NCBI, GenBank, Earth Engine,
+  NOAA and USGS. Each declares its inputs, limits and what it may return. The planner sees small
+  summaries.</p></div>
+  <div class="card"><h3>Safe stop</h3><p>A critical integrity finding quarantines the affected
+  results and their descendants, stops dispatch, and the report reads STOPPED, NOT SUCCESSFUL.</p></div>
+  <div class="card"><h3>Offline replay</h3><p><code>sewall agent-replay</code> re-derives saved
+  results from recorded events. It repeats no model call and no source request.</p></div>
+  <div class="card"><h3>Review after the run</h3><p>A review forum, an FMEA-style release gate and
+  a cross-run panel work on recorded manifests, each with a verify command. Records can be signed
+  with Ed25519.</p></div>
+  <div class="card"><h3>Any MCP host</h3><p>The same controller is exposed as MCP tools, so
+  commercial and open-weight models use one set of checks.</p></div>
+  <div class="card"><h3>Expert consultation</h3><p><code>sewall consult</code> asks rule-based
+  dataset experts and writes a capped plan script for the controller.</p></div>
+</div>
+
+<h2>Live results</h2>
+<figure>
+  <div class="img"><img src="figures/fig6-ndci-2022.png" alt="Mean Sentinel-2 NDCI per 2022 day over the lower York River and the Lafayette River" loading="lazy"></div>
+  <figcaption>Mean Sentinel-2 NDCI for each 2022 day in two live Earth Engine runs on October 16,
+  2026: the lower York River (22 days) and the Lafayette River (19 days), screened per pixel with
+  Cloud Score+ and masked to JRC Global Surface Water permanent water. The shaded band is the
+  August to September window of the York River <i>M. polykrikoides</i> bloom simulated by Yu et
+  al. (2025). Both runs pass offline replay. NDCI is a chlorophyll proxy; it does not identify a
+  species or confirm a bloom.</figcaption>
+</figure>
+<figure>
+  <div class="img"><img src="figures/fig7-flood-sensors.png" alt="Live flood sensor run over six Chesapeake areas: NWS gauges by flood category and NOAA tide stations relative to minor flood thresholds" loading="lazy"></div>
+  <figcaption>One live <code>flood_sensors</code> run over six Chesapeake areas, Norfolk to
+  Baltimore, at 12:03 UTC on October 15, 2026. No NWS gauge was at action stage or above; the six
+  NOAA tide stations were 1.4 to 3.4 feet below their minor flood thresholds. Readings are
+  provisional. The run passes offline replay.</figcaption>
+</figure>
+
+<h2>Design figures</h2>
+<div class="figs">
+  <figure>
+    <div class="img"><img src="figures/fig2-run-lifecycle.png" alt="Run lifecycle: propose, check, gate, execute, record and gate loop" loading="lazy"></div>
+    <figcaption>One run step by step, and where each of the six final statuses arises.</figcaption>
+  </figure>
+  <figure>
+    <div class="img"><img src="figures/fig3-safe-stop.png" alt="Safe-stop demonstration" loading="lazy"></div>
+    <figcaption>The bundled safe-stop demonstration: a critical missing-provenance critique after
+    action 2 stops the run.</figcaption>
+  </figure>
+  <figure>
+    <div class="img"><img src="figures/fig4-offline-replay.png" alt="Offline replay checks" loading="lazy"></div>
+    <figcaption>Offline replay re-derives saved results with nine groups of checks.</figcaption>
+  </figure>
+  <figure>
+    <div class="img"><img src="figures/fig5-bloom-mvp.png" alt="Chesapeake bloom MVP workflow" loading="lazy"></div>
+    <figcaption>The Chesapeake bloom MVP. Window alignment is planned and not implemented.</figcaption>
+  </figure>
+</div>
+
+<h2>Try it</h2>
+<pre><code>pip install -e .
+sewall safety-demo --out output/safety
+sewall agent-replay gallery/runs/york-2022-jrc.json
+sewall gallery --catalog gallery/catalog.json --out output/site</code></pre>
+<p>Replay and the gallery build run offline. Live Skills need network access, and the Earth
+Engine Skills need a Google Cloud project with Earth Engine enabled. See the
+<a href="https://github.com/QinLab/sewall.ai#readme">README</a> for every command.</p>
+
+<h2>Limits</h2>
+<ul>
+  <li>No run establishes a biological finding. Results are public metadata and small summaries.</li>
+  <li>Abstracts and full text are not retrieved. Marker sequences are fetched only by
+  <code>fetch_markers</code>, at most 100 public records per step.</li>
+  <li>Custodian federation and window alignment are not implemented.</li>
+  <li>Release-gate ratings are uncalibrated prototype settings.</li>
+</ul>
+
+<footer>
+  School of Data Science and Department of Computer Science, Old Dominion University.
+  Released under the Apache License 2.0.
+</footer>
+</main>
+</body>
+</html>

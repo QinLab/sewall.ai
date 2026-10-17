@@ -31,6 +31,30 @@ def review(ids=None, **extra):
             "limitations": ["Metadata does not validate a biological claim."], **extra}
 
 
+def reseal(manifest):
+    """Recompute every hash after an edit, as a forger with write access would."""
+    previous = "0" * 64
+    for sequence, event in enumerate(manifest["events"], 1):
+        event.update(sequence=sequence, previous_hash=previous)
+        event["hash"] = previous = digest({key: value for key, value in event.items() if key != "hash"})
+    manifest["run_id"] = "agent-" + digest({"inputs": manifest["inputs"], "parent": manifest["parent_digest"],
+                                            "events": manifest["events"]})[:16]
+    manifest["content_digest"] = digest({key: value for key, value in manifest.items() if key != "content_digest"})
+    return manifest
+
+
+def rewrite(value, edit, skip=lambda item: False):
+    """Apply edit to every dict in value, depth first, except inside dicts where skip is true."""
+    if isinstance(value, list):
+        for item in value:
+            rewrite(item, edit, skip)
+    elif isinstance(value, dict) and not skip(value):
+        for item in value.values():
+            rewrite(item, edit, skip)
+        edit(value)
+    return value
+
+
 class Client:
     def __init__(self, *outputs):
         self.outputs = list(outputs)
@@ -335,6 +359,96 @@ class AgentTests(unittest.TestCase):
         self.assertFalse(checked["valid"])
         self.assertIn("reduction", checked["reason"])
 
+    def test_resealed_edits_fail_replay(self):
+        planner = Client(search(), {"action": "citations", "record_id": "ncbi:gds:1", "reason": "Linked paper"},
+                         finish(["ncbi:gds:1", "ncbi:pubmed:11"]))
+        result = self.run_agent(planner, Client(review(["ncbi:gds:1", "ncbi:pubmed:11"])))
+        self.assertEqual(result["status"], "completed")
+        self.assertTrue(verify_agent_manifest(reseal(deepcopy(result)))["valid"])
+
+        def unfinished(manifest):
+            manifest["events"] = [event for event in manifest["events"]
+                                  if not (event["type"] == "action_planned" and event["details"]["action"] == "finish")]
+
+        def unsupported_citation(manifest):
+            rewrite(manifest, lambda item: item.pop("evidence", None) if item.get("relation") == "cites" else None)
+            manifest["metrics"]["verified_links"] -= 1
+
+        def retitled(manifest):
+            def edit(item):
+                if item.get("record", {}).get("id") == "ncbi:gds:1" and "record_digest" in item:
+                    item["record"]["title"] += " (edited)"
+                    item["record_digest"] = digest(item["record"])
+            # The source node changes, digest included; the record projection keeps the original.
+            rewrite(manifest, edit)
+
+        def unreviewed(manifest):
+            manifest["status"] = "needs_review"
+            manifest["stop_reason"] = "reviewer_failed_validation"
+            manifest["events"][-1]["details"].update(status="needs_review", stop_reason="reviewer_failed_validation")
+
+        for tamper, reason in ((unfinished, "finish action"), (unsupported_citation, "no explicit evidence"),
+                               (retitled, "source node"), (unreviewed, "cannot need review")):
+            tampered = deepcopy(result)
+            tamper(tampered)
+            checked = verify_agent_manifest(reseal(tampered))
+            with self.subTest(tamper=tamper.__name__):
+                self.assertFalse(checked["valid"])
+                self.assertIn(reason, checked["reason"])
+
+    def test_every_external_action_is_checked_against_its_source_policy(self):
+        planner = Client(search(), {"action": "citations", "record_id": "ncbi:gds:1", "reason": "Linked paper"},
+                         {"action": "assess_source", "source": "eol", "reason": "Inspect capability"},
+                         finish(["ncbi:gds:1", "ncbi:pubmed:11"]))
+        result = self.run_agent(planner, Client(review(["ncbi:gds:1", "ncbi:pubmed:11"])))
+        self.assertTrue(verify_agent_manifest(result)["valid"])
+        decisions = [event["details"] for event in result["events"] if event["type"] == "policy_checked"]
+        # The local draft Skill makes no external call, so only the search and citation actions are checked.
+        self.assertEqual([(item["action_index"], item["source_id"], item["assessment"]["status"]) for item in decisions],
+                         [(1, "gds", "allow"), (2, "pubmed", "allow")])
+        self.assertEqual(result["context"]["policy_enforcement"], "evaluate_policy_per_external_action")
+
+    def test_policy_denial_blocks_the_action_before_any_source_request(self):
+        profiles = deepcopy(agent_module._SOURCE_PROFILES)
+        profiles["gds"]["egress"] = ["individual"]
+        planner = Client(search(), finish([]))
+        with patch.object(agent_module, "_SOURCE_PROFILES", profiles):
+            result = self.run_agent(planner, Client(review([])))
+        self.assertEqual(self.sources.searches, [])
+        self.assertEqual(result["actions"][0]["status"], "blocked")
+        self.assertIn("Policy deny for gds", result["actions"][0]["observation"]["error"])
+        self.assertTrue(verify_agent_manifest(result)["valid"])
+
+    def test_resealed_policy_edits_fail_replay(self):
+        planner = Client(search(), finish(["ncbi:gds:1"]))
+        result = self.run_agent(planner, Client(review(["ncbi:gds:1"])))
+
+        def unchecked(manifest):
+            manifest["events"] = [event for event in manifest["events"] if event["type"] != "policy_checked"]
+
+        def overruled(manifest):
+            for event in manifest["events"]:
+                if event["type"] == "policy_checked":
+                    event["details"]["assessment"]["status"] = "review"
+
+        def widened(manifest):
+            for event in manifest["events"]:
+                if event["type"] == "policy_checked":
+                    event["details"]["profile"]["egress"].append("individual")
+
+        def unenforced(manifest):
+            for item in (manifest["context"], manifest["events"][0]["details"]["context"]):
+                del item["policy_enforcement"]
+
+        for tamper, reason in ((unchecked, "allowed policy decision"), (overruled, "re-evaluation"),
+                               (widened, "more egress"), (unenforced, "Unexpected policy decision")):
+            tampered = deepcopy(result)
+            tamper(tampered)
+            checked = verify_agent_manifest(reseal(tampered))
+            with self.subTest(tamper=tamper.__name__):
+                self.assertFalse(checked["valid"])
+                self.assertIn(reason, checked["reason"])
+
     def test_replay_binds_header_fields_to_the_recorded_trace(self):
         planner = Client(search(), {"action": "assess_source", "source": "eol", "reason": "Inspect capability"},
                          finish(["ncbi:gds:1"]))
@@ -418,8 +532,8 @@ class AgentTests(unittest.TestCase):
             self.run_agent(Client(finish()), Client(review()), previous=previous)
 
     def test_invalid_limits_fail_before_model_or_source_calls(self):
-        for override in [{"max_actions": 0}, {"max_model_calls": 1}, {"max_records": 16}, {"per_search": 6},
-                         {"max_seconds": 601}, {"max_actions": True}]:
+        for override in [{"max_actions": 0}, {"max_actions": 17}, {"max_model_calls": 1}, {"max_model_calls": 19},
+                         {"max_records": 31}, {"per_search": 6}, {"max_seconds": 601}, {"max_actions": True}]:
             client = Client()
             with self.subTest(override=override), self.assertRaises(ValueError):
                 self.run_agent(client, **override)

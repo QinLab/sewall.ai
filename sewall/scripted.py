@@ -24,7 +24,8 @@ from .graph import digest
 from .safety import CRITIQUE_TYPES
 
 
-MAX_STEPS = 8
+# Sized so a lab-manager plan for two taxa with community and satellite terms runs without deferral.
+MAX_STEPS = 16
 _PLACEHOLDER = re.compile(r"\$record:(pubmed|gds|bioproject):([0-9])\Z", re.ASCII)
 _NO_ASSESSMENT = "No model read or assessed the retrieved metadata; no biological analysis performed."
 _GAPS = {"fixed": ["Scripted demonstration: actions were fixed in advance, not chosen by a model.", _NO_ASSESSMENT],

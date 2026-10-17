@@ -1,0 +1,335 @@
+{
+  "schema_version": "0.1.0",
+  "kind": "sewall_risk_gate",
+  "manifest_digest": "753bc2e424bd678b923626e517c63a973f9bae5c6eeaac9f1ba3b8e226daded8",
+  "forum_digest": "2d37bca222ae294284090565e5e5fd291ad2ba7fbc91e5e038ff3d865a6b36e7",
+  "catalog_digest": "4b33d58cda8d41d953d1bc6b0ff1ede4fd98ab41d90f9ea2ca5523bdcb060453",
+  "thresholds": {
+    "hold_rpn": 150,
+    "limit_rpn": 20,
+    "high_severity": 8,
+    "likely": 6,
+    "min_scenes": 3
+  },
+  "gates": [
+    {
+      "id": "G0-manifest",
+      "passed": true,
+      "detail": "manifest verifies"
+    },
+    {
+      "id": "G0-forum",
+      "passed": true,
+      "detail": "forum verifies against the manifest"
+    },
+    {
+      "id": "G1-run-status",
+      "passed": true,
+      "detail": "run status completed (planner_finished)"
+    },
+    {
+      "id": "G2-containment",
+      "passed": true,
+      "detail": "0 outputs quarantined or blocked by the supervisor"
+    },
+    {
+      "id": "G3-peer-review",
+      "passed": false,
+      "detail": "forum verdict needs_revision; 2 unresolved concerns"
+    },
+    {
+      "id": "G4-risk",
+      "passed": false,
+      "detail": "1 outputs held for validation"
+    }
+  ],
+  "items": [
+    {
+      "node": "action:1",
+      "action": 1,
+      "operation": "search",
+      "reviewed": true,
+      "modes": [],
+      "decision": "release",
+      "max_rpn": 0
+    },
+    {
+      "node": "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01",
+      "action": 2,
+      "operation": "chlorophyll_timeseries",
+      "reviewed": true,
+      "modes": [
+        {
+          "id": "FM08",
+          "mode": "proxy read as identification",
+          "effect": "a chlorophyll index is read as a species or a bloom",
+          "severity": 8,
+          "occurrence": 3,
+          "detection": 6,
+          "rpn": 144,
+          "evidence": "NDCI responds to chlorophyll from any phytoplankton",
+          "mitigation": "Pair the index with an in situ cell count or species observation before any bloom claim."
+        },
+        {
+          "id": "FM13",
+          "mode": "open minor review concern",
+          "effect": "a reviewer's minor objection is unanswered",
+          "severity": 4,
+          "occurrence": 10,
+          "detection": 3,
+          "rpn": 120,
+          "evidence": "post:1 (open): The run's metadata review covers literature records only; 7 computed observations (satellite or sensor summaries) were never reviewed.",
+          "mitigation": "Answer or acknowledge the concern in the release notes."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 144
+    },
+    {
+      "node": "earthengine:chlorophyll_timeseries:2022-07-31:york-river-lower:2022-07-01",
+      "action": 3,
+      "operation": "chlorophyll_timeseries",
+      "reviewed": true,
+      "modes": [
+        {
+          "id": "FM08",
+          "mode": "proxy read as identification",
+          "effect": "a chlorophyll index is read as a species or a bloom",
+          "severity": 8,
+          "occurrence": 3,
+          "detection": 6,
+          "rpn": 144,
+          "evidence": "NDCI responds to chlorophyll from any phytoplankton",
+          "mitigation": "Pair the index with an in situ cell count or species observation before any bloom claim."
+        },
+        {
+          "id": "FM13",
+          "mode": "open minor review concern",
+          "effect": "a reviewer's minor objection is unanswered",
+          "severity": 4,
+          "occurrence": 10,
+          "detection": 3,
+          "rpn": 120,
+          "evidence": "post:1 (open): The run's metadata review covers literature records only; 7 computed observations (satellite or sensor summaries) were never reviewed.",
+          "mitigation": "Answer or acknowledge the concern in the release notes."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 144
+    },
+    {
+      "node": "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+      "action": 4,
+      "operation": "chlorophyll_timeseries",
+      "reviewed": true,
+      "modes": [
+        {
+          "id": "FM08",
+          "mode": "proxy read as identification",
+          "effect": "a chlorophyll index is read as a species or a bloom",
+          "severity": 8,
+          "occurrence": 3,
+          "detection": 6,
+          "rpn": 144,
+          "evidence": "NDCI responds to chlorophyll from any phytoplankton",
+          "mitigation": "Pair the index with an in situ cell count or species observation before any bloom claim."
+        },
+        {
+          "id": "FM13",
+          "mode": "open minor review concern",
+          "effect": "a reviewer's minor objection is unanswered",
+          "severity": 4,
+          "occurrence": 10,
+          "detection": 3,
+          "rpn": 120,
+          "evidence": "post:1 (open): The run's metadata review covers literature records only; 7 computed observations (satellite or sensor summaries) were never reviewed.",
+          "mitigation": "Answer or acknowledge the concern in the release notes."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 144
+    },
+    {
+      "node": "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01",
+      "action": 5,
+      "operation": "chlorophyll_timeseries",
+      "reviewed": true,
+      "modes": [
+        {
+          "id": "FM08",
+          "mode": "proxy read as identification",
+          "effect": "a chlorophyll index is read as a species or a bloom",
+          "severity": 8,
+          "occurrence": 3,
+          "detection": 6,
+          "rpn": 144,
+          "evidence": "NDCI responds to chlorophyll from any phytoplankton",
+          "mitigation": "Pair the index with an in situ cell count or species observation before any bloom claim."
+        },
+        {
+          "id": "FM13",
+          "mode": "open minor review concern",
+          "effect": "a reviewer's minor objection is unanswered",
+          "severity": 4,
+          "occurrence": 10,
+          "detection": 3,
+          "rpn": 120,
+          "evidence": "post:1 (open): The run's metadata review covers literature records only; 7 computed observations (satellite or sensor summaries) were never reviewed.",
+          "mitigation": "Answer or acknowledge the concern in the release notes."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 144
+    },
+    {
+      "node": "earthengine:chlorophyll_timeseries:2022-10-31:york-river-lower:2022-10-01",
+      "action": 6,
+      "operation": "chlorophyll_timeseries",
+      "reviewed": true,
+      "modes": [
+        {
+          "id": "FM08",
+          "mode": "proxy read as identification",
+          "effect": "a chlorophyll index is read as a species or a bloom",
+          "severity": 8,
+          "occurrence": 3,
+          "detection": 6,
+          "rpn": 144,
+          "evidence": "NDCI responds to chlorophyll from any phytoplankton",
+          "mitigation": "Pair the index with an in situ cell count or species observation before any bloom claim."
+        },
+        {
+          "id": "FM13",
+          "mode": "open minor review concern",
+          "effect": "a reviewer's minor objection is unanswered",
+          "severity": 4,
+          "occurrence": 10,
+          "detection": 3,
+          "rpn": 120,
+          "evidence": "post:1 (open): The run's metadata review covers literature records only; 7 computed observations (satellite or sensor summaries) were never reviewed.",
+          "mitigation": "Answer or acknowledge the concern in the release notes."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 144
+    },
+    {
+      "node": "earthengine:alphaearth_context:york-river-lower:2021",
+      "action": 7,
+      "operation": "alphaearth_context",
+      "reviewed": true,
+      "modes": [
+        {
+          "id": "FM09",
+          "mode": "embedding read as measurement",
+          "effect": "a learned feature is read as a physical quantity",
+          "severity": 6,
+          "occurrence": 3,
+          "detection": 6,
+          "rpn": 108,
+          "evidence": "64-dimensional embedding, model version 2.1",
+          "mitigation": "Use embeddings only as covariates; report the dataset and model versions."
+        },
+        {
+          "id": "FM13",
+          "mode": "open minor review concern",
+          "effect": "a reviewer's minor objection is unanswered",
+          "severity": 4,
+          "occurrence": 10,
+          "detection": 3,
+          "rpn": 120,
+          "evidence": "post:1 (open): The run's metadata review covers literature records only; 7 computed observations (satellite or sensor summaries) were never reviewed.",
+          "mitigation": "Answer or acknowledge the concern in the release notes."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 120
+    },
+    {
+      "node": "earthengine:alphaearth_context:york-river-lower:2022",
+      "action": 8,
+      "operation": "alphaearth_context",
+      "reviewed": true,
+      "modes": [
+        {
+          "id": "FM09",
+          "mode": "embedding read as measurement",
+          "effect": "a learned feature is read as a physical quantity",
+          "severity": 6,
+          "occurrence": 3,
+          "detection": 6,
+          "rpn": 108,
+          "evidence": "64-dimensional embedding, model version 2.1",
+          "mitigation": "Use embeddings only as covariates; report the dataset and model versions."
+        },
+        {
+          "id": "FM13",
+          "mode": "open minor review concern",
+          "effect": "a reviewer's minor objection is unanswered",
+          "severity": 4,
+          "occurrence": 10,
+          "detection": 3,
+          "rpn": 120,
+          "evidence": "post:1 (open): The run's metadata review covers literature records only; 7 computed observations (satellite or sensor summaries) were never reviewed.",
+          "mitigation": "Answer or acknowledge the concern in the release notes."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 120
+    },
+    {
+      "node": "result",
+      "action": null,
+      "operation": "run_result",
+      "reviewed": true,
+      "modes": [
+        {
+          "id": "FM13",
+          "mode": "open minor review concern",
+          "effect": "a reviewer's minor objection is unanswered",
+          "severity": 4,
+          "occurrence": 10,
+          "detection": 3,
+          "rpn": 120,
+          "evidence": "post:1 (open): The run's metadata review covers literature records only; 7 computed observations (satellite or sensor summaries) were never reviewed.",
+          "mitigation": "Answer or acknowledge the concern in the release notes."
+        },
+        {
+          "id": "FM12",
+          "mode": "open major review concern",
+          "effect": "a reviewer's major objection is unanswered",
+          "severity": 8,
+          "occurrence": 6,
+          "detection": 3,
+          "rpn": 144,
+          "evidence": "post:8 (contested): The run holds no in situ cell count or species observation for the bloom, so the satellite signal cannot be attributed to the named organism.",
+          "mitigation": "Answer the concern with new evidence in a revised run."
+        }
+      ],
+      "decision": "hold_for_validation",
+      "max_rpn": 144
+    }
+  ],
+  "decision": "hold_for_validation",
+  "released": [
+    "action:1",
+    "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01",
+    "earthengine:chlorophyll_timeseries:2022-07-31:york-river-lower:2022-07-01",
+    "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+    "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01",
+    "earthengine:chlorophyll_timeseries:2022-10-31:york-river-lower:2022-10-01",
+    "earthengine:alphaearth_context:york-river-lower:2021",
+    "earthengine:alphaearth_context:york-river-lower:2022"
+  ],
+  "held": [
+    "result"
+  ],
+  "blocked": [],
+  "limitations": [
+    "Severity, detection ratings and thresholds are prototype settings chosen by hand; they are not calibrated against observed failures.",
+    "An RPN ranks outputs for attention; it is not a probability that an output is invalid.",
+    "The catalog covers the failure modes this prototype knows about. An output can fail in a way no mode describes.",
+    "A release decision concerns retrieved evidence. The gate validates no biological claim."
+  ],
+  "content_digest": "c9839e9472113ae5edb20d6b2ba8053bb987dc43db520d33fd9a6e6b5bb13a50"
+}

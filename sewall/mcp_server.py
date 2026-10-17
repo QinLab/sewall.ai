@@ -6,10 +6,14 @@ retrieve controlled data. Live model-driven research requires a Slurm CPU node.
 Fixture tools remain isolated from live scientific execution.
 
 Run with stdio for local hosts, or with --transport streamable-http to serve
-http://127.0.0.1:PORT/mcp on the loopback interface only.
+http://127.0.0.1:PORT/mcp on the loopback interface only. If SEWALL_MCP_TOKEN
+is set, every HTTP request must carry "Authorization: Bearer <token>". The
+token is required when --allowed-host admits a forwarding hostname.
 """
 
 import argparse
+import hmac
+import os
 import re
 
 from mcp.server.fastmcp import FastMCP
@@ -145,6 +149,30 @@ def verify_recorded_run(manifest: dict) -> dict:
             "reason": reason}
 
 
+TOKEN_ENV = "SEWALL_MCP_TOKEN"
+MIN_TOKEN_LENGTH = 32
+
+
+class BearerAuth:
+    """ASGI wrapper that rejects HTTP requests without the expected bearer token."""
+
+    def __init__(self, app, token):
+        self.app, self.expected = app, b"Bearer " + token.encode()
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] == "http":
+            supplied = b""
+            for name, value in scope.get("headers", []):
+                if name.lower() == b"authorization":
+                    supplied = value
+            if not hmac.compare_digest(supplied, self.expected):
+                await send({"type": "http.response.start", "status": 401,
+                            "headers": [(b"www-authenticate", b"Bearer"), (b"content-type", b"text/plain")]})
+                await send({"type": "http.response.body", "body": b"Unauthorized\n"})
+                return
+        await self.app(scope, receive, send)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="sewall mcp", description="Sewall.ai MCP server")
     parser.add_argument("--transport", choices=("stdio", "streamable-http"), default="stdio")
@@ -156,6 +184,11 @@ def main(argv=None):
         parser.error("--port must be from 1024 to 65535")
     if any(not re.fullmatch(r"[A-Za-z0-9.-]{1,253}", host) for host in args.allowed_host):
         parser.error("--allowed-host takes a bare hostname")
+    token = os.environ.get(TOKEN_ENV, "")
+    if token and (len(token) < MIN_TOKEN_LENGTH or not re.fullmatch(r"[\x21-\x7e]+", token)):
+        parser.error(f"{TOKEN_ENV} must be at least {MIN_TOKEN_LENGTH} printable characters without spaces")
+    if args.allowed_host and not token:
+        parser.error(f"--allowed-host exposes the server through a forwarder; set {TOKEN_ENV} first")
     if args.transport == "streamable-http":
         # The server binds to loopback only. DNS rebinding protection stays on; a tunnel
         # hostname must be named explicitly to be accepted.
@@ -164,6 +197,11 @@ def main(argv=None):
         security = mcp.settings.transport_security
         security.allowed_hosts += args.allowed_host
         security.allowed_origins += ["https://" + host for host in args.allowed_host]
+        if token:
+            import uvicorn
+            uvicorn.run(BearerAuth(mcp.streamable_http_app(), token), host=mcp.settings.host,
+                        port=mcp.settings.port, log_level=mcp.settings.log_level.lower())
+            return
     mcp.run(transport=args.transport)
 
 

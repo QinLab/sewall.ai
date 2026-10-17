@@ -13,7 +13,8 @@ from unittest.mock import MagicMock, patch
 from sewall import earthengine
 from sewall.agent import default_registry, run_agent, verify_agent_manifest
 from sewall.earthengine import EarthEngineError, alphaearth_context, check_window, check_year, chlorophyll_timeseries
-from test_agent import Client, Sources, finish, review
+from sewall.graph import digest
+from test_agent import Client, Sources, finish, reseal, review, rewrite
 
 
 class Computed:
@@ -29,14 +30,15 @@ class Computed:
         return deepcopy(self.info)
 
 
-def scene(index, day, ndci, pixels=500):
+def scene(index, day, ndci, pixels=500, tiles=("T18SVF",)):
+    stamp = date.fromordinal(date(1970, 1, 1).toordinal() + day)
     return {"type": "Feature", "geometry": None, "id": str(index),
-            "properties": {"image_id": f"20200{index}T155000_20200{index}T155000_T18SVF",
-                           "time_start": int(day * 86_400_000), "cloudy_pixel_percentage": 12.5,
-                           "ndci_mean": ndci, "water_pixels": pixels}}
+            "properties": {"day": stamp.isoformat(),
+                           "image_ids": [f"{stamp:%Y%m%d}T155000_{stamp:%Y%m%d}T155000_{tile}" for tile in tiles],
+                           "cloudy_pixel_percentage": 12.5, "ndci_mean": ndci, "water_pixels": pixels}}
 
 
-S2 = {"scenes_in_window": 9, "scenes_under_cloud_limit": 4,
+S2 = {"scenes_in_window": 9, "scenes_under_cloud_limit": 4, "days_under_cloud_limit": 3,
       "scenes": [scene(6, 18_430, 0.08), scene(7, 18_440, 0.21), scene(8, 18_450, None, 0)]}
 EMBEDDING = {"images": 2, "pixels": 240_000, "dataset_version": "1", "model_version": "1",
              "means": {band: 0.1 for band in earthengine.BANDS}}
@@ -67,12 +69,26 @@ class SummaryTests(unittest.TestCase):
         self.assertEqual([item["date"] for item in result["scenes"]], ["2020-06-17", "2020-06-27", "2020-07-07"])
         self.assertEqual(result["scenes_with_water_pixels"], 2)
         self.assertEqual(result["ndci_range"], [0.08, 0.21])
-        self.assertEqual(result["scenes"][2], {"image_id": S2["scenes"][2]["properties"]["image_id"], "date": "2020-07-07",
+        self.assertEqual(result["scenes"][2], {"image_ids": S2["scenes"][2]["properties"]["image_ids"], "date": "2020-07-07",
                                                "cloudy_pixel_percentage": 12.5, "water_pixels": 0, "ndci_mean": None})
+        self.assertFalse(result["truncated"])
+        self.assertEqual(result["min_water_pixels"], 100)
+        self.assertIn("JRC Global Surface Water", result["mask"])
         self.assertIn("Copernicus Sentinel", result["attribution"])
         self.assertEqual(len(result["requests"]), 1)
         self.assertRegex(result["requests"][0]["raw_sha256"], r"^[a-f0-9]{64}$")
         self.assertNotIn("project", str(result).lower())
+
+    def test_days_with_few_water_pixels_get_no_value_and_truncation_is_reported(self):
+        info = {**S2, "scenes_under_cloud_limit": 6, "days_under_cloud_limit": 5,
+                "scenes": [scene(6, 18_430, 0.08, 99), scene(7, 18_440, 0.21, 100, ("T18SVF", "T18SUF"))]}
+        result = chlorophyll_timeseries("lafayette-river", "2020-06-01", "2020-09-30", max_scenes=2, compute=Computed(info))
+        self.assertEqual([item["ndci_mean"] for item in result["scenes"]], [None, 0.21])
+        self.assertEqual(result["scenes"][0]["water_pixels"], 99)
+        self.assertEqual(result["scenes"][1]["image_ids"], sorted(info["scenes"][1]["properties"]["image_ids"]))
+        self.assertEqual((result["scenes_with_water_pixels"], result["truncated"]), (1, True))
+        with self.assertRaises(EarthEngineError):
+            chlorophyll_timeseries("lafayette-river", "2020-06-01", "2020-09-30", max_scenes=1, compute=Computed(info))
 
     def test_alphaearth_summary_records_versions_and_attribution(self):
         result = alphaearth_context("lafayette-river", "2023", compute=Computed(EMBEDDING))
@@ -84,8 +100,16 @@ class SummaryTests(unittest.TestCase):
         self.assertIsNone(empty["mean_embedding"])
         self.assertEqual(empty["images"], 0)
 
+    def test_alphaearth_scale_follows_the_site(self):
+        self.assertEqual(alphaearth_context("lafayette-river", "2023", compute=Computed(EMBEDDING))["scale_meters"], 10)
+        self.assertEqual(alphaearth_context("york-river-lower", "2023", compute=Computed(EMBEDDING))["scale_meters"], 30)
+
     def test_malformed_results_fail(self):
-        bad_s2 = [{**S2, "scenes": [scene(6, 18_430, 1.5)]}, {**S2, "scenes": [{"properties": {"image_id": "../x", "time_start": 1}}]},
+        bad_s2 = [{**S2, "scenes": [scene(6, 18_430, 1.5)]}, {**S2, "scenes": [{"properties": {"day": "2020-06-17", "image_ids": ["../x"]}}]},
+                  {**S2, "scenes": [scene(6, 18_430, 0.1), scene(6, 18_430, 0.1)]},
+                  {**S2, "scenes": [scene(6, 18_440, 0.1), scene(7, 18_430, 0.1)]},
+                  {**S2, "scenes": [scene(6, 18_000, 0.1)]}, {**S2, "days_under_cloud_limit": 5},
+                  {**S2, "scenes": [scene(6, 18_430, 0.1, tiles=("T18SVF", "T18SUF", "T18SUG", "T18SVG", "T18SWF"))]},
                   {**S2, "scenes_under_cloud_limit": 1}, {**S2, "scenes": "many"}, ["not", "a", "dict"],
                   {**S2, "scenes": [scene(6, 18_430, float("nan"))]}, RuntimeError("private detail")]
         for info in bad_s2:
@@ -113,7 +137,9 @@ class SummaryTests(unittest.TestCase):
         with patch.dict(os.environ, {"EARTHENGINE_PROJECT": "example-project"}), patch.dict(sys.modules, {"ee": fake}):
             result = chlorophyll_timeseries("lafayette-river", "2020-06-01", "2020-09-30")
         fake.Initialize.assert_called_once_with(project="example-project")
-        fake.ImageCollection.assert_called_once_with("COPERNICUS/S2_SR_HARMONIZED")
+        self.assertEqual([item.args for item in fake.ImageCollection.call_args_list],
+                         [("COPERNICUS/S2_SR_HARMONIZED",), ("GOOGLE/CLOUD_SCORE_PLUS/V1/S2_HARMONIZED",)])
+        fake.Image.assert_called_once_with("JRC/GSW1_4/GlobalSurfaceWater")
         fake.ImageCollection.return_value.filterBounds.return_value.filterDate.assert_called_once_with("2020-06-01", "2020-10-01")
         fake.Geometry.Rectangle.assert_called_once_with([-76.32, 36.88, -76.25, 36.915])
         self.assertEqual(fake.Dictionary.return_value.calls, 1)
@@ -165,6 +191,44 @@ class ControllerTests(unittest.TestCase):
         self.assertNotIn("mean_embedding", observation)
         # No PubMed or GenBank records were retrieved, so the run cannot claim evidence.
         self.assertEqual(result["status"], "no_evidence")
+
+    def test_resealed_payload_edits_fail_replay(self):
+        result = self.plan(s2_action())
+
+        def ndci(item):
+            if item.get("ndci_mean") == 0.21:
+                item["ndci_mean"] = 0.5
+
+        def redigest(item):
+            if "earth_summary" in item:
+                item["earth_summary_digest"] = digest(item["earth_summary"])
+
+        def source_response(item):
+            return "utility" in item
+
+        def everywhere_but_response(manifest):
+            rewrite(manifest, ndci, skip=source_response)
+            rewrite(manifest, redigest)
+
+        def observation_only(manifest):
+            rewrite(manifest, ndci, skip=lambda item: source_response(item) or "earth_summary" in item)
+
+        def payload_without_digest(manifest):
+            rewrite(manifest, ndci)
+
+        for tamper, reason in ((everywhere_but_response, "source response"), (observation_only, "observation"),
+                               (payload_without_digest, "digest")):
+            tampered = deepcopy(result)
+            tamper(tampered)
+            checked = verify_agent_manifest(reseal(tampered))
+            with self.subTest(tamper=tamper.__name__):
+                self.assertFalse(checked["valid"])
+                self.assertIn(reason, checked["reason"])
+        # An edit applied consistently to every copy, response included, still replays. Only a signature
+        # over the manifest detects it.
+        tampered = rewrite(deepcopy(result), ndci)
+        rewrite(tampered, redigest)
+        self.assertTrue(verify_agent_manifest(reseal(tampered))["valid"])
 
     def test_invalid_and_repeated_requests_make_no_call(self):
         result = self.plan(s2_action(start="2014-01-01"))

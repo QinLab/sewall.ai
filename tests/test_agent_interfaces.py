@@ -9,6 +9,7 @@ from contextlib import redirect_stderr, redirect_stdout
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
 import tempfile
 from types import ModuleType, SimpleNamespace
@@ -230,8 +231,16 @@ class AgentMCPBoundaryTests(unittest.TestCase):
     def test_http_transport_binds_loopback_and_names_tunnel_hosts(self):
         module = _mcp_functions_without_optional_sdk()
         module.mcp.run = Mock()
-        module.main(["--transport", "streamable-http", "--port", "8123", "--allowed-host", "abc.example.app"])
-        module.mcp.run.assert_called_once_with(transport="streamable-http")
+        # A forwarded host requires a bearer token; with one set, uvicorn serves the wrapped app.
+        module.mcp.settings.log_level = "INFO"
+        module.mcp.streamable_http_app = Mock()
+        uvicorn = ModuleType("uvicorn")
+        uvicorn.run = Mock()
+        with patch.dict(os.environ, {module.TOKEN_ENV: "t" * 40}), patch.dict("sys.modules", {"uvicorn": uvicorn}):
+            module.main(["--transport", "streamable-http", "--port", "8123", "--allowed-host", "abc.example.app"])
+        self.assertIsInstance(uvicorn.run.call_args.args[0], module.BearerAuth)
+        self.assertEqual(uvicorn.run.call_args.kwargs["port"], 8123)
+        module.mcp.run.assert_not_called()
         settings = module.mcp.settings
         self.assertEqual((settings.host, settings.port), ("127.0.0.1", 8123))
         self.assertIn("abc.example.app", settings.transport_security.allowed_hosts)

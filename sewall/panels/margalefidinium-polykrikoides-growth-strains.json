@@ -1,0 +1,166 @@
+{
+ "table_id": "sewall.mpolykrikoides-growth-strains",
+ "version": "0.1.0",
+ "taxon": "Margalefidinium polykrikoides",
+ "marker": "lsu",
+ "strains": [
+  {
+   "strain": "MP-LRCB-082419",
+   "aliases": [],
+   "origin": "USA, Virginia, Lafayette River (lower Chesapeake Bay); isolated 2019-08-24",
+   "published_label": "Group III",
+   "label_system": "Phylogenetic groups I to IV (Rene et al. 2013)",
+   "responses": [
+    {
+     "variable": "temperature",
+     "tested": "16, 18, 20, 24, 28, 30, 32, 34 C",
+     "result": "Growth from 18 to 32 C; no growth at 16 or 34 C"
+    },
+    {
+     "variable": "salinity",
+     "tested": "10, 15, 20, 25, 30 (factorial with temperature)",
+     "result": "Growth from salinity 15 to 30; no growth at 10; inhibited at 32 C with salinity 15"
+    }
+   ],
+   "citation": {
+    "authors": "Perez-Vega E, Mulholland MR, Crider KE, Powell KE, Chappell PD, Bochdansky A",
+    "year": 2025,
+    "title": "The effect of temperature and salinity on Margalefidinium polykrikoides group III VA, USA strain growth",
+    "journal": "Harmful Algae 146:102837",
+    "doi": "10.1016/j.hal.2025.102837",
+    "pmid": "40409864"
+   },
+   "verification": "abstract"
+  },
+  {
+   "strain": "CP-1",
+   "aliases": [],
+   "origin": "USA, New York, Flanders Bay (Peconic Estuary); isolated 2006",
+   "published_label": "Malaysian-American ribotype, stated for North Atlantic strains generally",
+   "label_system": "Iwataki et al. 2008 ribotypes as cited by Griffith and Gobler 2016",
+   "responses": [
+    {
+     "variable": "temperature",
+     "tested": "15, 18, 21, 24, 27, 30, 33 C at salinity 32-33",
+     "result": "Growth from 15 to 30 C, maximal at 24 C (0.27 doublings per day); none at 33 C"
+    }
+   ],
+   "citation": {
+    "authors": "Griffith AW, Gobler CJ",
+    "year": 2016,
+    "title": "Temperature controls the toxicity of the ichthyotoxic dinoflagellate Cochlodinium polykrikoides",
+    "journal": "Marine Ecology Progress Series 545:63-76",
+    "doi": "10.3354/meps11590",
+    "pmid": null
+   },
+   "verification": "full_text"
+  },
+  {
+   "strain": "CP2013",
+   "aliases": [],
+   "origin": "Korea (coastal; site not stated in the abstract)",
+   "published_label": null,
+   "label_system": null,
+   "responses": [
+    {
+     "variable": "temperature",
+     "tested": "Marine heatwave range, 28 to 30 C and above (full range not read)",
+     "result": "Did not survive above 28 C"
+    }
+   ],
+   "citation": {
+    "authors": "Lim YK, Park BS, Kim JH, Baek SS, Baek SH",
+    "year": 2021,
+    "title": "Effect of marine heatwaves on bloom formation of the harmful dinoflagellate Cochlodinium polykrikoides: Two sides of the same coin?",
+    "journal": "Harmful Algae 104:102029",
+    "doi": "10.1016/j.hal.2021.102029",
+    "pmid": "34023074"
+   },
+   "verification": "abstract"
+  },
+  {
+   "strain": "CP2018",
+   "aliases": [],
+   "origin": "Korea (coastal; site not stated in the abstract)",
+   "published_label": null,
+   "label_system": null,
+   "responses": [
+    {
+     "variable": "temperature",
+     "tested": "Marine heatwave range, 28 to 30 C and above (full range not read)",
+     "result": "Grew above 28 C; lower growth rate and yield at 30 C; LSU identical to CP2013"
+    }
+   ],
+   "citation": {
+    "authors": "Lim YK, Park BS, Kim JH, Baek SS, Baek SH",
+    "year": 2021,
+    "title": "Effect of marine heatwaves on bloom formation of the harmful dinoflagellate Cochlodinium polykrikoides: Two sides of the same coin?",
+    "journal": "Harmful Algae 104:102029",
+    "doi": "10.1016/j.hal.2021.102029",
+    "pmid": "34023074"
+   },
+   "verification": "abstract"
+  },
+  {
+   "strain": "IS ND69",
+   "aliases": [],
+   "origin": "Japan, Isahaya Bay (Ariake Sound); isolated August 2003",
+   "published_label": null,
+   "label_system": null,
+   "responses": [
+    {
+     "variable": "temperature and salinity",
+     "tested": "60 combinations, 10 to 32.5 C and salinity 16 to 36",
+     "result": "Growth across the full range; maximum 0.56 per day at 27.5 C and salinity 32"
+    }
+   ],
+   "citation": {
+    "authors": "Yamatogi T, Sakaguchi M, Iwataki M, Matsuoka K",
+    "year": 2006,
+    "title": "Effects of temperature and salinity on the growth of four harmful red tide flagellates occurring in Isahaya Bay in Ariake Sound, Japan",
+    "journal": "Nippon Suisan Gakkaishi 72:160-168",
+    "doi": "10.2331/suisan.72.160",
+    "pmid": null
+   },
+   "verification": "full_text"
+  },
+  {
+   "strain": "CPYG0106",
+   "aliases": [],
+   "origin": "Japan, Yatsushiro Sea (Kumamoto); axenic clone isolated 2001",
+   "published_label": null,
+   "label_system": null,
+   "responses": [
+    {
+     "variable": "nitrogen",
+     "tested": "N-limited semi-continuous culture, dilution 0.05 to 0.35 per day, 25 C, 35 psu",
+     "result": "Maximum growth rate 0.48 per day; minimum cell quota 5.25 pmol N per cell"
+    },
+    {
+     "variable": "phosphorus",
+     "tested": "P-limited semi-continuous culture, dilution 0.05 to 0.35 per day, 25 C, 35 psu",
+     "result": "Maximum growth rate 0.54 per day; minimum cell quota 0.37 pmol P per cell"
+    }
+   ],
+   "citation": {
+    "authors": "Kim DI, Matsubara T, Oh SJ, Shimasaki Y, Oshima Y, Honjo T",
+    "year": 2007,
+    "title": "Effects of nitrogen and phosphorus sources on the utilization and growth kinetics of the harmful dinoflagellate Cochlodinium polykrikoides isolated from Yatsushiro Sea, Japan",
+    "journal": "Nippon Suisan Gakkaishi 73:711-717",
+    "doi": "10.2331/suisan.73.711",
+    "pmid": null
+   },
+   "verification": "full_text"
+  }
+ ],
+ "label_note": "Labels are given only as each paper states them. Perez-Vega et al. 2026 (J Phycol 62:1367-1382, doi 10.1111/jpy.70201) equate Group III of Rene et al. 2013 with the American/Malaysian ribotype of Iwataki et al. 2008; the linkage does not apply this mapping.",
+ "limitations": [
+  "Strains are linked to GenBank records by name alone; a shared name does not prove the same culture.",
+  "CP-1 matches GenBank strain CP1 by name, but the CP1 record comes from a phylogeny paper and is not confirmed to be the Griffith and Gobler culture.",
+  "The MP-LRCB-082419 name, origin and methods come from the authors' PANGAEA dataset (doi 10.1594/PANGAEA.974726); the abstract does not name the strain.",
+  "Entries marked abstract were curated from the abstract only; optima and rates not stated there are omitted.",
+  "Growth conditions (medium, irradiance, photoperiod) differ between studies, so responses are not directly comparable.",
+  "Only six named strains with laboratory growth data were found; none from Puerto Rico, Mexico, China or the Mediterranean.",
+  "Kim et al. 2004 (J Plankton Res 26:61-66) is omitted because its strain name could not be verified."
+ ]
+}

@@ -1,11 +1,12 @@
 name: pages
 
-# Publishes gallery/ as a static site. Every manifest is verified offline and
-# scanned before publication; the build makes no model or source request.
+# Publishes the landing page (site/), the figures (docs/figures/) and the verified
+# gallery (gallery/, under /gallery/). Every manifest is verified offline and scanned
+# before publication; the build makes no model or source request.
 on:
   push:
     branches: [main]
-    paths: ["gallery/**", "sewall/**", ".github/workflows/pages.yml"]
+    paths: ["gallery/**", "sewall/**", "site/**", "docs/figures/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -26,7 +27,13 @@ jobs:
         with:
           python-version: "3.12"
       - name: Build verified gallery
-        run: python -m sewall gallery --catalog gallery/catalog.json --out _site
+        run: python -m sewall gallery --catalog gallery/catalog.json --out _site/gallery
+      - name: Add landing page and figures
+        run: |
+          cp site/index.html _site/index.html
+          mkdir _site/figures
+          cp docs/figures/fig*.png _site/figures/
+          touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

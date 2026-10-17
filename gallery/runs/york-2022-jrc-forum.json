@@ -1,0 +1,254 @@
+{
+  "schema_version": "0.1.0",
+  "kind": "sewall_review_forum",
+  "manifest_digest": "4259e3f41fd1e73b8f2e9c8f1c8d40351ef3031d237716b40fee599245d11438",
+  "question": "Did the Sentinel-2 chlorophyll proxy over the lower York River rise during the documented August to September 2022 Margalefidinium polykrikoides bloom, and what landscape context does AlphaEarth give?",
+  "topic": "Did the Sentinel-2 chlorophyll proxy over the lower York River rise during the documented August to September 2022 Margalefidinium polykrikoides bloom, and what landscape context does AlphaEarth give?",
+  "reviewers": [
+    {
+      "name": "methods",
+      "type": "rule",
+      "focus": "Provenance and completeness of the run itself."
+    },
+    {
+      "name": "ncbi",
+      "type": "rule",
+      "focus": "Literature and sequence records."
+    },
+    {
+      "name": "earthengine",
+      "type": "rule",
+      "focus": "Satellite summaries."
+    },
+    {
+      "name": "ecology",
+      "type": "rule",
+      "focus": "Whether the evidence can speak to the biological question."
+    }
+  ],
+  "rule_only": true,
+  "posts": [
+    {
+      "id": "post:1",
+      "round": 1,
+      "author": "methods",
+      "kind": "concern",
+      "text": "The run's metadata review covers literature records only; 7 computed observations (satellite or sensor summaries) were never reviewed.",
+      "refs": [
+        "review",
+        "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01",
+        "earthengine:chlorophyll_timeseries:2022-07-31:york-river-lower:2022-07-01",
+        "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01",
+        "earthengine:chlorophyll_timeseries:2022-10-31:york-river-lower:2022-10-01",
+        "earthengine:alphaearth_context:york-river-lower:2021",
+        "earthengine:alphaearth_context:york-river-lower:2022"
+      ],
+      "severity": "minor",
+      "topic": "review-omits-observations",
+      "prev": "4259e3f41fd1e73b8f2e9c8f1c8d40351ef3031d237716b40fee599245d11438",
+      "hash": "d49bc233e9cae931895a0bfd09664b856cac32331aa7fbac917a545b0e499986"
+    },
+    {
+      "id": "post:2",
+      "round": 1,
+      "author": "methods",
+      "kind": "support",
+      "text": "Every action, observation and policy decision is a node in a digest-verified graph, so the run can be replayed and audited.",
+      "refs": [
+        "question",
+        "result"
+      ],
+      "topic": "verified-chain",
+      "prev": "d49bc233e9cae931895a0bfd09664b856cac32331aa7fbac917a545b0e499986",
+      "hash": "ca70bc8f1a9daa8e56f721dd987e395571d982b5793b7d1261634c84f30ff2c4"
+    },
+    {
+      "id": "post:3",
+      "round": 1,
+      "author": "methods",
+      "kind": "question",
+      "text": "How many usable water scenes support each monthly NDCI value, and are any months too sparse to compare?",
+      "refs": [
+        "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01",
+        "earthengine:chlorophyll_timeseries:2022-07-31:york-river-lower:2022-07-01",
+        "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01",
+        "earthengine:chlorophyll_timeseries:2022-10-31:york-river-lower:2022-10-01"
+      ],
+      "topic": "scene-counts",
+      "prev": "ca70bc8f1a9daa8e56f721dd987e395571d982b5793b7d1261634c84f30ff2c4",
+      "hash": "b14a66bdc4dcc9311390d3c9b57b8ff294ad5b85893b70638da4f922990a58e7"
+    },
+    {
+      "id": "post:4",
+      "round": 1,
+      "author": "ncbi",
+      "kind": "support",
+      "text": "3 public literature records were retrieved and each is a node with its source URL.",
+      "refs": [
+        "ncbi:pubmed:38830711",
+        "ncbi:pubmed:35550296",
+        "ncbi:pubmed:34303516"
+      ],
+      "topic": "records-present",
+      "prev": "b14a66bdc4dcc9311390d3c9b57b8ff294ad5b85893b70638da4f922990a58e7",
+      "hash": "32cb1461c2b6b4438dcf3d766c431d087d3e2272d91eb44b5d644d6a7883c28b"
+    },
+    {
+      "id": "post:5",
+      "round": 1,
+      "author": "ncbi",
+      "kind": "limitation",
+      "text": "Records are metadata only: titles and summaries, no full text, sequences or measurements.",
+      "refs": [
+        "policy:pubmed"
+      ],
+      "topic": "metadata-only",
+      "prev": "32cb1461c2b6b4438dcf3d766c431d087d3e2272d91eb44b5d644d6a7883c28b",
+      "hash": "2436182d06550fe7fe56c0b15189640c34e008321c97e7953ccc40d700df6d42"
+    },
+    {
+      "id": "post:6",
+      "round": 1,
+      "author": "earthengine",
+      "kind": "limitation",
+      "text": "NDCI is a chlorophyll proxy from red-edge reflectance; it cannot identify a species or confirm a bloom.",
+      "refs": [
+        "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01"
+      ],
+      "topic": "ndci-proxy",
+      "prev": "2436182d06550fe7fe56c0b15189640c34e008321c97e7953ccc40d700df6d42",
+      "hash": "239b131b12f6b3ceca968e3b402f5dd53819cf616a2ac65a6bef967c2998822d"
+    },
+    {
+      "id": "post:7",
+      "round": 1,
+      "author": "earthengine",
+      "kind": "limitation",
+      "text": "AlphaEarth features are learned embeddings, not physical measurements; they were reduced at 30 m.",
+      "refs": [
+        "earthengine:alphaearth_context:york-river-lower:2021",
+        "earthengine:alphaearth_context:york-river-lower:2022"
+      ],
+      "topic": "alphaearth-learned",
+      "prev": "239b131b12f6b3ceca968e3b402f5dd53819cf616a2ac65a6bef967c2998822d",
+      "hash": "23212805329fb2795062d7f093fedc548f6cb0d657c5ee067defda015630cf94"
+    },
+    {
+      "id": "post:8",
+      "round": 1,
+      "author": "ecology",
+      "kind": "concern",
+      "text": "The run holds no in situ cell count or species observation for the bloom, so the satellite signal cannot be attributed to the named organism.",
+      "refs": [
+        "question"
+      ],
+      "severity": "major",
+      "topic": "no-in-situ",
+      "prev": "23212805329fb2795062d7f093fedc548f6cb0d657c5ee067defda015630cf94",
+      "hash": "a2090316edf66e3eccad955bd7b510dffceed767efb1ea65506f6705751a3ff7"
+    },
+    {
+      "id": "post:9",
+      "round": 2,
+      "author": "ncbi",
+      "kind": "reply",
+      "text": "3 retrieved paper titles mention a bloom; those papers may hold in situ observations, but the run reads only their metadata.",
+      "refs": [
+        "post:8",
+        "ncbi:pubmed:38830711",
+        "ncbi:pubmed:35550296",
+        "ncbi:pubmed:34303516"
+      ],
+      "reply_to": "post:8",
+      "stance": "answer",
+      "prev": "a2090316edf66e3eccad955bd7b510dffceed767efb1ea65506f6705751a3ff7",
+      "hash": "4fd8c9070fe9806e95f768e2ce9e819fd67768546e27176abaf5ba315cdd2c8c"
+    },
+    {
+      "id": "post:10",
+      "round": 2,
+      "author": "earthengine",
+      "kind": "reply",
+      "text": "Usable water scenes per month: 2022-06: 5, 2022-07: 3, 2022-08: 6, 2022-09: 5, 2022-10: 3. Every month has at least 3 scenes.",
+      "refs": [
+        "post:3",
+        "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01",
+        "earthengine:chlorophyll_timeseries:2022-07-31:york-river-lower:2022-07-01",
+        "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01",
+        "earthengine:chlorophyll_timeseries:2022-10-31:york-river-lower:2022-10-01"
+      ],
+      "reply_to": "post:3",
+      "stance": "answer",
+      "prev": "4fd8c9070fe9806e95f768e2ce9e819fd67768546e27176abaf5ba315cdd2c8c",
+      "hash": "0b9e74824b520e1df7663b286435844dddccf06c78a929f3c97f1b57c4c3fa07"
+    },
+    {
+      "id": "post:11",
+      "round": 2,
+      "author": "earthengine",
+      "kind": "reply",
+      "text": "Agreed: paper metadata may name a bloom, but no cell count or species observation is linked to any satellite scene, so NDCI changes cannot be attributed to the organism.",
+      "refs": [
+        "post:8",
+        "post:9"
+      ],
+      "reply_to": "post:8",
+      "stance": "agree",
+      "prev": "0b9e74824b520e1df7663b286435844dddccf06c78a929f3c97f1b57c4c3fa07",
+      "hash": "16ca3ab503e8eaded516a3fac504f6a5cef85534f4f1776fe35e1239bcd533a0"
+    }
+  ],
+  "rejected": [],
+  "model_calls": [],
+  "synthesis": {
+    "id": "post:12",
+    "round": 3,
+    "author": "moderator",
+    "kind": "synthesis",
+    "verdict": "needs_revision",
+    "concerns": [
+      {
+        "post": "post:1",
+        "author": "methods",
+        "severity": "minor",
+        "status": "open",
+        "replies": []
+      },
+      {
+        "post": "post:8",
+        "author": "ecology",
+        "severity": "major",
+        "status": "contested",
+        "replies": [
+          "post:9",
+          "post:11"
+        ]
+      }
+    ],
+    "blocking_concerns": [
+      "post:8"
+    ],
+    "disputed_posts": [],
+    "concern_counts": {
+      "open": 1,
+      "contested": 1,
+      "resolved": 0
+    },
+    "limitations": [
+      "post:5",
+      "post:6",
+      "post:7"
+    ],
+    "biological_claims_validated": false,
+    "prev": "16ca3ab503e8eaded516a3fac504f6a5cef85534f4f1776fe35e1239bcd533a0"
+  },
+  "limitations": [
+    "The forum reviews retrieved metadata and computed summaries; it validates no biological claim.",
+    "Rule reviewers apply fixed checks; agreement among them is not independent expert judgment.",
+    "Model reviewer posts are checked for structure and citations, not for truth."
+  ],
+  "content_digest": "f4acf4faf8afe0478e5a082173b0733808b24c7211a123517e43503905e6dcbd"
+}

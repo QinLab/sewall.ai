@@ -1,0 +1,45 @@
+{
+  "$schema": "../../schemas/executable_skill.schema.json",
+  "schema_version": "0.2.0",
+  "skill_id": "noaa-usgs.flood-sensors-area",
+  "version": "0.1.0",
+  "name": "Latest flood sensor readings over a named Chesapeake area",
+  "description": "Gather the most recent public water-level readings over a named Chesapeake Bay area: NWS flood categories from NOAA NWPS gauges, NOAA CO-OPS tide station levels compared with their flood thresholds, and USGS gage height and water surface elevation. Only the latest reading per sensor is returned.",
+  "operation": "flood_sensors",
+  "implementation": "sewall.agent:flood_sensors",
+  "planner_template": "{\"action\":\"flood_sensors\",\"area\":\"norfolk\",\"reason\":\"why\"}",
+  "planner_guidance": [
+    "Use flood_sensors to see current water levels and any gauges at action stage or above in a named area of the Chesapeake Bay.",
+    "Each area can be queried once per run. Readings are live at run time, so two runs at different times return different values.",
+    "A flood category comes from NWS or NOAA thresholds for that gauge. USGS readings have no thresholds here and carry no flood status."
+  ],
+  "arguments": [
+    {"name": "area", "type": "string",
+     "enum": ["norfolk", "lafayette-river", "hampton-newport-news", "york-river-lower", "annapolis", "baltimore"],
+     "description": "A named area. Each area is a fixed approximate bounding box recorded in the result."}
+  ],
+  "sources": [
+    "NOAA NWS National Water Prediction Service gauges API (api.water.noaa.gov/nwps/v1)",
+    "NOAA CO-OPS Data API and Metadata API (api.tidesandcurrents.noaa.gov)",
+    "USGS Water Data OGC API, latest-continuous collection (api.waterdata.usgs.gov)"
+  ],
+  "external_actions": true,
+  "evidence": {
+    "method": "latest_reading_per_sensor_with_published_thresholds",
+    "supports_causality": false,
+    "limitations": [
+      "Recent readings are provisional and may be revised or removed by NOAA or USGS.",
+      "Values use different datums: CO-OPS readings and thresholds are in feet above station datum, NWPS stages use each gauge's datum, and USGS elevations use NAVD88. Do not compare values across services.",
+      "An out_of_service or stale gauge is missing data, not evidence that no flooding is occurring.",
+      "The area is an approximate bounding box. Street flooding between gauges, rainfall flooding and community sensor networks such as StormSense are not covered.",
+      "These readings are not forecasts or official flood warnings; consult the National Weather Service for warnings."
+    ]
+  },
+  "policy_constraints": {
+    "egress": "public_metadata_only",
+    "may_grant_access": false,
+    "may_sign_agreements": false,
+    "attribution": "Water levels and flood categories from NOAA NWS National Water Prediction Service and NOAA CO-OPS; continuous values from the USGS Water Data APIs."
+  },
+  "validation": {"tests": ["tests/test_floodsensors.py", "tests/test_skills.py"]}
+}

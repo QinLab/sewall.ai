@@ -10,16 +10,20 @@ from copy import deepcopy
 import json
 import os
 import re
+import hashlib
+from pathlib import Path
 import shutil
 import socket
+import subprocess
 import sys
 import time
 
-from . import earthengine
+from . import __version__, earthengine, floodsensors, ribotype, strains
 from .evidence import fetch_metadata
-from .genbank import InventoryError, organism_term, taxon_inventory
+from .genbank import MARKERS, MAX_MARKER_RECORDS, InventoryError, fetch_markers, organism_term, taxon_inventory
 from .graph import _Trace, digest
 from .llm import LLMError
+from .policy import evaluate_policy
 from .ncbi import MetadataSearchError, search_metadata
 from .providers import recorded_config
 from .safety import CRITIQUE_TYPES
@@ -28,15 +32,37 @@ from .skills import LIVE_DIRECTORY, Implementation, SkillRegistry
 
 _DATABASES = {"pubmed", "gds", "bioproject"}
 _UNCONFIGURED = {"eol", "alphaearth", "ncbi_genotype"}
+# Operator profiles for the public sources this prototype calls. They state what the
+# prototype permits itself to do; they are not provider terms or access grants.
+_PURPOSE = "question_driven_public_data_review"
+_RETENTION_DAYS = 3650  # Manifests are kept as research records.
+_SOURCE_PROFILES = {
+    source: {"policy_id": "sewall-public-" + source, "version": "1", "allowed_purposes": [_PURPOSE],
+             "allowed_operations": [representation], "compute_locations": [location], "egress": [representation],
+             "max_bytes": max_bytes, "max_retention_days": _RETENTION_DAYS, "attribution": [],
+             "authorization_required": False, "prohibited_purposes": [], "negotiation_allowed": False}
+    for source, representation, location, max_bytes in (
+        ("gds", "metadata", "sewall_client", 2 * 1_048_576), ("bioproject", "metadata", "sewall_client", 2 * 1_048_576),
+        ("pubmed", "metadata", "sewall_client", 2 * 1_048_576), ("nuccore", "metadata", "sewall_client", 7 * 1_048_576),
+        # Public sequences of one marker for one taxon, kept in the run record and never sent to a model.
+        ("nuccore_sequences", "individual", "sewall_client", 3 * 1_048_576),
+        # Earth Engine reduces imagery where it is stored; only summaries leave the source.
+        ("earthengine", "aggregate", "source", 1_048_576),
+        ("floodsensors", "aggregate", "sewall_client", (2 + 2 * floodsensors.MAX_COOPS_STATIONS) * 1_048_576))}
+# Outputs each Skill egress class may return. A draft-only Skill may return no source data.
+_EGRESS_OUTPUTS = {"public_metadata_only": ["metadata", "aggregate"],
+                   "public_sequence_records": ["metadata", "individual"], "local_draft_only": []}
+_POLICY_EVENT = {"action_index", "source_id", "skill_id", "descriptor_sha256", "egress", "request", "profile", "assessment"}
 _UID = re.compile(r"[1-9][0-9]{0,19}\Z", re.ASCII)
 _HEX = re.compile(r"[a-f0-9]{64}\Z", re.ASCII)
-_LIMITS = {"max_actions": (1, 8), "max_model_calls": (2, 10),
-           "max_records": (1, 15), "per_search": (1, 5), "max_seconds": (1, 600)}
+_HEX40 = re.compile(r"[a-f0-9]{40}\Z", re.ASCII)
+_LIMITS = {"max_actions": (1, 16), "max_model_calls": (2, 18),
+           "max_records": (1, 30), "per_search": (1, 5), "max_seconds": (1, 600)}
 _STATUS = {"completed", "budget_exhausted", "failed", "no_evidence", "needs_review", "safe_stopped"}
 _INTEGRITY = {"valid", "invalid", "unknown"}
 _PROPAGATES = {"depends_on", "produces"}
 _STOPPED_EVENTS = {"model_call_started", "model_call_finished", "action_completed", "record_retrieved",
-                   "source_response", "metadata_summary_checked"}
+                   "source_response", "metadata_summary_checked", "policy_checked"}
 _MODEL_PAYLOAD_BYTES = 28_000
 # September 2026 manifests predate the Skill registry and record no Skill digests.
 _LEGACY_ACTIONS = ["search", "citations", "assess_source", "finish"]
@@ -95,6 +121,7 @@ LIMITATIONS = [
     "This run retrieves public citation and study metadata only; it performs no biological analysis.",
     "No expression matrices, sequences, participant genotypes, full text, or new observations are retrieved.",
     "EOL has no live connector. Earth Engine Skills return only small summaries and run only with a configured Earth Engine project; genotype access needs a separately configured authorized workflow.",
+    "Flood sensor readings are the latest provisional public values at the time of the run; they are not forecasts or official flood warnings.",
     "Models select bounded actions; source metadata cannot authorize actions, execute code, or change policy.",
     "Model review and exact quote matches do not establish biological validity or independent scientific verification.",
     "Explicit citations and shared taxonomy provide context, not shared specimens, causal effects, or ecological outcomes.",
@@ -119,6 +146,47 @@ class _SafeStop(RuntimeError):
     def __init__(self, phase, node_id, critiques):
         super().__init__("Integrity safe stop")
         self.phase, self.node_id, self.critiques = phase, node_id, critiques
+
+
+_PACKAGE = Path(__file__).resolve().parent
+
+
+def code_version() -> dict:
+    """Identify the code that ran: package version, git commit if any, and a hash of the sewall sources."""
+    sources = hashlib.sha256()
+    for path in sorted(_PACKAGE.glob("*.py")):
+        sources.update(path.name.encode() + b"\0" + hashlib.sha256(path.read_bytes()).digest())
+    commit, dirty = None, None
+    try:
+        git = ["git", "-C", str(_PACKAGE)]
+        head = subprocess.run([*git, "rev-parse", "HEAD"], capture_output=True, text=True, timeout=5)
+        if head.returncode == 0 and _HEX40.fullmatch(head.stdout.strip()):
+            commit = head.stdout.strip()
+            status = subprocess.run([*git, "status", "--porcelain", "--", str(_PACKAGE), str(LIVE_DIRECTORY)],
+                                    capture_output=True, text=True, timeout=5)
+            dirty = bool(status.stdout.strip()) if status.returncode == 0 else None
+    except (OSError, subprocess.SubprocessError):
+        pass
+    return {"sewall_version": __version__, "git_commit": commit, "git_dirty": dirty,
+            "source_sha256": sources.hexdigest()}
+
+
+def current_code_report(manifest: dict) -> dict:
+    """Compare a manifest's recorded code and Skill digests with this checkout. Informational only."""
+    recorded = manifest.get("context", {}).get("code")
+    current = code_version()
+    registry = {item["operation"]: item for item in default_registry(earth_engine=True).entries()}
+    skills = []
+    for item in manifest.get("plan", {}).get("skills", []):
+        now = registry.get(item["operation"])
+        skills.append({"operation": item["operation"],
+                       "status": "missing" if now is None else
+                       "same" if now["descriptor_sha256"] == item["descriptor_sha256"] else "changed"})
+    return {"code_recorded": recorded is not None,
+            "same_source": None if recorded is None else recorded["source_sha256"] == current["source_sha256"],
+            "recorded_commit": None if recorded is None else recorded["git_commit"],
+            "current_commit": current["git_commit"], "skills": skills,
+            "skills_unchanged": all(item["status"] == "same" for item in skills)}
 
 
 def _on_slurm_cluster() -> bool:
@@ -223,6 +291,12 @@ def _check_inventory(action, records, skill):
         raise ActionError(str(exc)) from None
 
 
+def _check_markers(action, records, skill):
+    _check_inventory(action, records, skill)
+    if action["marker"] not in MARKERS:
+        raise ActionError("Unknown marker")
+
+
 def _check_nothing(action, records, skill):
     return None
 
@@ -298,11 +372,196 @@ def _execute_inventory(run, action, node):
     inventory = run.trace.node("inventory:nuccore:" + taxon, "source", "GenBank inventory: " + taxon, "completed",
                                source_id="nuccore", details={"inventory": result, "inventory_digest": digest(result)})
     run.trace.edge(node["id"], inventory["id"], "produces")
-    return {"taxon": taxon, "inventory_node": inventory["id"], "total": result["total"],
+    return _inventory_observation(result, inventory["id"])
+
+
+def _execute_markers(run, action, node):
+    taxon, marker = action["taxon"], action["marker"]
+    if (taxon.casefold(), marker) in run.seen_markers:
+        raise ActionError("Repeated marker fetch blocked; no request made")
+    run.seen_markers.add((taxon.casefold(), marker))
+    run.policy("nuccore_sequences")
+    run.checkpoint()
+    result = run.markers_fn(taxon, marker)
+    requests = result.get("requests") if isinstance(result, dict) else None
+    sequences = result.get("records") if isinstance(result, dict) else None
+    if (not isinstance(requests, list) or not 1 <= len(requests) <= 3 or result.get("taxon") != taxon
+            or result.get("marker") != marker or result.get("database") != "nuccore"
+            or type(result.get("total")) is not int or not isinstance(sequences, list)
+            or len(sequences) > MAX_MARKER_RECORDS or result.get("returned") != len(sequences)
+            or any(not isinstance(item, dict) or not isinstance(item.get("accession"), str)
+                   or not isinstance(item.get("sequence"), str) for item in sequences)):
+        raise ActionError("GenBank marker fetch returned an invalid bounded result")
+    response_bytes = result.get("response_bytes", 0)
+    if type(response_bytes) is not int or not 0 <= response_bytes <= 3 * 1_048_576:
+        raise ActionError("Invalid GenBank marker fetch byte count")
+    attempts = [item.get("attempts", 1) if isinstance(item, dict) else 1 for item in requests]
+    if any(type(value) is not int or not 1 <= value <= 2 for value in attempts):
+        raise ActionError("Invalid GenBank marker fetch attempt count")
+    run.source_requests += sum(attempts)
+    run.network_bytes += response_bytes
+    run.trace.event("source_response", {"utility": "nuccore_markers", "response": result})
+    markers = run.trace.node(_markers_node_id(taxon, marker), "source", f"GenBank {marker.upper()} sequences: {taxon}",
+                             "completed", source_id="nuccore_sequences",
+                             details={"markers": result, "markers_digest": digest(result)})
+    run.trace.edge(node["id"], markers["id"], "produces")
+    return _markers_observation(result, markers["id"])
+
+
+def _check_ribotype(action, records, skill):
+    try:
+        ribotype.load_panel(action["taxon"], action["marker"])
+    except (ribotype.PanelError, OSError) as exc:
+        raise ActionError(str(exc)) from None
+
+
+def _execute_ribotype(run, action, node):
+    taxon, marker = action["taxon"], action["marker"]
+    source_id = _markers_node_id(taxon, marker)
+    source = next((item for item in run.trace.nodes if item["id"] == source_id), None)
+    if source is None or source["status"] != "completed" or "markers" not in source.get("details", {}):
+        raise ActionError("Ribotype assignment needs a completed fetch_markers step for the same taxon and marker")
+    if source_id in run.seen_assignments:
+        raise ActionError("Repeated ribotype assignment blocked")
+    run.seen_assignments.add(source_id)
+    panel = ribotype.load_panel(taxon, marker)
+    try:
+        result = ribotype.assign(_assignment_queries(source["details"]["markers"]), panel)
+    except ribotype.PanelError as exc:
+        raise ActionError(str(exc)) from None
+    assignment = run.trace.node(_assignment_node_id(taxon, marker), "verification",
+                                f"Ribotype assignment: {taxon} {marker.upper()}", "completed",
+                                details={"assignment": result, "assignment_digest": digest(result), "panel": panel})
+    run.trace.edge(source_id, assignment["id"], "depends_on")
+    run.trace.edge(node["id"], assignment["id"], "produces")
+    return _assignment_observation(result, assignment["id"])
+
+
+def _check_strains(action, records, skill):
+    try:
+        strains.load_table(action["taxon"], action["marker"])
+    except (strains.StrainTableError, OSError) as exc:
+        raise ActionError(str(exc)) from None
+
+
+def _execute_strains(run, action, node):
+    taxon, marker = action["taxon"], action["marker"]
+    assignment_id = _assignment_node_id(taxon, marker)
+    assignment = next((item for item in run.trace.nodes if item["id"] == assignment_id), None)
+    source = next((item for item in run.trace.nodes if item["id"] == _markers_node_id(taxon, marker)), None)
+    if assignment is None or assignment["status"] != "completed" or source is None:
+        raise ActionError("Strain linkage needs a completed assign_ribotype step for the same taxon and marker")
+    if assignment_id in run.seen_links:
+        raise ActionError("Repeated strain linkage blocked")
+    run.seen_links.add(assignment_id)
+    table = strains.load_table(taxon, marker)
+    try:
+        result = strains.link(assignment["details"]["assignment"], source["details"]["markers"], table)
+    except strains.StrainTableError as exc:
+        raise ActionError(str(exc)) from None
+    linked = run.trace.node(_strains_node_id(taxon, marker), "verification",
+                            f"Growth strain linkage: {taxon} {marker.upper()}", "completed",
+                            details={"strain_links": result, "strain_links_digest": digest(result), "strain_table": table})
+    run.trace.edge(assignment_id, linked["id"], "depends_on")
+    run.trace.edge(node["id"], linked["id"], "produces")
+    return _strains_observation(result, linked["id"])
+
+
+def _markers_node_id(taxon, marker):
+    return "markers:nuccore:" + taxon + ":" + marker
+
+
+def _assignment_node_id(taxon, marker):
+    return "ribotype:" + taxon + ":" + marker
+
+
+def _strains_node_id(taxon, marker):
+    return "strains:" + taxon + ":" + marker
+
+
+def _assignment_queries(markers):
+    return [{"accession": item["accession"], "sequence": item["sequence"]} for item in markers["records"]]
+
+
+# Observations are pure functions of the retained payload, so replay can rebuild them.
+def _markers_observation(result, node_id):
+    """Summarize fetched sequences for the planner; the sequences themselves stay in the run record."""
+    countries = {}
+    for item in result["records"]:
+        qualifiers = item.get("qualifiers") or {}
+        place = (qualifiers.get("geo_loc_name") or qualifiers.get("country") or "not stated").split(":")[0].strip()
+        countries[place] = countries.get(place, 0) + 1
+    return {"taxon": result["taxon"], "marker": result["marker"], "markers_node": node_id, "total": result["total"],
+            "returned": result["returned"], "truncated": result.get("truncated"),
+            "classification": result.get("classification"), "countries": dict(sorted(countries.items())),
+            "records": [{"accession": item["accession"], "length": item.get("length"),
+                         **{key: (item.get("qualifiers") or {}).get(key)
+                            for key in ("strain", "isolate", "geo_loc_name", "country", "collection_date")}}
+                        for item in result["records"]]}
+
+
+def _assignment_observation(result, node_id):
+    return {"assignment_node": node_id, "method": result["method"], "panel_id": result["panel"]["panel_id"],
+            "panel_version": result["panel"]["version"], "panel_digest": result["panel_digest"],
+            "assigned": deepcopy(result["assigned"]), "unassigned": deepcopy(result["unassigned"]),
+            "calls": [{key: call[key] for key in ("accession", "ribotype", "nearest_ribotype", "score", "margin",
+                                                   "reason", "panel_reference", "panel_excluded")}
+                      for call in result["calls"]],
+            "limitations": deepcopy(result["limitations"])}
+
+
+def _strains_observation(result, node_id):
+    return {"strains_node": node_id, "method": result["method"], "table_id": result["table"]["table_id"],
+            "table_version": result["table"]["version"], "table_digest": result["table_digest"],
+            "statuses": deepcopy(result["statuses"]), "strains_per_ribotype": deepcopy(result["strains_per_ribotype"]),
+            "ribotypes_without_growth_strains": list(result["ribotypes_without_growth_strains"]),
+            "links": [{key: deepcopy(entry[key]) for key in ("strain", "origin", "accessions", "status", "ribotype",
+                                                            "published_label", "label_check", "variables", "verification",
+                                                            "citation")}
+                      for entry in result["links"]],
+            "limitations": deepcopy(result["limitations"])}
+
+
+def _inventory_observation(result, node_id):
+    return {"taxon": result["taxon"], "inventory_node": node_id, "total": result["total"],
             "total_excluding_tsa": result.get("total_excluding_tsa"), "tsa_records": result.get("tsa_records"),
-            "marker_counts": deepcopy(counts), "classification": result.get("classification"),
+            "marker_counts": deepcopy(result["marker_counts"]), "classification": result.get("classification"),
             "sample": [{key: item.get(key) for key in ("accession", "title", "organism", "length", "qualifiers")}
                        for item in result["sample"]]}
+
+
+def _earth_observation(result, node_id):
+    observation = {key: deepcopy(value) for key, value in result.items() if key not in ("requests", "mean_embedding")}
+    observation["summary_node"] = node_id
+    if "mean_embedding" in result:
+        observation["mean_embedding_dimensions"] = 0 if result["mean_embedding"] is None else len(result["mean_embedding"])
+    return observation
+
+
+def _flood_observation(result, node_id):
+    observation = {key: deepcopy(value) for key, value in result.items() if key != "requests"}
+    observation["summary_node"] = node_id
+    return observation
+
+
+def _earth_node_id(operation, arguments):
+    return "earthengine:" + operation + ":" + ":".join(str(value) for _, value in sorted(arguments.items()))
+
+
+# Payload detail key -> (source_response utility, node id from action and payload, observation builder).
+_PAYLOADS = {
+    "inventory": (lambda action, result: "nuccore_inventory",
+                  lambda action, result: "inventory:nuccore:" + action["taxon"], _inventory_observation),
+    "earth_summary": (lambda action, result: "earthengine_" + action["action"],
+                      lambda action, result: _earth_node_id(
+                          action["action"], {k: v for k, v in action.items() if k not in ("action", "reason")}),
+                      _earth_observation),
+    "markers": (lambda action, result: "nuccore_markers",
+                lambda action, result: _markers_node_id(action["taxon"], action["marker"]), _markers_observation),
+    "flood_summary": (lambda action, result: "floodsensors",
+                      lambda action, result: "floodsensors:" + action["area"] + ":" + result["retrieved_at"],
+                      _flood_observation),
+}
 
 
 def _execute_assessment(run, action, node):
@@ -353,15 +612,42 @@ def _execute_earth(run, action, node):
     run.network_bytes += result["response_bytes"]
     run.trace.event("source_response", {"utility": "earthengine_" + operation, "response": result})
     label = "Earth Engine " + operation + ": " + " ".join(str(value) for _, value in sorted(arguments.items()))
-    summary = run.trace.node("earthengine:" + operation + ":" + ":".join(str(value) for _, value in sorted(arguments.items())),
-                             "source", label, "completed", source_id="earthengine",
+    summary = run.trace.node(_earth_node_id(operation, arguments), "source", label, "completed", source_id="earthengine",
                              details={"earth_summary": result, "earth_summary_digest": digest(result)})
     run.trace.edge(node["id"], summary["id"], "produces")
-    observation = {key: deepcopy(value) for key, value in result.items() if key not in ("requests", "mean_embedding")}
-    observation["summary_node"] = summary["id"]
-    if "mean_embedding" in result:
-        observation["mean_embedding_dimensions"] = 0 if result["mean_embedding"] is None else len(result["mean_embedding"])
-    return observation
+    return _earth_observation(result, summary["id"])
+
+
+def _check_flood(action, records, skill):
+    try:
+        floodsensors.check_area(action["area"])
+    except ValueError as exc:
+        raise ActionError(str(exc)) from None
+
+
+def _execute_flood(run, action, node):
+    area = action["area"]
+    if area in run.seen_flood:
+        raise ActionError("Repeated flood sensor request blocked; no request made")
+    run.seen_flood.add(area)
+    run.policy("floodsensors")
+    run.checkpoint()
+    result = run.flood_fn("flood_sensors", {"area": area})
+    requests = result.get("requests") if isinstance(result, dict) else None
+    if (not isinstance(requests, list) or not 1 <= len(requests) <= 2 + 2 * floodsensors.MAX_COOPS_STATIONS
+            or result.get("operation") != "flood_sensors" or result.get("area") != area
+            or type(result.get("response_bytes")) is not int
+            or not 0 <= result["response_bytes"] <= len(requests) * floodsensors.MAX_RESPONSE_BYTES):
+        raise ActionError("Flood sensor services returned an invalid bounded result")
+    run.source_requests += len(requests)
+    run.network_bytes += result["response_bytes"]
+    run.trace.event("source_response", {"utility": "floodsensors", "response": result})
+    summary = run.trace.node("floodsensors:" + area + ":" + result["retrieved_at"], "source",
+                             "Flood sensors: " + area + " at " + result["retrieved_at"], "completed",
+                             source_id="floodsensors",
+                             details={"flood_summary": result, "flood_summary_digest": digest(result)})
+    run.trace.edge(node["id"], summary["id"], "produces")
+    return _flood_observation(result, summary["id"])
 
 
 IMPLEMENTATIONS = {
@@ -371,6 +657,15 @@ IMPLEMENTATIONS = {
         "sewall.agent:gds_citations", ("record_id",), {}, _check_citations, _execute_citations),
     "sewall.agent:genbank_inventory": Implementation(
         "sewall.agent:genbank_inventory", ("taxon",), {}, _check_inventory, _execute_inventory),
+    "sewall.agent:genbank_fetch_markers": Implementation(
+        "sewall.agent:genbank_fetch_markers", ("taxon", "marker"), {"marker": set(MARKERS)},
+        _check_markers, _execute_markers),
+    "sewall.agent:genotype_assign_ribotype": Implementation(
+        "sewall.agent:genotype_assign_ribotype", ("taxon", "marker"), {"marker": {m for _, m in ribotype.PANELS}},
+        _check_ribotype, _execute_ribotype),
+    "sewall.agent:genotype_link_strains": Implementation(
+        "sewall.agent:genotype_link_strains", ("taxon", "marker"), {"marker": {m for _, m in strains.TABLES}},
+        _check_strains, _execute_strains),
     "sewall.agent:source_assessment": Implementation(
         "sewall.agent:source_assessment", ("source",), {"source": _UNCONFIGURED}, _check_nothing, _execute_assessment),
     "sewall.agent:earthengine_s2_chlorophyll": Implementation(
@@ -379,6 +674,8 @@ IMPLEMENTATIONS = {
     "sewall.agent:earthengine_alphaearth": Implementation(
         "sewall.agent:earthengine_alphaearth", ("site", "year"), {"site": set(earthengine.SITES)},
         _check_earth, _execute_earth),
+    "sewall.agent:flood_sensors": Implementation(
+        "sewall.agent:flood_sensors", ("area",), {"area": set(floodsensors.AREAS)}, _check_flood, _execute_flood),
 }
 _EARTH_IMPLEMENTATIONS = {"sewall.agent:earthengine_s2_chlorophyll", "sewall.agent:earthengine_alphaearth"}
 
@@ -464,6 +761,14 @@ def _evidence_critiques(nodes, records):
     changed = []
     for node in nodes:
         details = node.get("details", {})
+        if node["kind"] == "verification" and "assignment" in details:
+            if (digest(details["assignment"]) != details.get("assignment_digest")
+                    or digest(details.get("panel")) != details["assignment"].get("panel_digest")):
+                changed.append(node["id"])
+        if node["kind"] == "verification" and "strain_links" in details:
+            if (digest(details["strain_links"]) != details.get("strain_links_digest")
+                    or digest(details.get("strain_table")) != details["strain_links"].get("table_digest")):
+                changed.append(node["id"])
         if node["kind"] != "source":
             continue
         if "record" in details:
@@ -473,6 +778,10 @@ def _evidence_critiques(nodes, records):
         elif "inventory" in details and digest(details["inventory"]) != details.get("inventory_digest"):
             changed.append(node["id"])
         elif "earth_summary" in details and digest(details["earth_summary"]) != details.get("earth_summary_digest"):
+            changed.append(node["id"])
+        elif "flood_summary" in details and digest(details["flood_summary"]) != details.get("flood_summary_digest"):
+            changed.append(node["id"])
+        elif "markers" in details and digest(details["markers"]) != details.get("markers_digest"):
             changed.append(node["id"])
     return [_critique("tampered_evidence", changed, "Source evidence no longer matches its recorded digest")] if changed else []
 
@@ -610,7 +919,8 @@ def _check_record(record, database, requested):
 
 def run_agent(question: str, planner, reviewer=None, *, max_actions=4, max_model_calls=6,
               max_records=9, per_search=3, max_seconds=300, search_fn=None, fetch_fn=None,
-              inventory_fn=None, earth_fn=None, previous=None, registry=None, monitor=None) -> dict:
+              inventory_fn=None, earth_fn=None, flood_fn=None, markers_fn=None, previous=None, registry=None,
+              monitor=None) -> dict:
     """Run bounded real public metadata research using caller-supplied model clients.
 
     Pure mocked tests may call this function without a scheduler. CLI callers
@@ -642,7 +952,9 @@ def run_agent(question: str, planner, reviewer=None, *, max_actions=4, max_model
     search_fn = search_metadata if search_fn is None else search_fn
     fetch_fn = fetch_metadata if fetch_fn is None else fetch_fn
     inventory_fn = taxon_inventory if inventory_fn is None else inventory_fn
+    markers_fn = fetch_markers if markers_fn is None else markers_fn
     earth_fn = earthengine.run_operation if earth_fn is None else earth_fn
+    flood_fn = floodsensors.run_operation if flood_fn is None else flood_fn
     registry = default_registry() if registry is None else registry
     if not isinstance(registry, SkillRegistry):
         raise ValueError("registry must be a SkillRegistry")
@@ -661,6 +973,7 @@ def run_agent(question: str, planner, reviewer=None, *, max_actions=4, max_model
                "runtime": {"slurm_job_id": os.environ.get("SLURM_JOB_ID"),
                            "partition": os.environ.get("SLURM_JOB_PARTITION"),
                            "hostname": socket.gethostname(), "python_version": sys.version.split()[0]},
+               "code": code_version(), "policy_enforcement": "evaluate_policy_per_external_action",
                "models": {role: recorded_config(client) for role, client in (("planner", planner), ("reviewer", reviewer))},
                "monitor": None if monitor is None else str(getattr(monitor, "__qualname__", type(monitor).__name__))[:100]}
     plan = {"planner": "llm_bounded_action_controller", "selected_sources": [],
@@ -683,9 +996,12 @@ def run_agent(question: str, planner, reviewer=None, *, max_actions=4, max_model
     run.question, run.records, run.drafts, run.trace = question, records, drafts, trace
     run.per_search, run.max_records, run.search_fn = per_search, max_records, search_fn
     run.inventory_fn, run.seen_inventories = inventory_fn, set()
+    run.markers_fn, run.seen_markers, run.seen_assignments, run.seen_links = markers_fn, set(), set(), set()
     run.earth_fn, run.seen_earth = earth_fn, set()
+    run.flood_fn, run.seen_flood = flood_fn, set()
     run.seen_searches, run.seen_citations, run.seen_sources = seen_searches, seen_citations, seen_sources
     run.source_requests, run.network_bytes = 0, 0
+    run.current = None
 
     def remaining():
         return max_seconds - (time.monotonic() - started)
@@ -724,7 +1040,28 @@ def run_agent(question: str, planner, reviewer=None, *, max_actions=4, max_model
         finally:
             trace.event("model_call_finished", entry)
 
+    def check_policy(source):
+        """Evaluate one external action against its source profile, narrowed by the Skill egress class."""
+        index, skill = run.current
+        constraints = skill.descriptor["policy_constraints"]
+        profile = deepcopy(_SOURCE_PROFILES.get(source))
+        if profile is not None:
+            profile["egress"] = [item for item in profile["egress"] if item in _EGRESS_OUTPUTS[constraints["egress"]]]
+        representation = profile["allowed_operations"][0] if profile else "individual"
+        request = {"purpose": _PURPOSE, "operation": representation,
+                   "compute_location": profile["compute_locations"][0] if profile else "sewall_client",
+                   "output": representation, "estimated_bytes": profile["max_bytes"] if profile else 0,
+                   "retention_days": _RETENTION_DAYS, "attribution": [constraints["attribution"]]}
+        assessment = evaluate_policy(profile, request)
+        trace.event("policy_checked", {"action_index": index, "source_id": source, "skill_id": skill.descriptor["skill_id"],
+                                       "descriptor_sha256": skill.sha256, "egress": constraints["egress"],
+                                       "request": request, "profile": profile, "assessment": assessment})
+        if assessment["status"] != "allow":
+            raise ActionError(f"Policy {assessment['status']} for {source}: " + " ".join(assessment["reasons"])[:400])
+
     def policy(source):
+        if run.current is not None and run.current[1].descriptor["external_actions"]:
+            check_policy(source)
         if source in seen_sources:
             return
         seen_sources.add(source)
@@ -735,13 +1072,19 @@ def run_agent(question: str, planner, reviewer=None, *, max_actions=4, max_model
         if source == "earthengine":
             item.update(status="summary_only", scope="Summary statistics reduced inside Earth Engine over a named site",
                         reason="Imagery stays in Earth Engine; only small per-scene or annual summaries are returned")
+        if source == "floodsensors":
+            item.update(status="summary_only", scope="Latest public water-level readings and flood categories over a named area",
+                        reason="Only the most recent provisional reading per sensor is returned; no time series or forecasts")
+        if source == "nuccore_sequences":
+            item.update(status="sequence_records", scope="At most 100 public GenBank sequences of one marker for one taxon",
+                        reason="Sequences stay in the run record for local Skills; the model sees accessions and qualifiers only")
         if source in _UNCONFIGURED:
             item.update(status="scope_limited" if source == "ncbi_genotype" else "unconfigured",
                         scope="Capability assessment and nonbinding local access-request draft only",
                         reason="No configured live connector or documented authorization for source data retrieval")
         policies.append(item)
         node = trace.node("policy:" + source, "policy", "Access scope: " + source,
-                          "completed" if item["status"] in ("metadata_only", "summary_only") else "blocked", details=item)
+                          "completed" if item["status"] in ("metadata_only", "summary_only", "sequence_records") else "blocked", details=item)
         trace.edge("question", node["id"], "depends_on")
 
     def gate(phase, node_id):
@@ -858,6 +1201,7 @@ def run_agent(question: str, planner, reviewer=None, *, max_actions=4, max_model
             actions.append(entry)  # Attempt budget is consumed before any source call.
             node = trace.node("action:" + str(entry["index"]), "action", action["action"], details={"action": action})
             trace.edge(plan_node["id"], node["id"], "depends_on")
+            run.current = (entry["index"], registry[action["action"]])
             try:
                 entry["observation"] = registry[action["action"]].implementation.execute(run, action, node)
                 entry["status"] = "completed"
@@ -866,7 +1210,8 @@ def run_agent(question: str, planner, reviewer=None, *, max_actions=4, max_model
                 entry.update(status="blocked", observation={"error": "Time budget exhausted before the next source request"})
                 trace.state(node, "blocked", observation=entry["observation"])
                 raise
-            except (MetadataSearchError, InventoryError, earthengine.EarthEngineError, ActionError, ValueError) as exc:
+            except (MetadataSearchError, InventoryError, earthengine.EarthEngineError, floodsensors.FloodSensorError,
+                    ActionError, ValueError) as exc:
                 source_failures += 1
                 entry.update(status="blocked" if isinstance(exc, ActionError) else "failed", observation={"error": str(exc)[:500]})
                 trace.state(node, entry["status"], observation=entry["observation"])
@@ -953,6 +1298,104 @@ def run_agent(question: str, planner, reviewer=None, *, max_actions=4, max_model
     return manifest
 
 
+def _check_policy_event(details, index, nodes, plan):
+    """A recorded decision must re-evaluate identically and belong to the pending action's Skill."""
+    node = nodes.get("action:" + str(index))
+    entries = {item["operation"]: item for item in plan.get("skills", [])}
+    entry = entries.get(node["details"]["action"]["action"]) if node and node["status"] == "pending" else None
+    if (not isinstance(details, dict) or set(details) != _POLICY_EVENT or details["action_index"] != index
+            or entry is None or details["skill_id"] != entry["skill_id"]
+            or details["descriptor_sha256"] != entry["descriptor_sha256"] or details["egress"] not in _EGRESS_OUTPUTS):
+        raise ValueError("Policy decision does not match the pending action and its recorded Skill")
+    profile, request = details["profile"], details["request"]
+    if profile is not None and (not isinstance(profile, dict) or not isinstance(profile.get("egress"), list)
+                                or not set(profile["egress"]) <= set(_EGRESS_OUTPUTS[details["egress"]])):
+        raise ValueError("Policy profile permits more egress than the Skill allows")
+    if not isinstance(request, dict) or request.get("purpose") != _PURPOSE or evaluate_policy(profile, request) != details["assessment"]:
+        raise ValueError("Recorded policy decision differs from its re-evaluation")
+
+
+def _check_payloads(nodes, edges, actions, responses):
+    """Recheck each retained source payload against its digest, source response and observation."""
+    producer = {edge["target"]: edge["source"] for edge in edges if edge["relation"] == "produces"}
+    by_node = {"action:" + str(item["index"]): item for item in actions}
+    for item in actions:
+        observation = nodes.get("action:" + str(item["index"]), {}).get("details", {}).get("observation")
+        if observation != item["observation"]:
+            raise ValueError("Action node observation differs from the recorded action")
+    checked = set()
+    for node in nodes.values():
+        details = node.get("details", {})
+        for key, (utility, node_id, observe) in _PAYLOADS.items():
+            if key not in details:
+                continue
+            payload = details[key]
+            if node["kind"] != "source" or digest(payload) != details.get(key + "_digest"):
+                raise ValueError("Retained source payload does not match its digest")
+            item = by_node.get(producer.get(node["id"]))
+            if item is None or item["status"] != "completed" or item["index"] in checked:
+                raise ValueError("Source payload has no single completed producing action")
+            if {"utility": utility(item["action"], payload), "response": payload} not in responses:
+                raise ValueError("Source payload differs from the recorded source response")
+            if node["id"] != node_id(item["action"], payload) or item["observation"] != observe(payload, node["id"]):
+                raise ValueError("Action observation differs from its source payload")
+            checked.add(item["index"])
+    assigned = set()
+    for node in nodes.values():
+        details = node.get("details", {})
+        if "assignment" not in details:
+            continue
+        result = details["assignment"]
+        if (node["kind"] != "verification" or digest(result) != details.get("assignment_digest")
+                or digest(details.get("panel")) != result.get("panel_digest")):
+            raise ValueError("Retained ribotype assignment does not match its digest or panel")
+        item = by_node.get(producer.get(node["id"]))
+        if item is None or item["status"] != "completed" or item["index"] in checked | assigned:
+            raise ValueError("Ribotype assignment has no single completed producing action")
+        action = item["action"]
+        source = nodes.get(_markers_node_id(action["taxon"], action["marker"]), {})
+        if (node["id"] != _assignment_node_id(action["taxon"], action["marker"]) or "markers" not in source.get("details", {})
+                or not any(edge["source"] == source["id"] and edge["target"] == node["id"]
+                           and edge["relation"] == "depends_on" for edge in edges)
+                or ribotype.assign(_assignment_queries(source["details"]["markers"]), details["panel"]) != result
+                or item["observation"] != _assignment_observation(result, node["id"])):
+            raise ValueError("Ribotype assignment differs from its recomputation over the retained sequences")
+        assigned.add(item["index"])
+    linked = set()
+    for node in nodes.values():
+        details = node.get("details", {})
+        if "strain_links" not in details:
+            continue
+        result = details["strain_links"]
+        if (node["kind"] != "verification" or digest(result) != details.get("strain_links_digest")
+                or digest(details.get("strain_table")) != result.get("table_digest")):
+            raise ValueError("Retained strain linkage does not match its digest or table")
+        item = by_node.get(producer.get(node["id"]))
+        if item is None or item["status"] != "completed" or item["index"] in checked | assigned | linked:
+            raise ValueError("Strain linkage has no single completed producing action")
+        action = item["action"]
+        assignment = nodes.get(_assignment_node_id(action["taxon"], action["marker"]), {})
+        source = nodes.get(_markers_node_id(action["taxon"], action["marker"]), {})
+        if (node["id"] != _strains_node_id(action["taxon"], action["marker"])
+                or "assignment" not in assignment.get("details", {}) or "markers" not in source.get("details", {})
+                or not any(edge["source"] == assignment["id"] and edge["target"] == node["id"]
+                           and edge["relation"] == "depends_on" for edge in edges)
+                or strains.link(assignment["details"]["assignment"], source["details"]["markers"],
+                                details["strain_table"]) != result
+                or item["observation"] != _strains_observation(result, node["id"])):
+            raise ValueError("Strain linkage differs from its recomputation over the retained assignment")
+        linked.add(item["index"])
+    for item in actions:
+        observation = item["observation"]
+        if item["status"] == "completed" and ({"summary_node", "inventory_node", "markers_node"} & set(observation)
+                                              and item["index"] not in checked
+                                              or "assignment_node" in observation and item["index"] not in assigned
+                                              or "strains_node" in observation and item["index"] not in linked):
+            raise ValueError("Action reports a payload node that was not recorded")
+    if sum(response["utility"] not in ("esearch", "esummary") for response in responses) != len(checked):
+        raise ValueError("Recorded source responses differ from retained payloads")
+
+
 def verify_agent_manifest(manifest: dict) -> dict:
     """Replay saved event projections without model calls or source requests."""
     try:
@@ -981,6 +1424,13 @@ def verify_agent_manifest(manifest: dict) -> dict:
                 raise ValueError("Invalid parent revision reference")
         elif parent is not None or manifest["context"]["prior_question"] is not None:
             raise ValueError("Unexpected parent for first revision")
+        code = manifest["context"].get("code")
+        if code is not None and (
+                set(code) != {"sewall_version", "git_commit", "git_dirty", "source_sha256"}
+                or not isinstance(code["sewall_version"], str) or not _HEX.fullmatch(code["source_sha256"])
+                or not (code["git_commit"] is None or _HEX40.fullmatch(code["git_commit"]))
+                or code["git_dirty"] not in (None, True, False)):
+            raise ValueError("Invalid recorded code version")
         plan = manifest["plan"]
         if "skills" in plan:
             skills = plan["skills"]
@@ -1011,6 +1461,9 @@ def verify_agent_manifest(manifest: dict) -> dict:
                 raise ValueError("Saved revision differs from the recorded revision event")
         nodes, edges, records, calls, actions, summaries, stops = {}, [], [], [], [], [], []
         added, responses, counts = [], [], {"link_rejected": 0, "integrity_gate": 0}
+        enforced, decisions = "policy_enforcement" in manifest["context"], {}
+        if enforced and manifest["context"]["policy_enforcement"] != "evaluate_policy_per_external_action":
+            raise ValueError("Unknown policy enforcement mode")
         previous_hash = "0" * 64
         for sequence, event in enumerate(manifest["events"], 1):
             if event["sequence"] != sequence or event["previous_hash"] != previous_hash or digest({key: value for key, value in event.items() if key != "hash"}) != event["hash"]:
@@ -1027,7 +1480,15 @@ def verify_agent_manifest(manifest: dict) -> dict:
                 nodes[details["id"]] = deepcopy(details)
                 added.append(details)
             elif kind == "source_response":
+                if enforced and decisions.get(len(actions) + 1) != "allow":
+                    raise ValueError("Source response without an allowed policy decision")
                 responses.append(details)
+            elif kind == "policy_checked":
+                index = len(actions) + 1
+                if not enforced or index in decisions:
+                    raise ValueError("Unexpected policy decision event")
+                _check_policy_event(details, index, nodes, plan)
+                decisions[index] = details["assessment"]["status"]
             elif kind == "node_status_changed":
                 node = nodes[details["node_id"]]
                 if node["status"] != details["before"]:
@@ -1043,6 +1504,8 @@ def verify_agent_manifest(manifest: dict) -> dict:
             elif kind == "model_call_finished":
                 calls.append(deepcopy(details))
             elif kind == "action_completed":
+                if decisions.get(len(actions) + 1, "allow") != "allow" and details["status"] != "blocked":
+                    raise ValueError("An action denied by policy was not blocked")
                 actions.append(deepcopy(details))
             elif kind == "metadata_summary_checked":
                 summaries.append(deepcopy(details))
@@ -1080,9 +1543,25 @@ def verify_agent_manifest(manifest: dict) -> dict:
             raise ValueError("Duplicate saved record IDs")
         for record in records:
             _check_record(record, record["database"], [record["uid"]])
+        for record in records:
+            details = nodes.get(record["id"], {}).get("details", {})
+            if details.get("record") != record or details.get("record_digest") != digest(record):
+                raise ValueError("Saved record differs from its source node or digest")
         for edge in edges:
+            if edge["relation"] not in _PROPAGATES and "evidence" not in edge:
+                raise ValueError("Saved knowledge link has no explicit evidence")
             if "evidence" in edge and _link_evidence(edge, indexed) != edge["evidence"]:
                 raise ValueError("Saved knowledge link lacks matching explicit metadata")
+        _check_payloads(nodes, edges, actions, responses)
+        planned = [event["details"] for event in manifest["events"] if event["type"] == "action_planned"]
+        finished = bool(planned) and planned[-1]["action"] == "finish"
+        if manifest["status"] in ("completed", "needs_review") and not finished:
+            raise ValueError("Run status claims a finished plan without a recorded finish action")
+        if manifest["status"] == "completed" and (manifest["metadata_summary"] is None
+                                                   or manifest["stop_reason"] != "planner_finished"):
+            raise ValueError("A completed run requires a checked metadata review")
+        if manifest["status"] == "needs_review" and manifest["metadata_summary"] is not None:
+            raise ValueError("A run with a checked review cannot need review")
         if manifest["metadata_summary"] is not None:
             _summary(manifest["metadata_summary"], indexed)
         policies = [node["details"] for node in added if node["kind"] == "policy"]
@@ -1107,7 +1586,7 @@ def verify_agent_manifest(manifest: dict) -> dict:
             else:
                 network_bytes += response["response"].get("response_bytes", 0)
                 minimum_requests += (sum(item.get("attempts", 1) for item in response["response"]["requests"])
-                                     if response["utility"] == "nuccore_inventory" else 1)
+                                     if response["utility"] in ("nuccore_inventory", "nuccore_markers") else 1)
         tokens = {key: sum(value for call in calls for name, value in call.get("trace", {}).get("usage", {}).items()
                            if name == key and type(value) is int) for key in _TOKEN_FIELDS}
         derived = {"selected_sources": len(policies), "inspected_sources": len({record["database"] for record in records}),

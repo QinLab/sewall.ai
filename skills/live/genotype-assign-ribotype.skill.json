@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schemas/executable_skill.schema.json",
+  "schema_version": "0.2.0",
+  "skill_id": "genotype.assign-ribotype",
+  "version": "0.1.0",
+  "name": "Assign marker sequences to published ribotypes",
+  "description": "Assign each sequence from an earlier fetch_markers step to the nearest ribotype in a curated, versioned reference panel by deterministic k-mer similarity. Returns the ribotype, score, distance and margin, and leaves low-score, low-margin and uncovered-region sequences unassigned. Runs locally with no source request.",
+  "operation": "assign_ribotype",
+  "implementation": "sewall.agent:genotype_assign_ribotype",
+  "planner_template": "{\"action\":\"assign_ribotype\",\"taxon\":\"taxon of an earlier fetch_markers step\",\"marker\":\"lsu\",\"reason\":\"why\"}",
+  "planner_guidance": [
+    "Call assign_ribotype only after fetch_markers completed for the same taxon and marker.",
+    "A curated panel exists for Margalefidinium polykrikoides LSU only; other taxa and markers are refused.",
+    "Unassigned sequences are results, not failures: they mark novel variants or regions the panel does not cover.",
+    "A ribotype is not a strain identity or a growth phenotype; strains with identical LSU differ in thermal response."
+  ],
+  "arguments": [
+    {"name": "taxon", "type": "string", "max_length": 100,
+     "description": "The taxon of a completed fetch_markers step."},
+    {"name": "marker", "type": "string", "enum": ["lsu"],
+     "description": "Marker of the completed fetch_markers step and of the panel."}
+  ],
+  "sources": ["Curated reference panel shipped with Sewall.ai; sequences from an earlier fetch_markers step"],
+  "external_actions": false,
+  "evidence": {
+    "method": "kmer_nearest_reference_with_abstention",
+    "supports_causality": false,
+    "limitations": [
+      "Panel labels are inferred from isolate origin in the source publications and need a full-text check.",
+      "Scores are k-mer similarity proxies, not alignments or phylogenetic placements.",
+      "Intragenomic LSU variation can exceed differences between closely related ribotypes.",
+      "A ribotype call does not give a growth parameter."
+    ]
+  },
+  "policy_constraints": {
+    "egress": "local_draft_only",
+    "may_grant_access": false,
+    "may_sign_agreements": false,
+    "attribution": "Cite the panel version, the source publication of each reference label, and the GenBank accessions assigned."
+  },
+  "validation": {"tests": ["tests/test_markers.py", "tests/test_skills.py"]}
+}

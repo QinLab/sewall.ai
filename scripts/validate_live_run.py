@@ -139,7 +139,8 @@ def _validate(path, validator, require_completed):
                 raise ValueError(f"Reported {field} differs from retained evidence")
         model_configs = manifest["context"]["models"]
         configured_models = {
-            role: ({key: config[key] for key in ("project", "location", "model", "api", "api_version")}
+            role: ({key: config[key] for key in ("project", "project_sha256", "location", "model", "api", "api_version")
+                    if key in config}
                    if config is not None else None)
             for role, config in model_configs.items()
         }

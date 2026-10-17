@@ -28,9 +28,11 @@ def descriptors():
 class RegistryTests(unittest.TestCase):
     def test_default_registry_preserves_action_names(self):
         registry = default_registry(earth_engine=False)
-        self.assertEqual(sorted(registry.operations()), ["assess_source", "citations", "search", "taxon_inventory"])
+        self.assertEqual(sorted(registry.operations()), ["assess_source", "assign_ribotype", "citations", "fetch_markers", "flood_sensors", "link_strains", "search",
+                          "taxon_inventory"])
         self.assertEqual(sorted(default_registry(earth_engine=True).operations()),
-                         ["alphaearth_context", "assess_source", "chlorophyll_timeseries", "citations", "search", "taxon_inventory"])
+                         ["alphaearth_context", "assess_source", "assign_ribotype", "chlorophyll_timeseries", "citations",
+                          "fetch_markers", "flood_sensors", "link_strains", "search", "taxon_inventory"])
         for entry in registry.entries():
             self.assertRegex(entry["descriptor_sha256"], r"^[a-f0-9]{64}$")
 

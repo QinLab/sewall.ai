@@ -8,8 +8,8 @@ type: software
 title: "Sewall.ai: a bounded, inspectable agentic harness over public biological data"
 abstract: >-
   Sewall.ai is a research prototype toward a federated, policy-aware, model-agnostic agentic
-  data harness. This release runs over public NCBI metadata and Earth Engine summaries; custodian
-  federation is not yet implemented. A planner model, a scripted plan or an MCP host selects
+  data harness. This release runs over public NCBI and GenBank records, Earth Engine summaries
+  and NOAA and USGS water-level sensors; custodian federation is not yet implemented. A planner model, a scripted plan or an MCP host selects
   versioned scientific Skills. A deterministic controller checks every
   action against the Skill registry, access policies and budgets, and writes a manifest that
   can be replayed and verified offline.
@@ -17,8 +17,8 @@ authors:
   - given-names: Hong
     family-names: Qin
     affiliation: "Old Dominion University"
-version: 0.1.2
-date-released: 2026-10-08
+version: 0.1.3
+date-released: 2026-10-17
 license: Apache-2.0
 repository-code: "https://github.com/QinLab/sewall.ai"
 keywords:

@@ -1,0 +1,242 @@
+{
+  "schema_version": "0.1.0",
+  "kind": "sewall_risk_gate",
+  "manifest_digest": "753bc2e424bd678b923626e517c63a973f9bae5c6eeaac9f1ba3b8e226daded8",
+  "forum_digest": null,
+  "catalog_digest": "4b33d58cda8d41d953d1bc6b0ff1ede4fd98ab41d90f9ea2ca5523bdcb060453",
+  "thresholds": {
+    "hold_rpn": 150,
+    "limit_rpn": 20,
+    "high_severity": 8,
+    "likely": 6,
+    "min_scenes": 3
+  },
+  "gates": [
+    {
+      "id": "G0-manifest",
+      "passed": true,
+      "detail": "manifest verifies"
+    },
+    {
+      "id": "G1-run-status",
+      "passed": true,
+      "detail": "run status completed (planner_finished)"
+    },
+    {
+      "id": "G2-containment",
+      "passed": true,
+      "detail": "0 outputs quarantined or blocked by the supervisor"
+    },
+    {
+      "id": "G3-peer-review",
+      "passed": false,
+      "detail": "no forum supplied; detection ratings raised for every output"
+    },
+    {
+      "id": "G4-risk",
+      "passed": false,
+      "detail": "6 outputs held for validation"
+    }
+  ],
+  "items": [
+    {
+      "node": "action:1",
+      "action": 1,
+      "operation": "search",
+      "reviewed": true,
+      "modes": [],
+      "decision": "release",
+      "max_rpn": 0
+    },
+    {
+      "node": "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01",
+      "action": 2,
+      "operation": "chlorophyll_timeseries",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM08",
+          "mode": "proxy read as identification",
+          "effect": "a chlorophyll index is read as a species or a bloom",
+          "severity": 8,
+          "occurrence": 3,
+          "detection": 7,
+          "rpn": 168,
+          "evidence": "NDCI responds to chlorophyll from any phytoplankton",
+          "mitigation": "Pair the index with an in situ cell count or species observation before any bloom claim."
+        }
+      ],
+      "decision": "hold_for_validation",
+      "max_rpn": 168
+    },
+    {
+      "node": "earthengine:chlorophyll_timeseries:2022-07-31:york-river-lower:2022-07-01",
+      "action": 3,
+      "operation": "chlorophyll_timeseries",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM08",
+          "mode": "proxy read as identification",
+          "effect": "a chlorophyll index is read as a species or a bloom",
+          "severity": 8,
+          "occurrence": 3,
+          "detection": 7,
+          "rpn": 168,
+          "evidence": "NDCI responds to chlorophyll from any phytoplankton",
+          "mitigation": "Pair the index with an in situ cell count or species observation before any bloom claim."
+        }
+      ],
+      "decision": "hold_for_validation",
+      "max_rpn": 168
+    },
+    {
+      "node": "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+      "action": 4,
+      "operation": "chlorophyll_timeseries",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM08",
+          "mode": "proxy read as identification",
+          "effect": "a chlorophyll index is read as a species or a bloom",
+          "severity": 8,
+          "occurrence": 3,
+          "detection": 7,
+          "rpn": 168,
+          "evidence": "NDCI responds to chlorophyll from any phytoplankton",
+          "mitigation": "Pair the index with an in situ cell count or species observation before any bloom claim."
+        }
+      ],
+      "decision": "hold_for_validation",
+      "max_rpn": 168
+    },
+    {
+      "node": "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01",
+      "action": 5,
+      "operation": "chlorophyll_timeseries",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM08",
+          "mode": "proxy read as identification",
+          "effect": "a chlorophyll index is read as a species or a bloom",
+          "severity": 8,
+          "occurrence": 3,
+          "detection": 7,
+          "rpn": 168,
+          "evidence": "NDCI responds to chlorophyll from any phytoplankton",
+          "mitigation": "Pair the index with an in situ cell count or species observation before any bloom claim."
+        }
+      ],
+      "decision": "hold_for_validation",
+      "max_rpn": 168
+    },
+    {
+      "node": "earthengine:chlorophyll_timeseries:2022-10-31:york-river-lower:2022-10-01",
+      "action": 6,
+      "operation": "chlorophyll_timeseries",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM08",
+          "mode": "proxy read as identification",
+          "effect": "a chlorophyll index is read as a species or a bloom",
+          "severity": 8,
+          "occurrence": 3,
+          "detection": 7,
+          "rpn": 168,
+          "evidence": "NDCI responds to chlorophyll from any phytoplankton",
+          "mitigation": "Pair the index with an in situ cell count or species observation before any bloom claim."
+        }
+      ],
+      "decision": "hold_for_validation",
+      "max_rpn": 168
+    },
+    {
+      "node": "earthengine:alphaearth_context:york-river-lower:2021",
+      "action": 7,
+      "operation": "alphaearth_context",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM09",
+          "mode": "embedding read as measurement",
+          "effect": "a learned feature is read as a physical quantity",
+          "severity": 6,
+          "occurrence": 3,
+          "detection": 7,
+          "rpn": 126,
+          "evidence": "64-dimensional embedding, model version 2.1",
+          "mitigation": "Use embeddings only as covariates; report the dataset and model versions."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 126
+    },
+    {
+      "node": "earthengine:alphaearth_context:york-river-lower:2022",
+      "action": 8,
+      "operation": "alphaearth_context",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM09",
+          "mode": "embedding read as measurement",
+          "effect": "a learned feature is read as a physical quantity",
+          "severity": 6,
+          "occurrence": 3,
+          "detection": 7,
+          "rpn": 126,
+          "evidence": "64-dimensional embedding, model version 2.1",
+          "mitigation": "Use embeddings only as covariates; report the dataset and model versions."
+        }
+      ],
+      "decision": "release_with_limitations",
+      "max_rpn": 126
+    },
+    {
+      "node": "result",
+      "action": null,
+      "operation": "run_result",
+      "reviewed": false,
+      "modes": [
+        {
+          "id": "FM16",
+          "mode": "depends on held evidence",
+          "effect": "the result rests on outputs that did not pass",
+          "severity": 7,
+          "occurrence": 7,
+          "detection": 3,
+          "rpn": 147,
+          "evidence": "5 of 8 outputs were held or blocked",
+          "mitigation": "Resolve the held outputs first, then reassess the result."
+        }
+      ],
+      "decision": "hold_for_validation",
+      "max_rpn": 147
+    }
+  ],
+  "decision": "hold_for_validation",
+  "released": [
+    "action:1",
+    "earthengine:alphaearth_context:york-river-lower:2021",
+    "earthengine:alphaearth_context:york-river-lower:2022"
+  ],
+  "held": [
+    "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01",
+    "earthengine:chlorophyll_timeseries:2022-07-31:york-river-lower:2022-07-01",
+    "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+    "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01",
+    "earthengine:chlorophyll_timeseries:2022-10-31:york-river-lower:2022-10-01",
+    "result"
+  ],
+  "blocked": [],
+  "limitations": [
+    "Severity, detection ratings and thresholds are prototype settings chosen by hand; they are not calibrated against observed failures.",
+    "An RPN ranks outputs for attention; it is not a probability that an output is invalid.",
+    "The catalog covers the failure modes this prototype knows about. An output can fail in a way no mode describes.",
+    "A release decision concerns retrieved evidence. The gate validates no biological claim."
+  ],
+  "content_digest": "889d83b6f76e82f2fa984fba85511866c51b9792649d1eadb0ddb13561aedcb9"
+}

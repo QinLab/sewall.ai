@@ -1,0 +1,588 @@
+{
+  "schema_version": "0.1.0",
+  "kind": "sewall_review_panel",
+  "topic": "Cross-run critique of the 2022 Chesapeake bloom runs",
+  "binding": "00546b83d1d0cf1f9e46afdc3730f7933889b2b0dc41360544d31c08fe37d622",
+  "runs": [
+    {
+      "researcher": "york",
+      "manifest_digest": "753bc2e424bd678b923626e517c63a973f9bae5c6eeaac9f1ba3b8e226daded8",
+      "question": "Did the Sentinel-2 chlorophyll proxy over the lower York River rise during the documented August to September 2022 Margalefidinium polykrikoides bloom, and what landscape context does AlphaEarth give?",
+      "panelist": "rule"
+    },
+    {
+      "researcher": "lafayette",
+      "manifest_digest": "fe438feeae379433feb4b3d8b52bf03dd1e7bd4871f9697364f38ca24955a672",
+      "question": "What does the Sentinel-2 chlorophyll proxy show over the Lafayette River across the 2022 summer, and what landscape context does AlphaEarth give?",
+      "panelist": "rule"
+    },
+    {
+      "researcher": "consult",
+      "manifest_digest": "4375fd6e8e858d86e44e3111c087086543240f256ba6e14a71de43f56ea01a0e",
+      "question": "Did satellite chlorophyll rise during the 2022 Margalefidinium polykrikoides bloom in the York River?",
+      "panelist": "rule"
+    }
+  ],
+  "rule_only": true,
+  "posts": [
+    {
+      "id": "post:1",
+      "round": 1,
+      "author": "york",
+      "target": "lafayette",
+      "kind": "concern",
+      "text": "Your 2022-06 NDCI value rests on 2 usable water scenes, too few to compare with other months or runs.",
+      "refs": [
+        "earthengine:chlorophyll_timeseries:2022-06-30:lafayette-river:2022-06-01"
+      ],
+      "severity": "minor",
+      "topic": "sparse-2022-06",
+      "prev": "00546b83d1d0cf1f9e46afdc3730f7933889b2b0dc41360544d31c08fe37d622",
+      "hash": "2fe4f537f358c2fe2cb545af0f306260c2309572e45f6f8b6b55fb0a73d9f121"
+    },
+    {
+      "id": "post:2",
+      "round": 1,
+      "author": "york",
+      "target": "lafayette",
+      "kind": "concern",
+      "text": "Your AlphaEarth context was reduced at 10 m and mine at 30 m, so our landscape summaries are not directly comparable.",
+      "refs": [
+        "earthengine:alphaearth_context:lafayette-river:2021",
+        "york::earthengine:alphaearth_context:york-river-lower:2021"
+      ],
+      "severity": "minor",
+      "topic": "alphaearth-scale",
+      "prev": "2fe4f537f358c2fe2cb545af0f306260c2309572e45f6f8b6b55fb0a73d9f121",
+      "hash": "342549933236a04239aaf456ef4e6120b4d72b99ed2398d9166a2ea8eed4c8a6"
+    },
+    {
+      "id": "post:3",
+      "round": 1,
+      "author": "york",
+      "target": "lafayette",
+      "kind": "concern",
+      "text": "Your run's review covers literature records only and skips 7 computed observations.",
+      "refs": [
+        "review",
+        "earthengine:chlorophyll_timeseries:2022-06-30:lafayette-river:2022-06-01",
+        "earthengine:chlorophyll_timeseries:2022-07-31:lafayette-river:2022-07-01",
+        "earthengine:chlorophyll_timeseries:2022-08-31:lafayette-river:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:lafayette-river:2022-09-01",
+        "earthengine:chlorophyll_timeseries:2022-10-31:lafayette-river:2022-10-01",
+        "earthengine:alphaearth_context:lafayette-river:2021",
+        "earthengine:alphaearth_context:lafayette-river:2022"
+      ],
+      "severity": "minor",
+      "topic": "review-omits-observations",
+      "prev": "342549933236a04239aaf456ef4e6120b4d72b99ed2398d9166a2ea8eed4c8a6",
+      "hash": "50fb1854cb9f12fd8dad705ebdeb6a2fdbc4c482de06be6ae16e4cf44d114454"
+    },
+    {
+      "id": "post:4",
+      "round": 1,
+      "author": "york",
+      "target": "lafayette",
+      "kind": "support",
+      "text": "My run independently retrieved 1 of the same records, so this part of your evidence is reproducible across runs.",
+      "refs": [
+        "ncbi:pubmed:34303516",
+        "york::ncbi:pubmed:34303516"
+      ],
+      "topic": "shared-records",
+      "prev": "50fb1854cb9f12fd8dad705ebdeb6a2fdbc4c482de06be6ae16e4cf44d114454",
+      "hash": "eb60771c47442bf64fca2a03814385e5289f84c78fbf0ab6b0c110fa6014642e"
+    },
+    {
+      "id": "post:5",
+      "round": 1,
+      "author": "york",
+      "target": "consult",
+      "kind": "concern",
+      "text": "Your run holds no in situ cell count or species observation for the bloom, so a satellite signal cannot be attributed to the named organism.",
+      "refs": [
+        "question"
+      ],
+      "severity": "major",
+      "topic": "no-in-situ",
+      "prev": "eb60771c47442bf64fca2a03814385e5289f84c78fbf0ab6b0c110fa6014642e",
+      "hash": "ce3225b110f6ce5a6bab0f5e76031deacfeb1b2e0f9077704cc6191ab6950b94"
+    },
+    {
+      "id": "post:6",
+      "round": 1,
+      "author": "york",
+      "target": "consult",
+      "kind": "concern",
+      "text": "Your run's review covers literature records only and skips 5 computed observations.",
+      "refs": [
+        "review",
+        "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01",
+        "earthengine:chlorophyll_timeseries:2022-07-31:york-river-lower:2022-07-01",
+        "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01",
+        "earthengine:chlorophyll_timeseries:2022-10-31:york-river-lower:2022-10-01"
+      ],
+      "severity": "minor",
+      "topic": "review-omits-observations",
+      "prev": "ce3225b110f6ce5a6bab0f5e76031deacfeb1b2e0f9077704cc6191ab6950b94",
+      "hash": "5eaa0d4874783637162a5aa331fd73e26f25681c27b7dafc321faa4420928eb4"
+    },
+    {
+      "id": "post:7",
+      "round": 1,
+      "author": "york",
+      "target": "consult",
+      "kind": "support",
+      "text": "My run independently retrieved 3 of the same records, so this part of your evidence is reproducible across runs.",
+      "refs": [
+        "ncbi:pubmed:34303516",
+        "ncbi:pubmed:35550296",
+        "ncbi:pubmed:38830711",
+        "york::ncbi:pubmed:34303516"
+      ],
+      "topic": "shared-records",
+      "prev": "5eaa0d4874783637162a5aa331fd73e26f25681c27b7dafc321faa4420928eb4",
+      "hash": "48ed9d9d032e003c2ea4d63ef7533cf25de2e70f0bb5049406f7cb9b27444c70"
+    },
+    {
+      "id": "post:8",
+      "round": 1,
+      "author": "lafayette",
+      "target": "york",
+      "kind": "concern",
+      "text": "Your run holds no in situ cell count or species observation for the bloom, so a satellite signal cannot be attributed to the named organism.",
+      "refs": [
+        "question"
+      ],
+      "severity": "major",
+      "topic": "no-in-situ",
+      "prev": "48ed9d9d032e003c2ea4d63ef7533cf25de2e70f0bb5049406f7cb9b27444c70",
+      "hash": "cfe932ea0052e11260789188ee9ce5878a7431a8c372e7a2e89a3079222ad68b"
+    },
+    {
+      "id": "post:9",
+      "round": 1,
+      "author": "lafayette",
+      "target": "york",
+      "kind": "concern",
+      "text": "Your AlphaEarth context was reduced at 30 m and mine at 10 m, so our landscape summaries are not directly comparable.",
+      "refs": [
+        "earthengine:alphaearth_context:york-river-lower:2021",
+        "lafayette::earthengine:alphaearth_context:lafayette-river:2021"
+      ],
+      "severity": "minor",
+      "topic": "alphaearth-scale",
+      "prev": "cfe932ea0052e11260789188ee9ce5878a7431a8c372e7a2e89a3079222ad68b",
+      "hash": "ed7155751835c725545590de6b022d4356d32a7517a72e0fb82dda64d2cb8f27"
+    },
+    {
+      "id": "post:10",
+      "round": 1,
+      "author": "lafayette",
+      "target": "york",
+      "kind": "concern",
+      "text": "Your run's review covers literature records only and skips 7 computed observations.",
+      "refs": [
+        "review",
+        "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01",
+        "earthengine:chlorophyll_timeseries:2022-07-31:york-river-lower:2022-07-01",
+        "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01",
+        "earthengine:chlorophyll_timeseries:2022-10-31:york-river-lower:2022-10-01",
+        "earthengine:alphaearth_context:york-river-lower:2021",
+        "earthengine:alphaearth_context:york-river-lower:2022"
+      ],
+      "severity": "minor",
+      "topic": "review-omits-observations",
+      "prev": "ed7155751835c725545590de6b022d4356d32a7517a72e0fb82dda64d2cb8f27",
+      "hash": "2676ffe2a8a27ad41df1ac58b25748ab8c95637ef84e5b64af9282bc7e5164d1"
+    },
+    {
+      "id": "post:11",
+      "round": 1,
+      "author": "lafayette",
+      "target": "york",
+      "kind": "support",
+      "text": "My run independently retrieved 1 of the same records, so this part of your evidence is reproducible across runs.",
+      "refs": [
+        "ncbi:pubmed:34303516",
+        "lafayette::ncbi:pubmed:34303516"
+      ],
+      "topic": "shared-records",
+      "prev": "2676ffe2a8a27ad41df1ac58b25748ab8c95637ef84e5b64af9282bc7e5164d1",
+      "hash": "2fceda3b9fe455f61e84e6e8e8767a1a60336aa8fae866142cfc2dbb6660c37d"
+    },
+    {
+      "id": "post:12",
+      "round": 2,
+      "author": "york",
+      "target": "york",
+      "kind": "reply",
+      "text": "3 of my retrieved paper titles mention the bloom; those papers may hold in situ observations, though my run reads only their metadata.",
+      "refs": [
+        "post:8",
+        "ncbi:pubmed:38830711",
+        "ncbi:pubmed:35550296",
+        "ncbi:pubmed:34303516"
+      ],
+      "reply_to": "post:8",
+      "stance": "answer",
+      "prev": "2fceda3b9fe455f61e84e6e8e8767a1a60336aa8fae866142cfc2dbb6660c37d",
+      "hash": "8964dde3acd5eccc5765eab7f5fa7c4868cebc33f196be424c69371ee793a483"
+    },
+    {
+      "id": "post:13",
+      "round": 2,
+      "author": "york",
+      "target": "york",
+      "kind": "reply",
+      "text": "The scale is recorded on each observation node, so a comparison can resample both runs to the coarser scale.",
+      "refs": [
+        "post:9",
+        "earthengine:alphaearth_context:york-river-lower:2021",
+        "earthengine:alphaearth_context:york-river-lower:2022"
+      ],
+      "reply_to": "post:9",
+      "stance": "answer",
+      "prev": "8964dde3acd5eccc5765eab7f5fa7c4868cebc33f196be424c69371ee793a483",
+      "hash": "6520893394c64e2b60181e8ed14e170545c9f7897697441b9eea9031e707f8ad"
+    },
+    {
+      "id": "post:14",
+      "round": 2,
+      "author": "york",
+      "target": "york",
+      "kind": "reply",
+      "text": "Conceded; the run should be revised on this point.",
+      "refs": [
+        "post:10"
+      ],
+      "reply_to": "post:10",
+      "stance": "agree",
+      "prev": "6520893394c64e2b60181e8ed14e170545c9f7897697441b9eea9031e707f8ad",
+      "hash": "2dea12f3942569027e1c52dfcee42d1150ef5a7b270b050d15930180a460da9b"
+    },
+    {
+      "id": "post:15",
+      "round": 2,
+      "author": "lafayette",
+      "target": "lafayette",
+      "kind": "reply",
+      "text": "Conceded; the run should be revised on this point.",
+      "refs": [
+        "post:1"
+      ],
+      "reply_to": "post:1",
+      "stance": "agree",
+      "prev": "2dea12f3942569027e1c52dfcee42d1150ef5a7b270b050d15930180a460da9b",
+      "hash": "07856cb07ac26e48a04d53d089e6f01f732d05923104bd6cc7b46b9b061fab0c"
+    },
+    {
+      "id": "post:16",
+      "round": 2,
+      "author": "lafayette",
+      "target": "lafayette",
+      "kind": "reply",
+      "text": "The scale is recorded on each observation node, so a comparison can resample both runs to the coarser scale.",
+      "refs": [
+        "post:2",
+        "earthengine:alphaearth_context:lafayette-river:2021",
+        "earthengine:alphaearth_context:lafayette-river:2022"
+      ],
+      "reply_to": "post:2",
+      "stance": "answer",
+      "prev": "07856cb07ac26e48a04d53d089e6f01f732d05923104bd6cc7b46b9b061fab0c",
+      "hash": "a12a082e045a387775ee01f03f38012ed177fea4f11f441797695d0e815a398e"
+    },
+    {
+      "id": "post:17",
+      "round": 2,
+      "author": "lafayette",
+      "target": "lafayette",
+      "kind": "reply",
+      "text": "Conceded; the run should be revised on this point.",
+      "refs": [
+        "post:3"
+      ],
+      "reply_to": "post:3",
+      "stance": "agree",
+      "prev": "a12a082e045a387775ee01f03f38012ed177fea4f11f441797695d0e815a398e",
+      "hash": "e21d49bece13288f5931b2536ab4546af1505b5383274ad340f504df8045154a"
+    },
+    {
+      "id": "post:18",
+      "round": 2,
+      "author": "lafayette",
+      "target": "consult",
+      "kind": "reply",
+      "text": "I reached the same concern from my own reading of this run.",
+      "refs": [
+        "post:5"
+      ],
+      "reply_to": "post:5",
+      "stance": "agree",
+      "prev": "e21d49bece13288f5931b2536ab4546af1505b5383274ad340f504df8045154a",
+      "hash": "e3de1db3b421eb977e7485148b997cc672d7a7117c7ba9538583f3f82e25f379"
+    },
+    {
+      "id": "post:19",
+      "round": 2,
+      "author": "lafayette",
+      "target": "consult",
+      "kind": "reply",
+      "text": "I reached the same concern from my own reading of this run.",
+      "refs": [
+        "post:6"
+      ],
+      "reply_to": "post:6",
+      "stance": "agree",
+      "prev": "e3de1db3b421eb977e7485148b997cc672d7a7117c7ba9538583f3f82e25f379",
+      "hash": "fcab1668d812fc35d706a59df7b49ebceb13edf953f470bc6c3fb24a9329d294"
+    },
+    {
+      "id": "post:20",
+      "round": 2,
+      "author": "consult",
+      "target": "lafayette",
+      "kind": "reply",
+      "text": "I reached the same concern from my own reading of this run.",
+      "refs": [
+        "post:1"
+      ],
+      "reply_to": "post:1",
+      "stance": "agree",
+      "prev": "fcab1668d812fc35d706a59df7b49ebceb13edf953f470bc6c3fb24a9329d294",
+      "hash": "c97a878c23291caf7d31c5a45d01086512464935abc846e0aabbee73c7204ec2"
+    },
+    {
+      "id": "post:21",
+      "round": 2,
+      "author": "consult",
+      "target": "lafayette",
+      "kind": "reply",
+      "text": "I reached the same concern from my own reading of this run.",
+      "refs": [
+        "post:3"
+      ],
+      "reply_to": "post:3",
+      "stance": "agree",
+      "prev": "c97a878c23291caf7d31c5a45d01086512464935abc846e0aabbee73c7204ec2",
+      "hash": "019f074c3f94b0fb5a72d17b6c6ac718a67b7c4259c28b6c047d502e3f9d3f87"
+    },
+    {
+      "id": "post:22",
+      "round": 2,
+      "author": "consult",
+      "target": "consult",
+      "kind": "reply",
+      "text": "3 of my retrieved paper titles mention the bloom; those papers may hold in situ observations, though my run reads only their metadata.",
+      "refs": [
+        "post:5",
+        "ncbi:pubmed:38830711",
+        "ncbi:pubmed:35550296",
+        "ncbi:pubmed:34303516"
+      ],
+      "reply_to": "post:5",
+      "stance": "answer",
+      "prev": "019f074c3f94b0fb5a72d17b6c6ac718a67b7c4259c28b6c047d502e3f9d3f87",
+      "hash": "144701931988029a527064737b39fbc3c71351f5c28e60edbc3655551109c83f"
+    },
+    {
+      "id": "post:23",
+      "round": 2,
+      "author": "consult",
+      "target": "consult",
+      "kind": "reply",
+      "text": "Conceded; the run should be revised on this point.",
+      "refs": [
+        "post:6"
+      ],
+      "reply_to": "post:6",
+      "stance": "agree",
+      "prev": "144701931988029a527064737b39fbc3c71351f5c28e60edbc3655551109c83f",
+      "hash": "2862d1d682cd2829543faf9e23ae389e0fcb62f22e41fbe27d668bd5889ba67c"
+    },
+    {
+      "id": "post:24",
+      "round": 2,
+      "author": "consult",
+      "target": "york",
+      "kind": "reply",
+      "text": "I reached the same concern from my own reading of this run.",
+      "refs": [
+        "post:8"
+      ],
+      "reply_to": "post:8",
+      "stance": "agree",
+      "prev": "2862d1d682cd2829543faf9e23ae389e0fcb62f22e41fbe27d668bd5889ba67c",
+      "hash": "eee1c90110e4f0e91c4813406554f5748e00eecdd8fd471d2aa2d6ed78bcde58"
+    },
+    {
+      "id": "post:25",
+      "round": 2,
+      "author": "consult",
+      "target": "york",
+      "kind": "reply",
+      "text": "I reached the same concern from my own reading of this run.",
+      "refs": [
+        "post:10"
+      ],
+      "reply_to": "post:10",
+      "stance": "agree",
+      "prev": "eee1c90110e4f0e91c4813406554f5748e00eecdd8fd471d2aa2d6ed78bcde58",
+      "hash": "a049af388a23e4b29a0d4af91ba107c8d4ff66af71e346c9e0638c8e0683176f"
+    }
+  ],
+  "rejected": [],
+  "model_calls": [],
+  "synthesis": {
+    "author": "moderator",
+    "kind": "synthesis",
+    "prev": "a049af388a23e4b29a0d4af91ba107c8d4ff66af71e346c9e0638c8e0683176f",
+    "runs": {
+      "york": {
+        "verdict": "needs_revision",
+        "concerns": [
+          {
+            "post": "post:8",
+            "author": "lafayette",
+            "severity": "major",
+            "status": "contested",
+            "replies": [
+              "post:12",
+              "post:24"
+            ]
+          },
+          {
+            "post": "post:9",
+            "author": "lafayette",
+            "severity": "minor",
+            "status": "resolved",
+            "replies": [
+              "post:13"
+            ]
+          },
+          {
+            "post": "post:10",
+            "author": "lafayette",
+            "severity": "minor",
+            "status": "open",
+            "replies": [
+              "post:14",
+              "post:25"
+            ]
+          }
+        ],
+        "blocking_concerns": [
+          "post:8"
+        ],
+        "disputed_posts": [],
+        "concern_counts": {
+          "open": 1,
+          "contested": 1,
+          "resolved": 1
+        },
+        "limitations": [],
+        "biological_claims_validated": false,
+        "conceded": [
+          "post:10"
+        ]
+      },
+      "lafayette": {
+        "verdict": "acceptable_as_retrieved_evidence",
+        "concerns": [
+          {
+            "post": "post:1",
+            "author": "york",
+            "severity": "minor",
+            "status": "open",
+            "replies": [
+              "post:15",
+              "post:20"
+            ]
+          },
+          {
+            "post": "post:2",
+            "author": "york",
+            "severity": "minor",
+            "status": "resolved",
+            "replies": [
+              "post:16"
+            ]
+          },
+          {
+            "post": "post:3",
+            "author": "york",
+            "severity": "minor",
+            "status": "open",
+            "replies": [
+              "post:17",
+              "post:21"
+            ]
+          }
+        ],
+        "blocking_concerns": [],
+        "disputed_posts": [],
+        "concern_counts": {
+          "open": 2,
+          "contested": 0,
+          "resolved": 1
+        },
+        "limitations": [],
+        "biological_claims_validated": false,
+        "conceded": [
+          "post:1",
+          "post:3"
+        ]
+      },
+      "consult": {
+        "verdict": "needs_revision",
+        "concerns": [
+          {
+            "post": "post:5",
+            "author": "york",
+            "severity": "major",
+            "status": "contested",
+            "replies": [
+              "post:18",
+              "post:22"
+            ]
+          },
+          {
+            "post": "post:6",
+            "author": "york",
+            "severity": "minor",
+            "status": "open",
+            "replies": [
+              "post:19",
+              "post:23"
+            ]
+          }
+        ],
+        "blocking_concerns": [
+          "post:5"
+        ],
+        "disputed_posts": [],
+        "concern_counts": {
+          "open": 1,
+          "contested": 1,
+          "resolved": 0
+        },
+        "limitations": [],
+        "biological_claims_validated": false,
+        "conceded": [
+          "post:6"
+        ]
+      }
+    },
+    "biological_claims_validated": false
+  },
+  "limitations": [
+    "The panel reviews retrieved metadata and computed summaries; it validates no biological claim.",
+    "Rule panelists apply the same fixed checks, so their agreement is not independent expert judgment.",
+    "A conceded concern is the owner's acceptance of a critique, not a revision of the run.",
+    "Model panelist posts are checked for structure and citations, not for truth."
+  ],
+  "content_digest": "cb67b1cbad06132f2916ed12d9373c37134534822e656007039c82aae4b87b47"
+}

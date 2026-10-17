@@ -14,7 +14,7 @@
     "NDCI is a biomass proxy. It does not identify a species, confirm a bloom, or measure chlorophyll concentration."
   ],
   "arguments": [
-    {"name": "site", "type": "string", "enum": ["lafayette-river"],
+    {"name": "site", "type": "string", "enum": ["lafayette-river", "york-river-lower"],
      "description": "A named study site. Each site is a fixed approximate bounding box recorded in the result."},
     {"name": "start", "type": "string", "max_length": 10, "description": "First date of the window, YYYY-MM-DD."},
     {"name": "end", "type": "string", "max_length": 10, "description": "Last date of the window, YYYY-MM-DD, inclusive."}

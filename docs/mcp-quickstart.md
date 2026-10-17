@@ -67,16 +67,24 @@ With the Secure MCP Tunnel, point the tunnel client at `http://127.0.0.1:8000/mc
 own HTTPS forwarding service for testing, name its hostname so the server accepts it:
 
 ```bash
+export SEWALL_MCP_TOKEN="$(openssl rand -hex 32)"
 .venv/bin/sewall mcp --transport streamable-http --port 8000 --allowed-host YOUR-TUNNEL-HOSTNAME
 ```
 
+`--allowed-host` requires `SEWALL_MCP_TOKEN`. When the token is set, every HTTP request must
+carry `Authorization: Bearer <token>`, and the server answers 401 otherwise. The token must be at
+least 32 printable characters with no spaces. Give it to the MCP host as a bearer token or custom
+header, and keep it out of shared files.
+
 Then create a custom MCP server in ChatGPT and give it the tunnel or the `https://.../mcp` URL.
 OpenAI's [Connect from ChatGPT](https://developers.openai.com/apps-sdk/deploy/connect-chatgpt)
-guide has the current menu path; account and workspace policies decide who may add one. This
-server has no authentication of its own. Prefer the Secure MCP Tunnel, which does not expose
-the server to the public internet. Anyone who learns a public forwarding URL can call the tools,
-including the live tools, which make NCBI requests from your machine. Stop the forwarder when
-you are done.
+guide has the current menu path; account and workspace policies decide who may add one. Without
+a token the server has no authentication of its own, which is acceptable only for a loopback
+client or the Secure MCP Tunnel. Prefer the tunnel, which does not expose the server to the
+public internet. With a public forwarding URL, anyone who has both the URL and the token can call
+the tools, including the live tools, which make NCBI requests from your machine. The token is a
+single shared secret; it does not identify users or limit which tools they call. Stop the
+forwarder when you are done.
 
 ### Slurm clusters
 

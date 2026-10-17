@@ -1,0 +1,19 @@
+{
+  "name": "york-2022-satellite",
+  "description": "Live Earth Engine summaries over the lower York River during the documented 2022 Margalefidinium polykrikoides bloom season (Yu et al., 2025). Runs without model keys.",
+  "steps": [
+    {"action": "search", "database": "pubmed", "query": "(Margalefidinium polykrikoides OR Cochlodinium polykrikoides) AND York River", "reason": "Find the published account of the 2022 York River bloom that sets the window"},
+    {"action": "chlorophyll_timeseries", "site": "york-river-lower", "start": "2022-06-01", "end": "2022-06-30", "reason": "Pre-bloom baseline month"},
+    {"action": "chlorophyll_timeseries", "site": "york-river-lower", "start": "2022-07-01", "end": "2022-07-31", "reason": "Month before the documented bloom"},
+    {"action": "chlorophyll_timeseries", "site": "york-river-lower", "start": "2022-08-01", "end": "2022-08-31", "reason": "Documented bloom month, first half of the reported window"},
+    {"action": "chlorophyll_timeseries", "site": "york-river-lower", "start": "2022-09-01", "end": "2022-09-30", "reason": "Documented bloom month, second half of the reported window"},
+    {"action": "chlorophyll_timeseries", "site": "york-river-lower", "start": "2022-10-01", "end": "2022-10-31", "reason": "Post-bloom month"},
+    {"action": "alphaearth_context", "site": "york-river-lower", "year": "2021", "reason": "Annual landscape context for the year before the bloom"},
+    {"action": "alphaearth_context", "site": "york-river-lower", "year": "2022", "reason": "Annual landscape context for the bloom year"}
+  ],
+  "gaps": [
+    "NDCI is a chlorophyll proxy; it does not identify M. polykrikoides or confirm a bloom.",
+    "The bloom window comes from Yu et al. (2025), not from in situ cell counts retrieved by this run.",
+    "The site is an approximate bounding box; no field validation was performed."
+  ]
+}

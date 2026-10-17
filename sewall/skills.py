@@ -30,7 +30,7 @@ _REQUIRED = {"$schema", "schema_version", "skill_id", "version", "name", "descri
 _ARGUMENT = {"name", "type", "description"}
 _EVIDENCE = {"method", "supports_causality", "limitations"}
 _POLICY = {"egress", "may_grant_access", "may_sign_agreements", "attribution"}
-_EGRESS = {"public_metadata_only", "local_draft_only"}
+_EGRESS = {"public_metadata_only", "public_sequence_records", "local_draft_only"}
 
 
 class SkillError(ValueError):

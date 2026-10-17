@@ -1,0 +1,217 @@
+{
+  "schema_version": "0.1.0",
+  "kind": "sewall_review_forum",
+  "manifest_digest": "fe438feeae379433feb4b3d8b52bf03dd1e7bd4871f9697364f38ca24955a672",
+  "question": "What does the Sentinel-2 chlorophyll proxy show over the Lafayette River across the 2022 summer, and what landscape context does AlphaEarth give?",
+  "topic": "What does the Sentinel-2 chlorophyll proxy show over the Lafayette River across the 2022 summer, and what landscape context does AlphaEarth give?",
+  "reviewers": [
+    {
+      "name": "methods",
+      "type": "rule",
+      "focus": "Provenance and completeness of the run itself."
+    },
+    {
+      "name": "ncbi",
+      "type": "rule",
+      "focus": "Literature and sequence records."
+    },
+    {
+      "name": "earthengine",
+      "type": "rule",
+      "focus": "Satellite summaries."
+    },
+    {
+      "name": "ecology",
+      "type": "rule",
+      "focus": "Whether the evidence can speak to the biological question."
+    }
+  ],
+  "rule_only": true,
+  "posts": [
+    {
+      "id": "post:1",
+      "round": 1,
+      "author": "methods",
+      "kind": "concern",
+      "text": "The run's metadata review covers literature records only; 7 computed observations (satellite or sensor summaries) were never reviewed.",
+      "refs": [
+        "review",
+        "earthengine:chlorophyll_timeseries:2022-06-30:lafayette-river:2022-06-01",
+        "earthengine:chlorophyll_timeseries:2022-07-31:lafayette-river:2022-07-01",
+        "earthengine:chlorophyll_timeseries:2022-08-31:lafayette-river:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:lafayette-river:2022-09-01",
+        "earthengine:chlorophyll_timeseries:2022-10-31:lafayette-river:2022-10-01",
+        "earthengine:alphaearth_context:lafayette-river:2021",
+        "earthengine:alphaearth_context:lafayette-river:2022"
+      ],
+      "severity": "minor",
+      "topic": "review-omits-observations",
+      "prev": "fe438feeae379433feb4b3d8b52bf03dd1e7bd4871f9697364f38ca24955a672",
+      "hash": "b93214669d3d189062ba1e8a4ac91d961b14bdaa9c5158a9eee353ef45f98446"
+    },
+    {
+      "id": "post:2",
+      "round": 1,
+      "author": "methods",
+      "kind": "support",
+      "text": "Every action, observation and policy decision is a node in a digest-verified graph, so the run can be replayed and audited.",
+      "refs": [
+        "question",
+        "result"
+      ],
+      "topic": "verified-chain",
+      "prev": "b93214669d3d189062ba1e8a4ac91d961b14bdaa9c5158a9eee353ef45f98446",
+      "hash": "2f4bb547f33ae0d80bc0693d5c3e46e9d4f35d7c818d52f3b3d15725488357b7"
+    },
+    {
+      "id": "post:3",
+      "round": 1,
+      "author": "methods",
+      "kind": "question",
+      "text": "How many usable water scenes support each monthly NDCI value, and are any months too sparse to compare?",
+      "refs": [
+        "earthengine:chlorophyll_timeseries:2022-06-30:lafayette-river:2022-06-01",
+        "earthengine:chlorophyll_timeseries:2022-07-31:lafayette-river:2022-07-01",
+        "earthengine:chlorophyll_timeseries:2022-08-31:lafayette-river:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:lafayette-river:2022-09-01",
+        "earthengine:chlorophyll_timeseries:2022-10-31:lafayette-river:2022-10-01"
+      ],
+      "topic": "scene-counts",
+      "prev": "2f4bb547f33ae0d80bc0693d5c3e46e9d4f35d7c818d52f3b3d15725488357b7",
+      "hash": "310eadab0420ea93d702badd162b18427e9defa76dd23363a4760d36d86ab552"
+    },
+    {
+      "id": "post:4",
+      "round": 1,
+      "author": "ncbi",
+      "kind": "support",
+      "text": "3 public literature records were retrieved and each is a node with its source URL.",
+      "refs": [
+        "ncbi:pubmed:39606117",
+        "ncbi:pubmed:34456021",
+        "ncbi:pubmed:34303516"
+      ],
+      "topic": "records-present",
+      "prev": "310eadab0420ea93d702badd162b18427e9defa76dd23363a4760d36d86ab552",
+      "hash": "edf86935bd02b986af6806ba465e95a9ee40bf7d6ed57696f0c3f8feb551f7e9"
+    },
+    {
+      "id": "post:5",
+      "round": 1,
+      "author": "ncbi",
+      "kind": "limitation",
+      "text": "Records are metadata only: titles and summaries, no full text, sequences or measurements.",
+      "refs": [
+        "policy:pubmed"
+      ],
+      "topic": "metadata-only",
+      "prev": "edf86935bd02b986af6806ba465e95a9ee40bf7d6ed57696f0c3f8feb551f7e9",
+      "hash": "8c751d9cdf785e4d000de51763221179f34b94ad738f19299781e5e9f859345e"
+    },
+    {
+      "id": "post:6",
+      "round": 1,
+      "author": "earthengine",
+      "kind": "concern",
+      "text": "2022-06 has only 2 usable water scenes; a monthly NDCI value from so few scenes is fragile.",
+      "refs": [
+        "earthengine:chlorophyll_timeseries:2022-06-30:lafayette-river:2022-06-01"
+      ],
+      "severity": "minor",
+      "topic": "sparse-2022-06",
+      "prev": "8c751d9cdf785e4d000de51763221179f34b94ad738f19299781e5e9f859345e",
+      "hash": "ee455424d4b3f2ad1f1e2ba6259b8bab05c577c2a566fd2301c4a5de9fdd6240"
+    },
+    {
+      "id": "post:7",
+      "round": 1,
+      "author": "earthengine",
+      "kind": "limitation",
+      "text": "NDCI is a chlorophyll proxy from red-edge reflectance; it cannot identify a species or confirm a bloom.",
+      "refs": [
+        "earthengine:chlorophyll_timeseries:2022-06-30:lafayette-river:2022-06-01"
+      ],
+      "topic": "ndci-proxy",
+      "prev": "ee455424d4b3f2ad1f1e2ba6259b8bab05c577c2a566fd2301c4a5de9fdd6240",
+      "hash": "1ce4b11a585d6a5645c2936a9955995b753cba2ba823eceb3ec00e6d0c974d7c"
+    },
+    {
+      "id": "post:8",
+      "round": 1,
+      "author": "earthengine",
+      "kind": "limitation",
+      "text": "AlphaEarth features are learned embeddings, not physical measurements; they were reduced at 10 m.",
+      "refs": [
+        "earthengine:alphaearth_context:lafayette-river:2021",
+        "earthengine:alphaearth_context:lafayette-river:2022"
+      ],
+      "topic": "alphaearth-learned",
+      "prev": "1ce4b11a585d6a5645c2936a9955995b753cba2ba823eceb3ec00e6d0c974d7c",
+      "hash": "4b6bba8ac69da1eccd12df36b6116a6da4fd3f6ff1f2f5bfedd352844ec1cab3"
+    },
+    {
+      "id": "post:9",
+      "round": 2,
+      "author": "earthengine",
+      "kind": "reply",
+      "text": "Usable water scenes per month: 2022-06: 2, 2022-07: 4, 2022-08: 5, 2022-09: 5, 2022-10: 3. 1 of 5 months fall below 3 scenes.",
+      "refs": [
+        "post:3",
+        "earthengine:chlorophyll_timeseries:2022-06-30:lafayette-river:2022-06-01",
+        "earthengine:chlorophyll_timeseries:2022-07-31:lafayette-river:2022-07-01",
+        "earthengine:chlorophyll_timeseries:2022-08-31:lafayette-river:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:lafayette-river:2022-09-01",
+        "earthengine:chlorophyll_timeseries:2022-10-31:lafayette-river:2022-10-01"
+      ],
+      "reply_to": "post:3",
+      "stance": "answer",
+      "prev": "4b6bba8ac69da1eccd12df36b6116a6da4fd3f6ff1f2f5bfedd352844ec1cab3",
+      "hash": "3f4090ea483d1b7a1451e232b3682874df5e56f8dc1c2624d132518c3dee9314"
+    }
+  ],
+  "rejected": [],
+  "model_calls": [],
+  "synthesis": {
+    "id": "post:10",
+    "round": 3,
+    "author": "moderator",
+    "kind": "synthesis",
+    "verdict": "acceptable_as_retrieved_evidence",
+    "concerns": [
+      {
+        "post": "post:1",
+        "author": "methods",
+        "severity": "minor",
+        "status": "open",
+        "replies": []
+      },
+      {
+        "post": "post:6",
+        "author": "earthengine",
+        "severity": "minor",
+        "status": "open",
+        "replies": []
+      }
+    ],
+    "blocking_concerns": [],
+    "disputed_posts": [],
+    "concern_counts": {
+      "open": 2,
+      "contested": 0,
+      "resolved": 0
+    },
+    "limitations": [
+      "post:5",
+      "post:7",
+      "post:8"
+    ],
+    "biological_claims_validated": false,
+    "prev": "3f4090ea483d1b7a1451e232b3682874df5e56f8dc1c2624d132518c3dee9314"
+  },
+  "limitations": [
+    "The forum reviews retrieved metadata and computed summaries; it validates no biological claim.",
+    "Rule reviewers apply fixed checks; agreement among them is not independent expert judgment.",
+    "Model reviewer posts are checked for structure and citations, not for truth."
+  ],
+  "content_digest": "f8b08cf369e0335fc834d1bbcbfa107c359c9e92479bb244b6e678ba72aa7834"
+}

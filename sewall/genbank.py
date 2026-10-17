@@ -1,15 +1,17 @@
-"""Bounded GenBank nucleotide record inventory for one taxon. No sequences are downloaded.
+"""Bounded GenBank nucleotide access for one taxon: a record inventory and a marker fetch.
 
-Counts come from NCBI ESearch on the nuccore database; a few record summaries
-come from ESummary. Marker counts use title keywords and are approximate.
-Transcriptome shotgun assembly (TSA) contigs are counted separately because a
-single assembly can add over 100,000 records for one species.
+The inventory counts records with NCBI ESearch on the nuccore database and
+summarizes a few with ESummary; it downloads no sequences. The marker fetch
+returns at most MAX_MARKER_RECORDS public LSU, ITS, SSU or COI sequences with
+their accession and submitter qualifiers. Marker matching uses title keywords
+and is approximate. Transcriptome shotgun assembly (TSA) contigs are excluded
+or counted separately because a single assembly can add over 100,000 records
+for one species.
 """
 
 from datetime import datetime, timezone
 import hashlib
 import json
-import os
 import re
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
@@ -23,6 +25,8 @@ MAX_RESPONSE_BYTES = 1_048_576
 TIMEOUT_SECONDS = 15
 MAX_SAMPLE = 5
 MAX_RETRY_WAIT_SECONDS = 3.0
+MAX_MARKER_RECORDS = 100
+MAX_SEQUENCE_LENGTH = 10_000
 TSA = '"tsa"[Properties]'
 MARKERS = {
     "lsu": '(28S[Title] OR "large subunit"[Title] OR LSU[Title])',
@@ -36,7 +40,8 @@ QUALIFIERS = ("strain", "isolate", "country", "geo_loc_name", "collection_date",
 _TAXID = re.compile(r"[1-9][0-9]{0,9}\Z", re.ASCII)
 _NAME = re.compile(r"[A-Z][a-z]{1,40}(?: [a-z][a-z-]{1,40}){0,2}\Z", re.ASCII)
 _UID = re.compile(r"[1-9][0-9]{0,19}\Z", re.ASCII)
-_ACCESSION = re.compile(r"[A-Z]{1,6}_?[0-9]{5,12}(?:\.[0-9]{1,4})?\Z", re.ASCII)
+# GenBank (MN908947), RefSeq (NC_045512, NZ_CP012345) and WGS (NZ_JAAXYZ010000001) accessions.
+_ACCESSION = re.compile(r"[A-Z]{1,6}(?:_[A-Z]{0,6})?[0-9]{5,12}(?:\.[0-9]{1,4})?\Z", re.ASCII)
 
 
 class InventoryError(RuntimeError):
@@ -54,14 +59,14 @@ def organism_term(taxon: str) -> str:
     raise ValueError("taxon must be a numeric NCBI taxonomy ID or a scientific name such as Genus species")
 
 
-def _get(utility, parameters):
+def _get(utility, parameters, *, text=False):
     parameters = {**parameters, "tool": "sewall_discover_prototype"}
     provenance_url = BASE + utility + ".fcgi?" + urlencode(parameters)
-    key = os.environ.get("NCBI_API_KEY")
+    key = ncbi.api_key()
     request_url = BASE + utility + ".fcgi?" + urlencode({**parameters, "api_key": key}) if key else provenance_url
     request = Request(request_url, headers={
         "User-Agent": "SewallDiscoverPrototype/0.2 (public sequence metadata inventory)",
-        "Accept": "application/json",
+        "Accept": "text/plain" if text else "application/json",
     }, method="GET")
     opener = build_opener(ncbi._NoRedirect())
     attempts, wait = 0, 0.0
@@ -69,7 +74,7 @@ def _get(utility, parameters):
         attempts += 1
         try:
             with ncbi._REQUEST_LOCK:
-                pause = max((0.12 if key else 0.4) - (ncbi.time.monotonic() - ncbi._LAST_REQUEST_AT), wait)
+                pause = max(ncbi.interval(key) - (ncbi.time.monotonic() - ncbi._LAST_REQUEST_AT), wait)
                 if pause > 0:
                     ncbi.time.sleep(pause)
                 ncbi._LAST_REQUEST_AT = ncbi.time.monotonic()
@@ -90,12 +95,18 @@ def _get(utility, parameters):
             raise InventoryError(f"NCBI request failed ({type(exc).__name__}); no retry attempted") from None
     if len(raw) > MAX_RESPONSE_BYTES:
         raise InventoryError("NCBI response exceeded the byte limit")
-    try:
-        document = json.loads(raw)
-    except (UnicodeDecodeError, json.JSONDecodeError, RecursionError):
-        raise InventoryError("NCBI response was not JSON") from None
-    if not isinstance(document, dict) or "error" in document:
-        raise InventoryError("NCBI returned an error document")
+    if text:
+        try:
+            document = raw.decode("ascii")
+        except UnicodeDecodeError:
+            raise InventoryError("NCBI text response was not ASCII") from None
+    else:
+        try:
+            document = json.loads(raw)
+        except (UnicodeDecodeError, json.JSONDecodeError, RecursionError):
+            raise InventoryError("NCBI response was not JSON") from None
+        if not isinstance(document, dict) or "error" in document:
+            raise InventoryError("NCBI returned an error document")
     return document, {"utility": utility, "url": provenance_url,
                       "raw_sha256": hashlib.sha256(raw).hexdigest(), "response_bytes": len(raw),
                       "attempts": attempts}
@@ -149,14 +160,15 @@ def _esummary(ids):
         if (not isinstance(uids, list) or len(uids) > len(ids) or len(set(uids)) != len(uids)
                 or any(uid not in ids for uid in uids)):
             raise ValueError
-        summaries = []
+        summaries, skipped = [], 0
         for uid in ids:
             record = result.get(uid)
             if uid not in uids or not isinstance(record, dict) or "error" in record:
                 continue
             accession = record.get("accessionversion")
             if not isinstance(accession, str) or not _ACCESSION.fullmatch(accession):
-                raise ValueError
+                skipped += 1
+                continue
             length = record.get("slen")
             taxid = record.get("taxid")
             summaries.append({
@@ -173,7 +185,7 @@ def _esummary(ids):
             })
     except (KeyError, TypeError, AttributeError, ValueError):
         raise InventoryError("NCBI response was not a valid bounded ESummary result") from None
-    return summaries, provenance
+    return summaries, provenance | {"skipped_records": skipped}
 
 
 def taxon_inventory(taxon: str, *, sample: int = 3) -> dict:
@@ -217,6 +229,87 @@ def taxon_inventory(taxon: str, *, sample: int = 3) -> dict:
             "TSA records are transcriptome assembly contigs; the sample is drawn from non-TSA records.",
             "Organism search includes descendant taxa and NCBI synonyms; counts change as GenBank grows.",
             "Strain, location and date qualifiers are submitter metadata and are often missing.",
+            "NCBI disclaimer: https://www.ncbi.nlm.nih.gov/About/disclaimer.html",
+        ],
+    }
+
+
+_FASTA_HEADER = re.compile(r">([A-Z]{1,6}(?:_[A-Z]{0,6})?[0-9]{5,12}\.[0-9]{1,4})(?: |\Z)", re.ASCII)
+_SEQUENCE = re.compile(r"[ACGTUNRYKMSWBDHV]+\Z", re.ASCII)
+
+
+def _fasta(text, accessions):
+    """Parse EFetch FASTA into {accession.version: sequence}, accepting only requested accessions."""
+    sequences, current = {}, None
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        if line.startswith(">"):
+            match = _FASTA_HEADER.match(line)
+            if not match or match.group(1) not in accessions or match.group(1) in sequences:
+                raise InventoryError("NCBI FASTA named an unexpected or repeated accession")
+            current = match.group(1)
+            sequences[current] = []
+        elif current is None or not _SEQUENCE.fullmatch(line.upper()):
+            raise InventoryError("NCBI FASTA contained an invalid sequence line")
+        else:
+            sequences[current].append(line.upper())
+    sequences = {accession: "".join(lines) for accession, lines in sequences.items()}
+    if any(not 1 <= len(value) <= MAX_SEQUENCE_LENGTH for value in sequences.values()):
+        raise InventoryError(f"NCBI FASTA sequence was empty or longer than {MAX_SEQUENCE_LENGTH}")
+    return sequences
+
+
+def fetch_markers(taxon: str, marker: str) -> dict:
+    """Fetch at most MAX_MARKER_RECORDS public non-TSA sequences of one marker for a taxon.
+
+    Three requests: an ESearch for the taxon and marker title keywords without
+    TSA records, an ESummary of the returned records, and one EFetch of their
+    FASTA sequences. Each record carries its accession.version, length and
+    submitter qualifiers such as isolate, strain, country and collection date.
+    """
+    term = organism_term(taxon)
+    if marker not in MARKERS:
+        raise ValueError("marker must be one of: " + ", ".join(sorted(MARKERS)))
+    requests = []
+    total, ids, provenance = _esearch(f"{term} AND {MARKERS[marker]} NOT {TSA}", MAX_MARKER_RECORDS)
+    requests.append(provenance)
+    records = []
+    if ids:
+        summaries, provenance = _esummary(ids)
+        requests.append(provenance)
+        accessions = {item["accession"] for item in summaries}
+        if len(accessions) != len(summaries):
+            raise InventoryError("NCBI summaries repeated an accession")
+        text, provenance = _get("efetch", {"db": "nuccore", "id": ",".join(item["uid"] for item in summaries),
+                                           "rettype": "fasta", "retmode": "text"}, text=True)
+        requests.append(provenance)
+        sequences = _fasta(text, accessions)
+        for item in summaries:
+            if item["accession"] not in sequences:
+                raise InventoryError("NCBI FASTA omitted a summarized record")
+            sequence = sequences[item["accession"]]
+            if item["length"] is not None and item["length"] != len(sequence):
+                raise InventoryError("NCBI FASTA length differs from the record summary")
+            records.append({key: item[key] for key in ("uid", "accession", "source_url", "title", "organism",
+                                                         "taxid", "create_date", "qualifiers", "trust")}
+                           | {"length": len(sequence), "sequence": sequence,
+                              "sequence_sha256": hashlib.sha256(sequence.encode()).hexdigest()})
+    return {
+        "kind": "public_marker_sequences", "mode": "live_public_records",
+        "database": "nuccore", "taxon": taxon, "marker": marker, "organism_term": term,
+        "total": total, "returned": len(records), "truncated": total > len(records),
+        "classification": "title_keyword_heuristic", "records": records, "requests": requests,
+        "response_bytes": sum(item["response_bytes"] for item in requests),
+        "retrieved_at": datetime.now(timezone.utc).isoformat(),
+        "limitations": [
+            f"At most {MAX_MARKER_RECORDS} records in ESearch order; truncated is true when more exist.",
+            "Marker selection matches title keywords; records can be missed, and operon records spanning several "
+            "markers are included whole.",
+            "TSA transcriptome contigs are excluded.",
+            "Isolate, strain, location and date qualifiers are submitter metadata and are often missing.",
+            "Sequences are public GenBank records as deposited; they are not quality checked here.",
             "NCBI disclaimer: https://www.ncbi.nlm.nih.gov/About/disclaimer.html",
         ],
     }

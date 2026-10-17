@@ -12,6 +12,32 @@ summaries. It establishes no biological finding.
 Developed at the School of Data Science and Department of Computer Science, Old Dominion
 University. Released under the Apache License 2.0.
 
+Project page and recorded-run gallery: <https://qinlab.github.io/sewall.ai/>
+
+## How a run works
+
+```mermaid
+flowchart LR
+    subgraph Planners
+        H[MCP host model]
+        M[Provider model<br/>Vertex AI, Anthropic, OpenAI]
+        S[Scripted plan<br/>or sewall consult]
+    end
+    H & M & S -->|proposed action| C{Deterministic controller}
+    R[(Versioned Skill registry)] --> C
+    P[Access policies and budgets] --> C
+    C -->|checked call| K[Bounded public Skills<br/>NCBI, GenBank, Earth Engine,<br/>NOAA and USGS sensors]
+    K -->|small summaries| C
+    C --> G[Integrity gates<br/>safe stop]
+    G --> F[Hash-chained manifest<br/>and HTML report]
+    F --> V[Offline replay]
+    F --> W[Review forum, release gate,<br/>cross-run panel]
+```
+
+![Sewall.ai architecture: planners propose actions to one deterministic controller, which checks them against the Skill registry, policies, budgets and integrity gates, calls bounded public Skills and writes a hash-chained manifest](docs/figures/fig1-architecture.png)
+
+More figures, with full captions, are in [`docs/figures/`](docs/figures/README.md).
+
 ## Quick start
 
 Python 3.10 or later. The core package uses only the standard library.
@@ -55,7 +81,10 @@ docker build -t sewall . && docker run --rm sewall demo --out /tmp/demo
   ends as `budget_exhausted`, and a step whose `$record:` reference finds no record fails the
   run; neither is reported as completed.
 - **Compute where the data are held.** Earth Engine Skills reduce satellite imagery inside
-  Earth Engine and return only small summaries (tested with simulated responses only).
+  Earth Engine and return only small summaries. Recorded live runs over the York and Lafayette
+  Rivers for 2022 are in the gallery.
+- **Expert consultation.** `sewall consult` asks rule-based dataset experts (NCBI, Earth Engine,
+  EOL, growth models) and writes a capped, ordered plan script for the controller.
 - **Research-integrity safe stop.** Integrity gates run before and after every action. A
   critical critique quarantines affected outputs, withholds the review and records the run as
   "stopped, not successful."
@@ -63,6 +92,9 @@ docker build -t sewall . && docker run --rm sewall demo --out /tmp/demo
   and rechecks evidence links without repeating model inference or source queries. The saved
   question, budgets, plan, Skill digests, access policies, request drafts and metrics must
   match the hash-chained events.
+- **Review after the run.** A peer-review forum, an FMEA-style release gate and a cross-run
+  critique panel work offline on recorded manifests. Each output is hash-chained to its inputs
+  and has a verify command. Records can be signed with an Ed25519 key.
 - **MCP tools.** Any MCP-compatible host (Claude, Gemini CLI, ChatGPT, open-weight models) can
   drive the same bounded controller.
 
@@ -77,9 +109,13 @@ or proof of custodian authenticity.
 | --- | --- | --- |
 | `search` | `ncbi.metadata-search` | Search PubMed, GEO (`gds`) or BioProject; fetch small public document summaries |
 | `citations` | `ncbi.gds-citations` | Retrieve publications explicitly listed in a returned GEO record |
-| `taxon_inventory` | `genbank.taxon-inventory` | Count GenBank nucleotide records for one taxon, separating transcriptome assembly (TSA) contigs and counting by marker (LSU, SSU, ITS, COI); no sequences |
-| `chlorophyll_timeseries` | `gee.s2-chlorophyll-timeseries` | Earth Engine only: per-scene mean NDCI, a chlorophyll proxy, over Sentinel-2 water pixels at a named site |
+| `taxon_inventory` | `genbank.taxon-inventory` | Count GenBank nucleotide records for one taxon, separating transcriptome assembly (TSA) contigs and counting by marker (LSU, SSU, ITS, COI), and summarize a few records with strain, location and date qualifiers; no sequences |
+| `fetch_markers` | `genbank.fetch-markers` | Fetch at most 100 public non-TSA GenBank records of one marker for one taxon; sequences stay in the run record and the planner sees only summaries |
+| `assign_ribotype` | `genotype.assign-ribotype` | Assign each fetched sequence to the nearest ribotype in a curated, versioned reference panel by deterministic k-mer similarity |
+| `link_strains` | `genotype.link-strains` | Match strains from a curated table of published growth experiments to fetched records by strain or isolate name and report their ribotype calls |
+| `chlorophyll_timeseries` | `gee.s2-chlorophyll-timeseries` | Earth Engine only: mean NDCI, a chlorophyll proxy, over one Sentinel-2 mosaic per day at a named site, masked to JRC Global Surface Water permanent water and Cloud Score+ clear pixels; no value below 100 water pixels |
 | `alphaearth_context` | `gee.alphaearth-context` | Earth Engine only: annual mean of the 64 AlphaEarth embedding bands over a named site |
+| `flood_sensors` | `noaa-usgs.flood-sensors-area` | Latest public water level per sensor over a named Chesapeake Bay area: NOAA NWPS flood categories, NOAA CO-OPS tide levels against flood thresholds, USGS gage height; stale readings are listed apart from current flooding |
 | `assess_source` | `sewall.source-capability-assessment` | Record a missing source capability and draft local access questions |
 | `finish` | built in | Propose a metadata map and evidence gaps for the separate review call |
 
@@ -112,10 +148,11 @@ Set `NCBI_API_KEY` to raise the NCBI rate limit; it is never written to a manife
 
 ## Earth Engine Skills
 
-The planner names a site from a fixed list (currently `lafayette-river`, an approximate
-bounding box in Norfolk, Virginia); it cannot supply a geometry, a collection or code. Each
-action issues one Earth Engine request, and the manifest records the collection, window or
-year, scale, mask, scene identifiers, versions, attribution and a digest of the returned
+The planner names a site from a fixed list (`lafayette-river` in Norfolk, Virginia, and
+`york-river-lower`, both approximate bounding boxes); it cannot supply a geometry, a collection
+or code. Each action issues one Earth Engine request, and the manifest records the
+collection, window or year, scale, mask, scene identifiers, versions, attribution and a
+digest of the returned
 summary. The Earth Engine project ID is never recorded. The Skills join the registry only when
 Earth Engine is configured:
 
@@ -127,8 +164,31 @@ export EARTHENGINE_PROJECT=YOUR-REGISTERED-CLOUD-PROJECT
 
 Earth Engine use requires a Cloud project registered for Earth Engine and is subject to its
 terms and quotas. NDCI is a chlorophyll proxy: it does not identify a species or confirm a
-bloom. AlphaEarth dimensions are learned features, not physical measurements. These Skills
-have been tested with simulated Earth Engine responses only.
+bloom. AlphaEarth dimensions are learned features, not physical measurements. The unit tests
+use simulated Earth Engine responses; the York and Lafayette runs in `gallery/runs/` made live
+Earth Engine requests on October 16, 2026.
+
+![Mean Sentinel-2 NDCI per 2022 day over clear permanent water in the lower York River and the Lafayette River, from two live Earth Engine runs](docs/figures/fig6-ndci-2022.png)
+
+Each point is one day's mosaic, screened per pixel with Cloud Score+ and masked to JRC Global
+Surface Water occurrence of at least 90%. The shaded band marks the August to September window
+of a simulated York River *M. polykrikoides* bloom (Yu et al. 2025). Both runs pass offline
+replay. NDCI does not identify a species or confirm a bloom.
+
+## Flood sensors
+
+`flood_sensors` reads the latest public water levels from NOAA and USGS over a named Chesapeake
+Bay area, from Norfolk to Baltimore. It needs no key.
+
+```bash
+sewall agent --script configs/scripted-flood-sensors-chesapeake.json \
+  --question "Which Chesapeake Bay water-level sensors are at or above flood stage now?" \
+  --out output/flood
+```
+
+![Live flood sensor run over six Chesapeake areas on October 15, 2026: NWS gauges by flood category, and NOAA tide stations' latest levels relative to their minor flood thresholds](docs/figures/fig7-flood-sensors.png)
+
+Readings are provisional. USGS series carry no flood thresholds and are not plotted.
 
 ## Safe stop on live runs
 
@@ -147,6 +207,8 @@ SUCCESSFUL." A synthetic supervisor demonstration is also available:
 sewall safety-demo --scenario critical_critique --out output/safe-stop
 sewall safety-verify output/safe-stop/manifest.json
 ```
+
+![The bundled safe-stop demonstration: a critical missing-provenance critique after action 2 quarantines the affected nodes and their descendants, and the report reads STOPPED, NOT SUCCESSFUL](docs/figures/fig3-safe-stop.png)
 
 Both exit nonzero for a stopped run so scripts cannot treat it as success. This is not a formal
 fail-safe guarantee or a detector of every scientific error. See `docs/safety-supervisor.md`.
@@ -186,7 +248,41 @@ sewall gallery --catalog gallery/catalog.json --out output/gallery-site
 
 The gallery is a static site of recorded runs with no live service. The build refuses the whole
 catalog if any manifest fails offline verification or contains a local path, a key, a token or a
-cloud project ID. `.github/workflows/pages.yml` deploys it to GitHub Pages.
+cloud project ID. `.github/workflows/pages.yml` builds it under `/gallery/`, adds the landing
+page in `site/` and the figures, and deploys the result to GitHub Pages.
+
+A run entry may also name a forum and a gate record, and the catalog may list cross-run
+panels. The build verifies each against its manifests and refuses the whole catalog on any
+failure.
+
+## Review forum, release gate and cross-run panel
+
+These commands work offline on recorded manifests and make no source query.
+
+```bash
+sewall forum gallery/runs/york-2022-jrc.json --out output/york-forum
+sewall forum-verify output/york-forum/forum.json gallery/runs/york-2022-jrc.json
+sewall risk-gate gallery/runs/york-2022-jrc.json --forum output/york-forum/forum.json --out output/york-gate
+sewall risk-gate-verify output/york-gate/risk-gate.json gallery/runs/york-2022-jrc.json \
+  --forum output/york-forum/forum.json
+sewall panel --run york gallery/runs/york-2022-jrc.json \
+  --run lafayette gallery/runs/lafayette-2022-jrc.json --out output/panel
+sewall consult "How fast does Margalefidinium polykrikoides grow in the York River?" \
+  --script-out output/consult-script.json
+```
+
+The forum's default reviewers and the panel's default researchers are deterministic rules with
+no model call. `--reviewer-config` and `--panelist-config` add model participants, whose posts
+must pass the same citation and target checks. A concern is resolved only by an answer that
+cites run evidence the concern did not already cite. The release gate scores each output for
+severity, occurrence and detection in the style of an FMEA and holds any output above the
+threshold; the ratings are uncalibrated prototype settings ([notes](docs/risk-gate-2026-10-15.md)).
+A [comparison on the York run](docs/forum-comparison-2026-10-16.md) sets no forum, the rule
+forum, Gemini and Llama reviewers, and an adversarial reviewer side by side.
+
+Replay alone cannot detect an edit that is resealed consistently end to end; a signature can.
+`sewall sign` signs a manifest, forum or gate with an Ed25519 key through OpenSSH 8.1 or later,
+and `sewall sign-verify` checks it against an allowed-signers file.
 
 ## Fixture demonstrations
 
@@ -218,14 +314,14 @@ launcher, and `docs/live-validation-2026-09-10.md` records the original cluster 
 
 | Path | Contents |
 | --- | --- |
-| `sewall/` | Package: live controller (`agent.py`), Skill registry (`skills.py`), scripted planner, model providers (`llm.py`, `providers.py`), NCBI and GenBank adapters, Earth Engine Skills (`earthengine.py`), policy checks, safe-stop supervisor, fixture graph, HTML report, gallery, MCP server, CLI |
+| `sewall/` | Package: live controller (`agent.py`), Skill registry (`skills.py`), scripted planner, expert consultation (`experts.py`), model providers (`llm.py`, `providers.py`), NCBI and GenBank adapters, ribotype assignment and strain linkage (`ribotype.py`, `strains.py`, curated panels in `panels/`), Earth Engine Skills (`earthengine.py`), flood sensors (`floodsensors.py`), policy checks, safe-stop supervisor, review forum, release gate, cross-run panel, signing, fixture graph, HTML report, gallery, MCP server, CLI |
 | `skills/` | Live Skill descriptors (`skills/live/`) and the fixture Skill descriptor |
 | `schemas/` | JSON Schemas for manifests and Skill descriptors |
 | `configs/` | Model configurations, MCP host configurations and scripted demonstrations; no credentials |
 | `gallery/` | Recorded reference runs and the gallery catalog |
-| `scripts/` | Smoke test, Slurm launchers and validation drivers |
-| `tests/` | Unit tests with mocked networking; they never contact NCBI, Earth Engine or a model |
-| `docs/` | MCP quickstart, source interfaces and limits, safe-stop design, validation records |
+| `scripts/` | Smoke test, Slurm launchers, validation drivers and figure scripts |
+| `tests/` | Unit tests with mocked networking; they never contact NCBI, Earth Engine, NOAA, USGS or a model |
+| `docs/` | MCP quickstart, source interfaces and limits, safe-stop design, validation and results records, figures |
 
 ## Tests
 
@@ -240,8 +336,9 @@ runs the suite on Python 3.10, 3.12 and 3.13, checks an installed wheel and buil
 ## Limitations
 
 This is a small, bounded controller, not a scientific workflow engine. It retrieves public
-metadata and small summaries only: no expression matrices, participant genotypes, sequences,
-article abstracts or full text. Controlled-access sources, custodian federation, production isolation,
+metadata and small summaries only: no expression matrices, participant genotypes, article
+abstracts or full text. Marker sequences are fetched only by `fetch_markers`, at most 100 public
+records per step, and stay in the run record. Controlled-access sources, custodian federation, production isolation,
 durable checkpointing and real grant verification are not implemented. Requests for
 unconfigured sources become local, nonbinding drafts. Review text is a model assessment;
 citations and quote matches do not validate all its reasoning. Even a completed run has zero

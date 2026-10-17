@@ -1,0 +1,19 @@
+{
+  "name": "lafayette-2022-satellite",
+  "description": "Live Earth Engine summaries over the Lafayette River, Norfolk, Virginia, across the 2022 summer bloom season. Runs without model keys. No dated 2022 Lafayette bloom is recorded in the repository, so this is an exploratory window, not a labeled event.",
+  "steps": [
+    {"action": "search", "database": "pubmed", "query": "(Margalefidinium polykrikoides OR Cochlodinium polykrikoides) AND Lafayette River", "reason": "Find published reports of dinoflagellate blooms in the Lafayette River"},
+    {"action": "chlorophyll_timeseries", "site": "lafayette-river", "start": "2022-06-01", "end": "2022-06-30", "reason": "Early summer baseline month"},
+    {"action": "chlorophyll_timeseries", "site": "lafayette-river", "start": "2022-07-01", "end": "2022-07-31", "reason": "Month when Lafayette River blooms have typically begun in earlier reports"},
+    {"action": "chlorophyll_timeseries", "site": "lafayette-river", "start": "2022-08-01", "end": "2022-08-31", "reason": "Late summer bloom season"},
+    {"action": "chlorophyll_timeseries", "site": "lafayette-river", "start": "2022-09-01", "end": "2022-09-30", "reason": "Late summer bloom season, second month"},
+    {"action": "chlorophyll_timeseries", "site": "lafayette-river", "start": "2022-10-01", "end": "2022-10-31", "reason": "Post-season month"},
+    {"action": "alphaearth_context", "site": "lafayette-river", "year": "2021", "reason": "Annual landscape context for the prior year"},
+    {"action": "alphaearth_context", "site": "lafayette-river", "year": "2022", "reason": "Annual landscape context for the same year"}
+  ],
+  "gaps": [
+    "NDCI is a chlorophyll proxy; it does not identify M. polykrikoides or confirm a bloom.",
+    "No dated 2022 Lafayette River bloom or in situ cell count was retrieved by this run.",
+    "The site is an approximate bounding box over a narrow tidal river; 20 m pixels mix water and shoreline."
+  ]
+}

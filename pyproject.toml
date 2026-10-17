@@ -29,6 +29,7 @@ packages = ["sewall", "sewall.skills_live"]
 package-dir = {"sewall.skills_live" = "skills/live"}
 
 [tool.setuptools.package-data]
+"sewall" = ["panels/*.json"]
 "sewall.skills_live" = ["*.skill.json"]
 
 [tool.setuptools.dynamic]

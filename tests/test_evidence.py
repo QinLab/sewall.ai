@@ -3,6 +3,7 @@
 import hashlib
 import io
 import json
+import os
 import unittest
 from unittest.mock import patch
 from urllib.error import HTTPError, URLError
@@ -43,6 +44,7 @@ class EvidenceTests(unittest.TestCase):
     def setUp(self):
         self.builder = patch("sewall.evidence.build_opener").start()
         self.sleep = patch("sewall.ncbi.time.sleep").start()
+        patch.dict(os.environ, {"NCBI_API_KEY": ""}).start()
         self.addCleanup(patch.stopall)
 
     def respond(self, value, *, redirect=None, status=200):
@@ -260,8 +262,16 @@ class EvidenceTests(unittest.TestCase):
         self.respond(document({"uid": "1"}))
         with patch("sewall.ncbi._LAST_REQUEST_AT", 100.0), patch("sewall.ncbi.time.monotonic", return_value=100.1):
             fetch_metadata("pubmed", ["1"])
-            self.assertAlmostEqual(self.sleep.call_args.args[0], 0.25)
+            self.assertAlmostEqual(self.sleep.call_args.args[0], ncbi.MIN_INTERVAL_SECONDS - 0.1)
             self.assertEqual(ncbi._LAST_REQUEST_AT, 100.1)
+
+    def test_api_key_is_sent_but_not_recorded(self):
+        self.respond(document({"uid": "1"}))
+        with patch.dict(os.environ, {"NCBI_API_KEY": "secret-key"}):
+            result = fetch_metadata("pubmed", ["1"])
+        request = self.builder.return_value.open.call_args.args[0]
+        self.assertEqual(parse_qs(urlparse(request.full_url).query)["api_key"], ["secret-key"])
+        self.assertNotIn("secret", json.dumps(result))
 
 
 if __name__ == "__main__":

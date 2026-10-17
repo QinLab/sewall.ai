@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schemas/executable_skill.schema.json",
+  "schema_version": "0.2.0",
+  "skill_id": "genotype.link-strains",
+  "version": "0.1.0",
+  "name": "Link growth-studied strains to ribotype calls",
+  "description": "Match each strain in a curated, versioned table of published growth experiments to the GenBank records from an earlier fetch_markers step by normalized strain or isolate name, and report the ribotype calls of those records with the responses each paper measured. Strains without a matching record, or whose records are unassigned or disagree, are reported as such. Runs locally with no source request.",
+  "operation": "link_strains",
+  "implementation": "sewall.agent:genotype_link_strains",
+  "planner_template": "{\"action\":\"link_strains\",\"taxon\":\"taxon of an earlier assign_ribotype step\",\"marker\":\"lsu\",\"reason\":\"why\"}",
+  "planner_guidance": [
+    "Call link_strains only after assign_ribotype completed for the same taxon and marker.",
+    "A curated growth strain table exists for Margalefidinium polykrikoides LSU only; other taxa and markers are refused.",
+    "A strain with no sequence record is a gap to report, not a failure.",
+    "A shared ribotype does not imply a shared growth response; report per-strain measurements."
+  ],
+  "arguments": [
+    {"name": "taxon", "type": "string", "max_length": 100,
+     "description": "The taxon of a completed assign_ribotype step."},
+    {"name": "marker", "type": "string", "enum": ["lsu"],
+     "description": "Marker of the completed assign_ribotype step."}
+  ],
+  "sources": ["Curated growth strain table shipped with Sewall.ai; calls from an earlier assign_ribotype step"],
+  "external_actions": false,
+  "evidence": {
+    "method": "normalized_strain_name_match",
+    "supports_causality": false,
+    "limitations": [
+      "Strain names are matched after removing case, spaces and punctuation; a renamed or relabeled culture can be missed or mismatched.",
+      "Table entries were curated from abstracts or full text as each entry records; responses are not re-estimated.",
+      "Responses measured under different protocols are not directly comparable.",
+      "Linkage estimates no growth parameter."
+    ]
+  },
+  "policy_constraints": {
+    "egress": "local_draft_only",
+    "may_grant_access": false,
+    "may_sign_agreements": false,
+    "attribution": "Cite the strain table version, each strain's source publication, and the GenBank accessions linked."
+  },
+  "validation": {"tests": ["tests/test_strains.py", "tests/test_skills.py"]}
+}

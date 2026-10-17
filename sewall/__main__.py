@@ -93,6 +93,14 @@ def main(argv=None):
     agent.add_argument("--out", required=True)
     verify_agent = commands.add_parser("agent-replay", help="Verify a recorded live graph offline; no model or source calls")
     verify_agent.add_argument("manifest")
+    sign = commands.add_parser("sign", help="Sign a saved record with an Ed25519 key (writes <file>.sig)")
+    sign.add_argument("file")
+    sign.add_argument("--key", required=True, help="Ed25519 private key file")
+    sign_verify = commands.add_parser("sign-verify", help="Check a saved record's Ed25519 signature offline")
+    sign_verify.add_argument("file")
+    sign_verify.add_argument("--allowed-signers", required=True)
+    sign_verify.add_argument("--identity", required=True)
+    sign_verify.add_argument("--signature", help="Signature file; defaults to <file>.sig")
     safety = commands.add_parser("safety-demo", help="Synthetic integrity supervisor: controlled safe stop and honest reporting")
     safety.add_argument("--scenario", default="critical_critique")
     safety.add_argument("--out", required=True)
@@ -101,6 +109,36 @@ def main(argv=None):
     gallery = commands.add_parser("gallery", help="Build a static site of verified recorded runs")
     gallery.add_argument("--catalog", default="gallery/catalog.json")
     gallery.add_argument("--out", required=True)
+    consult = commands.add_parser("consult", help="Ask the dataset experts and write a checked plan script")
+    consult.add_argument("question")
+    consult.add_argument("--script-out", help="Write the lab manager's script here for sewall agent --script")
+    risk = commands.add_parser("risk-gate", help="Gated release risk assessment (FMEA style) of a verified manifest")
+    risk.add_argument("manifest")
+    risk.add_argument("--forum", help="A forum.json bound to the same manifest")
+    risk.add_argument("--out", required=True, help="New directory for risk-gate.json and risk-gate.html")
+    risk_verify = commands.add_parser("risk-gate-verify", help="Recompute a saved risk gate from its inputs offline")
+    risk_verify.add_argument("gate")
+    risk_verify.add_argument("manifest")
+    risk_verify.add_argument("--forum")
+    forum = commands.add_parser("forum", help="Agentic peer-review discussion forum over a verified live manifest")
+    forum.add_argument("manifest")
+    forum.add_argument("--out", required=True)
+    forum.add_argument("--topic", help="Discussion topic; defaults to the run's question")
+    forum.add_argument("--reviewer-config", action="append", default=[],
+                       help="Model reviewer JSON {name, focus, model}; repeat to add reviewers alongside the rule reviewers")
+    forum_verify = commands.add_parser("forum-verify", help="Verify a saved forum against its manifest offline")
+    forum_verify.add_argument("forum")
+    forum_verify.add_argument("manifest")
+    panel = commands.add_parser("panel", help="Cross-run critique panel: researchers critique each other's runs")
+    panel.add_argument("--run", action="append", nargs=2, metavar=("RESEARCHER", "MANIFEST"), required=True,
+                       help="One researcher and the manifest of the run they produced; give 2 to 6")
+    panel.add_argument("--out", required=True)
+    panel.add_argument("--topic")
+    panel.add_argument("--panelist-config", action="append", default=[],
+                       help="JSON {name, focus, model} making that researcher a model panelist")
+    panel_verify = commands.add_parser("panel-verify", help="Verify a saved panel against its manifests offline")
+    panel_verify.add_argument("panel")
+    panel_verify.add_argument("--run", action="append", nargs=2, metavar=("RESEARCHER", "MANIFEST"), required=True)
     mcp = commands.add_parser("mcp", help="Run the optional MCP server (stdio, or loopback streamable HTTP)")
     mcp.add_argument("--transport", choices=("stdio", "streamable-http"), default="stdio")
     mcp.add_argument("--port", type=int, default=8000)
@@ -146,8 +184,19 @@ def main(argv=None):
             _save(manifest, args.out)
             return 0 if manifest["status"] == "completed" else 1
         elif args.command == "agent-replay":
-            from .agent import verify_agent_manifest
-            result = verify_agent_manifest(_load(args.manifest, 64 * 1024 * 1024))
+            from .agent import current_code_report, verify_agent_manifest
+            manifest = _load(args.manifest, 64 * 1024 * 1024)
+            result = verify_agent_manifest(manifest)
+            if result["valid"]:
+                result["current_checkout"] = current_code_report(manifest)
+            print(json.dumps(result, indent=2))
+            return 0 if result["valid"] else 1
+        elif args.command == "sign":
+            from .signing import sign_file
+            print(json.dumps(sign_file(args.file, args.key), indent=2))
+        elif args.command == "sign-verify":
+            from .signing import verify_file
+            result = verify_file(args.file, args.allowed_signers, args.identity, args.signature)
             print(json.dumps(result, indent=2))
             return 0 if result["valid"] else 1
         elif args.command == "safety-demo":
@@ -159,6 +208,106 @@ def main(argv=None):
         elif args.command == "safety-verify":
             from .safety import verify_safety_manifest
             result = verify_safety_manifest(_load(args.manifest))
+            print(json.dumps(result, indent=2))
+            return 0 if result["valid"] else 1
+        elif args.command == "consult":
+            from .experts import consult as consult_experts
+            memo = consult_experts(args.question)
+            if args.script_out:
+                if memo["script"] is None:
+                    raise ValueError("No expert proposed an action, so no script was written")
+                with open(args.script_out, "x", encoding="utf-8") as handle:
+                    handle.write(json.dumps(memo["script"], indent=2) + "\n")
+            print(json.dumps(memo, indent=2))
+        elif args.command == "risk-gate":
+            from .riskgate import assess, render_risk_html
+            out = Path(args.out)
+            out.mkdir(parents=True, exist_ok=True)
+            targets = [out / "risk-gate.json", out / "risk-gate.html"]
+            if any(p.exists() for p in targets):
+                raise ValueError("Output files already exist; choose a new --out directory")
+            forum = _load(args.forum, 16 * 1024 * 1024) if args.forum else None
+            result = assess(_load(args.manifest, 64 * 1024 * 1024), forum)
+            serialized = json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
+            for target, content in zip(targets, [serialized, render_risk_html(result)]):
+                with target.open("x", encoding="utf-8") as handle:
+                    handle.write(content)
+            print(json.dumps({"decision": result["decision"], "released": len(result["released"]),
+                              "held": result["held"], "blocked": result["blocked"],
+                              "gates": {g["id"]: g["passed"] for g in result["gates"]},
+                              "gate": str(targets[0]), "page": str(targets[1]),
+                              "content_digest": result["content_digest"]}, indent=2))
+        elif args.command == "risk-gate-verify":
+            from .riskgate import verify_risk_gate
+            forum = _load(args.forum, 16 * 1024 * 1024) if args.forum else None
+            result = verify_risk_gate(_load(args.gate, 16 * 1024 * 1024), _load(args.manifest, 64 * 1024 * 1024), forum)
+            print(json.dumps(result, indent=2))
+            return 0 if result["valid"] else 1
+        elif args.command == "forum":
+            from .forum import RULE_REVIEWERS, ModelReviewer, render_forum_html, run_forum
+            from .providers import client_from_config
+            out = Path(args.out)
+            out.mkdir(parents=True, exist_ok=True)
+            targets = [out / "forum.json", out / "forum.html"]
+            if any(p.exists() for p in targets):
+                raise ValueError("Output files already exist; choose a new --out directory")
+            reviewers = list(RULE_REVIEWERS)
+            for path in args.reviewer_config:
+                config = _load(path, 64 * 1024)
+                if not isinstance(config, dict) or not isinstance(config.get("model"), dict):
+                    raise ValueError("reviewer config needs name, optional focus, and a model object")
+                reviewers.append((config.get("name"), ModelReviewer(config.get("name"), client_from_config(config["model"]),
+                                                                    config.get("focus", "general methods and evidence"))))
+            result = run_forum(_load(args.manifest, 64 * 1024 * 1024), args.topic, reviewers)
+            serialized = json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
+            for target, content in zip(targets, [serialized, render_forum_html(result)]):
+                with target.open("x", encoding="utf-8") as handle:
+                    handle.write(content)
+            print(json.dumps({"verdict": result["synthesis"]["verdict"], "posts": len(result["posts"]),
+                              "rejected": len(result["rejected"]), "concerns": result["synthesis"]["concern_counts"],
+                              "forum": str(targets[0]), "page": str(targets[1]),
+                              "content_digest": result["content_digest"]}, indent=2))
+        elif args.command == "forum-verify":
+            from .forum import verify_forum
+            result = verify_forum(_load(args.forum, 16 * 1024 * 1024), _load(args.manifest, 64 * 1024 * 1024))
+            print(json.dumps(result, indent=2))
+            return 0 if result["valid"] else 1
+        elif args.command == "panel":
+            from .panel import ModelPanelist, render_panel_html, run_panel
+            from .providers import client_from_config
+            out = Path(args.out)
+            out.mkdir(parents=True, exist_ok=True)
+            targets = [out / "panel.json", out / "panel.html"]
+            if any(p.exists() for p in targets):
+                raise ValueError("Output files already exist; choose a new --out directory")
+            panelists = {}
+            for path in args.panelist_config:
+                config = _load(path, 64 * 1024)
+                if not isinstance(config, dict) or not isinstance(config.get("model"), dict):
+                    raise ValueError("panelist config needs name, optional focus, and a model object")
+                panelists[config.get("name")] = ModelPanelist(client_from_config(config["model"]),
+                                                              config.get("focus", "methods, evidence and comparability across runs"))
+            unknown = set(panelists) - {name for name, _ in args.run}
+            if unknown:
+                raise ValueError(f"panelist config names no submitted run: {sorted(map(str, unknown))}")
+            entries = [(name, _load(path, 64 * 1024 * 1024), panelists.get(name)) for name, path in args.run]
+            result = run_panel(entries, args.topic)
+            serialized = json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
+            for target, content in zip(targets, [serialized, render_panel_html(result)]):
+                with target.open("x", encoding="utf-8") as handle:
+                    handle.write(content)
+            runs = result["synthesis"]["runs"]
+            print(json.dumps({"verdicts": {n: r["verdict"] for n, r in runs.items()},
+                              "conceded": {n: len(r["conceded"]) for n, r in runs.items()},
+                              "posts": len(result["posts"]), "rejected": len(result["rejected"]),
+                              "panel": str(targets[0]), "page": str(targets[1]),
+                              "content_digest": result["content_digest"]}, indent=2))
+        elif args.command == "panel-verify":
+            from .panel import verify_panel
+            manifests = {name: _load(path, 64 * 1024 * 1024) for name, path in args.run}
+            if len(manifests) != len(args.run):
+                raise ValueError("each researcher may be named once")
+            result = verify_panel(_load(args.panel, 16 * 1024 * 1024), manifests)
             print(json.dumps(result, indent=2))
             return 0 if result["valid"] else 1
         elif args.command == "gallery":

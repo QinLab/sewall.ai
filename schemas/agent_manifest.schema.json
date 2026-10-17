@@ -50,6 +50,19 @@
         "prior_content_digest": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/hash"}]},
         "previous_results_reused": {"const": false},
         "monitor": {"type": ["string", "null"], "maxLength": 100, "description": "Name of the trusted integrity monitor, if any; built-in digest checks always run."},
+        "code": {
+          "type": "object", "additionalProperties": false,
+          "description": "The code that ran: package version, git commit when run from a checkout, and a SHA-256 over the sewall sources.",
+          "required": ["sewall_version", "git_commit", "git_dirty", "source_sha256"],
+          "properties": {
+            "sewall_version": {"$ref": "#/$defs/text"},
+            "git_commit": {"anyOf": [{"type": "null"}, {"type": "string", "pattern": "^[0-9a-f]{40}$"}]},
+            "git_dirty": {"type": ["boolean", "null"]},
+            "source_sha256": {"$ref": "#/$defs/hash"}
+          }
+        },
+        "policy_enforcement": {"const": "evaluate_policy_per_external_action",
+                               "description": "Present when every external action was checked against its source profile; each decision is a policy_checked event."},
         "runtime": {
           "type": "object", "additionalProperties": false,
           "required": ["slurm_job_id", "partition", "hostname", "python_version"],
@@ -97,7 +110,7 @@
     "hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[a-f0-9]{64}$"},
     "uid": {"type": "string", "pattern": "^[1-9][0-9]{0,19}$", "not": {"pattern": "\\s"}},
     "database": {"enum": ["pubmed", "gds", "bioproject"]},
-    "sourceId": {"enum": ["eol", "ncbi_genotype", "gds", "bioproject", "alphaearth", "pubmed", "nuccore"]},
+    "sourceId": {"enum": ["eol", "ncbi_genotype", "gds", "bioproject", "alphaearth", "pubmed", "nuccore", "nuccore_sequences"]},
     "recordId": {"type": "string", "pattern": "^ncbi:(pubmed|gds|bioproject):[1-9][0-9]{0,19}$", "not": {"pattern": "\\s"}},
     "sourceUrl": {
       "type": "string", "format": "uri",
@@ -109,9 +122,9 @@
       "required": ["question", "max_actions", "max_model_calls", "max_records", "per_search", "max_seconds"],
       "properties": {
         "question": {"type": "string", "minLength": 1, "maxLength": 2000, "description": "Runtime additionally limits the UTF-8 representation to 4000 bytes."},
-        "max_actions": {"type": "integer", "minimum": 1, "maximum": 8},
-        "max_model_calls": {"type": "integer", "minimum": 2, "maximum": 10},
-        "max_records": {"type": "integer", "minimum": 1, "maximum": 15},
+        "max_actions": {"type": "integer", "minimum": 1, "maximum": 16},
+        "max_model_calls": {"type": "integer", "minimum": 2, "maximum": 18},
+        "max_records": {"type": "integer", "minimum": 1, "maximum": 30},
         "per_search": {"type": "integer", "minimum": 1, "maximum": 5},
         "max_seconds": {"type": "integer", "minimum": 1, "maximum": 600}
       }
@@ -284,9 +297,12 @@
     },
     "modelConfig": {
       "type": "object", "additionalProperties": false,
-      "required": ["project", "location", "model", "api", "api_version", "max_output_tokens", "timeout_seconds", "retries", "auth_method", "endpoint_id", "thinking_budget", "thinking_level"],
+      "required": ["location", "model", "api", "api_version", "max_output_tokens", "timeout_seconds", "retries", "auth_method", "endpoint_id", "thinking_budget", "thinking_level"],
+      "oneOf": [{"required": ["project"]}, {"required": ["project_sha256"]}],
       "properties": {
-        "project": {"$ref": "#/$defs/text"}, "location": {"$ref": "#/$defs/text"},
+        "project": {"$ref": "#/$defs/text"},
+        "project_sha256": {"type": "string", "pattern": "^[0-9a-f]{16}$"},
+        "location": {"$ref": "#/$defs/text"},
         "model": {"$ref": "#/$defs/text"}, "api": {"enum": ["gemini", "openai"]},
         "api_version": {"enum": ["v1", "v1beta1"]},
         "max_output_tokens": {"type": "integer", "minimum": 1, "maximum": 2048},
@@ -296,7 +312,7 @@
         "thinking_budget": {"type": ["integer", "null"], "minimum": 0, "maximum": 2048},
         "thinking_level": {"enum": [null, "MINIMAL", "LOW", "MEDIUM", "HIGH"]}
       },
-      "description": "Public configuration only. No credentials, authentication grants, or model-availability claims are encoded."
+      "description": "Public configuration only. No credentials, authentication grants, or model-availability claims are encoded. Newer runs record a truncated SHA-256 of the cloud project ID in place of the ID."
     },
     "modelCall": {
       "type": "object", "additionalProperties": false,
@@ -352,7 +368,7 @@
       "required": ["source_id", "status", "scope", "reason", "live_access_granted"],
       "properties": {
         "source_id": {"$ref": "#/$defs/sourceId"},
-        "status": {"enum": ["metadata_only", "unconfigured", "scope_limited"]},
+        "status": {"enum": ["metadata_only", "sequence_records", "unconfigured", "scope_limited"]},
         "scope": {"$ref": "#/$defs/text"}, "reason": {"$ref": "#/$defs/text"},
         "live_access_granted": {"const": false}
       }

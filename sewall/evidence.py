@@ -250,8 +250,9 @@ def _normalize(database, uid, record):
 def fetch_metadata(database: str, ids: list[str]) -> dict:
     """Fetch at most five public ESummary records, without retries or redirects.
 
-    ESearch and ESummary share an in-process rate limiter. Deployments sharing
-    one public IP must coordinate the NCBI request budget across processes.
+    ESearch and ESummary share an in-process rate limiter. An NCBI_API_KEY in the
+    environment is sent to NCBI but omitted from returned provenance. Deployments
+    sharing one public IP must coordinate the NCBI request budget across processes.
     Empty input produces an empty result without making a network request.
     """
     if not isinstance(database, str) or database not in DATABASES:
@@ -267,9 +268,11 @@ def fetch_metadata(database: str, ids: list[str]) -> dict:
         "version": "2.0", "retmax": str(len(ids)),
         "tool": "sewall_discover_prototype",
     }
-    request_url = ENDPOINT + "?" + urlencode(parameters)
+    provenance_url = ENDPOINT + "?" + urlencode(parameters)
+    key = ncbi.api_key()
+    request_url = ENDPOINT + "?" + urlencode({**parameters, "api_key": key}) if key else provenance_url
     provenance = {
-        "url": request_url if ids else None,
+        "url": provenance_url if ids else None,
         "retrieved_at": datetime.now(timezone.utc).isoformat(),
         "raw_sha256": None, "response_bytes": 0, "request_sent": bool(ids),
         "utility": "esummary", "format": "json", "version": "2.0",
@@ -284,7 +287,7 @@ def fetch_metadata(database: str, ids: list[str]) -> dict:
         opener = build_opener(ncbi._NoRedirect())
         try:
             with ncbi._REQUEST_LOCK:
-                pause = 0.35 - (ncbi.time.monotonic() - ncbi._LAST_REQUEST_AT)
+                pause = ncbi.interval(key) - (ncbi.time.monotonic() - ncbi._LAST_REQUEST_AT)
                 if pause > 0:
                     ncbi.time.sleep(pause)
                 ncbi._LAST_REQUEST_AT = ncbi.time.monotonic()

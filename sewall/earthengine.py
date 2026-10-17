@@ -3,7 +3,8 @@
 Two operations reduce public collections over a fixed, named site inside Earth
 Engine and return only small summaries:
 
-- chlorophyll_timeseries: per-scene mean NDCI over Sentinel-2 water pixels.
+- chlorophyll_timeseries: daily mean NDCI over clear Sentinel-2 pixels inside
+  permanent surface water, one mosaic per acquisition date.
 - alphaearth_context: the annual mean of the 64 AlphaEarth embedding bands.
 
 The planner names a site from SITES; it never supplies a geometry, a
@@ -14,6 +15,8 @@ project in EARTHENGINE_PROJECT. The project ID is never written to a result.
 
 Collections (Earth Engine Data Catalog, consulted 2026-10-05):
 https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED
+https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_CLOUD_SCORE_PLUS_V1_S2_HARMONIZED
+https://developers.google.com/earth-engine/datasets/catalog/JRC_GSW1_4_GlobalSurfaceWater
 https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL
 """
 
@@ -26,6 +29,10 @@ import re
 
 
 S2_COLLECTION = "COPERNICUS/S2_SR_HARMONIZED"
+CLOUD_SCORE_COLLECTION = "GOOGLE/CLOUD_SCORE_PLUS/V1/S2_HARMONIZED"
+WATER_IMAGE = "JRC/GSW1_4/GlobalSurfaceWater"
+WATER_ATTRIBUTION = ("Surface water from the EC JRC/Google Global Surface Water dataset "
+                     "(Pekel et al. 2016, Nature 540:418-422).")
 ALPHAEARTH_COLLECTION = "GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL"
 S2_ATTRIBUTION = "Contains modified Copernicus Sentinel data, processed in Google Earth Engine."
 ALPHAEARTH_ATTRIBUTION = "The AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind."
@@ -36,17 +43,33 @@ SITES = {
         "label": "Lafayette River, Norfolk, Virginia (tidal tributary of the Elizabeth River)",
         "bbox": [-76.32, 36.88, -76.25, 36.915],
         "note": "Approximate bounding box drawn for this prototype; it includes shoreline and land, "
-                "so Sentinel-2 summaries keep only pixels classified as water.",
+                "so Sentinel-2 summaries keep only permanent surface-water pixels.",
+    },
+    "york-river-lower": {
+        "label": "Lower York River, Virginia, from the mouth to about Clay Bank",
+        "bbox": [-76.66, 37.22, -76.38, 37.42],
+        "alphaearth_scale_meters": 30,
+        "note": "Approximate bounding box drawn for this prototype around the reach of the 2022 bloom "
+                "simulated by Yu et al. (2025); it includes shoreline and land, so Sentinel-2 summaries "
+                "keep only permanent surface-water pixels.",
     },
 }
 MAX_SCENES = 60
 MAX_WINDOW_DAYS = 366
 MAX_CLOUD_PERCENT = 60
+# Per-pixel screens: permanent water from JRC occurrence, clear sky from Cloud Score+ cs_cdf.
+WATER_OCCURRENCE_PERCENT = 90
+CLEAR_THRESHOLD = 0.6
+# 100 pixels at 20 m is 4 ha of clear water; fewer gives no daily NDCI value.
+MIN_WATER_PIXELS = 100
+MAX_TILES_PER_DAY = 8
 S2_FIRST_DATE = date(2017, 3, 28)
 ALPHAEARTH_FIRST_YEAR = 2017
 S2_SCALE_METERS = 20
 ALPHAEARTH_SCALE_METERS = 10
 DEADLINE_MILLISECONDS = 60_000
+# Earth Engine counts maxPixels over all bands, so a multiband reduction scales the limit by band count.
+MAX_PIXELS_PER_BAND = 10_000_000
 BANDS = tuple(f"A{index:02d}" for index in range(64))
 _DATE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}\Z", re.ASCII)
 _YEAR = re.compile(r"20[0-9]{2}\Z", re.ASCII)
@@ -152,7 +175,16 @@ def _features(value):
 
 
 def chlorophyll_timeseries(site: str, start: str, end: str, max_scenes: int = 20, compute=None) -> dict:
-    """Per-scene mean NDCI, (B5 - B4) / (B5 + B4), over Sentinel-2 pixels classified as water."""
+    """Daily mean NDCI, (B5 - B4) / (B5 + B4), over clear Sentinel-2 pixels inside permanent surface water.
+
+    Tiles under the scene cloud limit are grouped by UTC acquisition date and
+    mosaicked, so a site that spans two tiles yields one value per day. A pixel
+    counts only if JRC Global Surface Water marks it as water in at least
+    WATER_OCCURRENCE_PERCENT of observations and its Cloud Score+ cs_cdf is at
+    least CLEAR_THRESHOLD. A day with fewer than MIN_WATER_PIXELS such pixels
+    keeps its pixel count but gets no NDCI value. At most max_scenes days are
+    returned, earliest first; truncated reports whether more days were available.
+    """
     spec = check_site(site)
     first, last = check_window(start, end)
     if type(max_scenes) is not int or not 1 <= max_scenes <= MAX_SCENES:
@@ -162,50 +194,77 @@ def chlorophyll_timeseries(site: str, start: str, end: str, max_scenes: int = 20
         region = ee.Geometry.Rectangle(spec["bbox"])
         everything = (ee.ImageCollection(S2_COLLECTION).filterBounds(region)
                       .filterDate(first.isoformat(), date.fromordinal(last.toordinal() + 1).isoformat()))
-        candidates = everything.filter(ee.Filter.lte("CLOUDY_PIXEL_PERCENTAGE", MAX_CLOUD_PERCENT))
-        chosen = candidates.sort("system:time_start").limit(max_scenes)
+        candidates = (everything.filter(ee.Filter.lte("CLOUDY_PIXEL_PERCENTAGE", MAX_CLOUD_PERCENT))
+                      .linkCollection(ee.ImageCollection(CLOUD_SCORE_COLLECTION), ["cs_cdf"])
+                      .map(lambda image: image.set("day", ee.Date(image.get("system:time_start")).format("YYYY-MM-dd"))))
+        days = ee.List(candidates.aggregate_array("day")).distinct().sort()
+        # occurrence is masked where water was never seen, and its mask equals its value; unmask before thresholding.
+        water = ee.Image(WATER_IMAGE).select("occurrence").unmask(0).gte(WATER_OCCURRENCE_PERCENT)
 
-        def summarize(image):
-            water = image.select("SCL").eq(6)
-            ndci = image.normalizedDifference(["B5", "B4"]).rename("ndci").updateMask(water)
+        def summarize(day):
+            tiles = candidates.filter(ee.Filter.eq("day", day))
+            # Mask clouds per tile first, so a clear pixel in one tile is not hidden by a cloudy one in another.
+            mosaic = tiles.map(lambda image: image.updateMask(image.select("cs_cdf").gte(CLEAR_THRESHOLD))).mosaic()
+            ndci = mosaic.normalizedDifference(["B5", "B4"]).rename("ndci").updateMask(water)
             stats = ndci.reduceRegion(reducer=ee.Reducer.mean().combine(ee.Reducer.count(), sharedInputs=True),
-                                      geometry=region, scale=S2_SCALE_METERS, maxPixels=10_000_000)
-            return ee.Feature(None, {"image_id": image.get("system:index"),
-                                     "time_start": image.get("system:time_start"),
-                                     "cloudy_pixel_percentage": image.get("CLOUDY_PIXEL_PERCENTAGE"),
+                                      geometry=region, scale=S2_SCALE_METERS, maxPixels=MAX_PIXELS_PER_BAND)
+            return ee.Feature(None, {"day": day, "image_ids": tiles.aggregate_array("system:index"),
+                                     "cloudy_pixel_percentage": tiles.aggregate_max("CLOUDY_PIXEL_PERCENTAGE"),
                                      "ndci_mean": stats.get("ndci_mean"), "water_pixels": stats.get("ndci_count")})
 
         compute = ee.Dictionary({"scenes_in_window": everything.size(), "scenes_under_cloud_limit": candidates.size(),
-                                 "scenes": chosen.map(summarize).toList(max_scenes)})
+                                 "days_under_cloud_limit": days.size(),
+                                 "scenes": days.slice(0, max_scenes).map(summarize)})
     info, provenance = _fetch(compute)
-    scenes = []
+    scenes, tiles_returned = [], 0
     for item in _features(info.get("scenes")):
-        image_id, started = item.get("image_id"), item.get("time_start")
-        if not isinstance(image_id, str) or not _IMAGE_ID.fullmatch(image_id) or type(started) is not int:
-            raise EarthEngineError("Earth Engine returned an invalid scene identifier or time")
+        day, image_ids = item.get("day"), item.get("image_ids")
+        if (not isinstance(day, str) or not _DATE.fullmatch(day) or not isinstance(image_ids, list)
+                or not 1 <= len(image_ids) <= MAX_TILES_PER_DAY
+                or any(not isinstance(value, str) or not _IMAGE_ID.fullmatch(value) for value in image_ids)):
+            raise EarthEngineError("Earth Engine returned an invalid day or tile identifier")
+        try:
+            date.fromisoformat(day)
+        except ValueError:
+            raise EarthEngineError("Earth Engine returned an invalid day") from None
         pixels = _number(item.get("water_pixels"), 0, 1e8)
-        scenes.append({"image_id": image_id,
-                       "date": datetime.fromtimestamp(started / 1000, timezone.utc).date().isoformat(),
+        pixels = int(pixels) if pixels is not None else 0
+        mean = None if item.get("ndci_mean") is None else round(_number(item["ndci_mean"], -1, 1), 6)
+        tiles_returned += len(image_ids)
+        scenes.append({"date": day, "image_ids": sorted(image_ids),
                        "cloudy_pixel_percentage": _number(item.get("cloudy_pixel_percentage"), 0, 100),
-                       "water_pixels": int(pixels) if pixels is not None else 0,
-                       "ndci_mean": None if item.get("ndci_mean") is None else round(_number(item["ndci_mean"], -1, 1), 6)})
-    totals = {key: _number(info.get(key), 0, 1e6) for key in ("scenes_in_window", "scenes_under_cloud_limit")}
-    if any(type(value) is not int for value in totals.values()) or len(scenes) > totals["scenes_under_cloud_limit"]:
+                       "water_pixels": pixels, "ndci_mean": mean if pixels >= MIN_WATER_PIXELS else None})
+    totals = {key: _number(info.get(key), 0, 1e6)
+              for key in ("scenes_in_window", "scenes_under_cloud_limit", "days_under_cloud_limit")}
+    dates = [scene["date"] for scene in scenes]
+    if (any(type(value) is not int for value in totals.values())
+            or not totals["days_under_cloud_limit"] <= totals["scenes_under_cloud_limit"] <= totals["scenes_in_window"]
+            or len(scenes) > min(max_scenes, totals["days_under_cloud_limit"])
+            or tiles_returned > totals["scenes_under_cloud_limit"] or dates != sorted(set(dates))
+            or any(not first.isoformat() <= day <= last.isoformat() for day in dates)):
         raise EarthEngineError("Earth Engine returned inconsistent scene counts")
     valid = [scene["ndci_mean"] for scene in scenes if scene["ndci_mean"] is not None]
     return {"operation": "chlorophyll_timeseries", "dataset": S2_COLLECTION, "site": site, "site_label": spec["label"],
             "bbox": spec["bbox"], "start": first.isoformat(), "end": last.isoformat(),
-            "index": "NDCI = (B5 - B4) / (B5 + B4)", "mask": "Scene classification (SCL) class 6, water",
+            "index": "NDCI = (B5 - B4) / (B5 + B4)",
+            "mask": (f"JRC Global Surface Water occurrence >= {WATER_OCCURRENCE_PERCENT}% "
+                     f"and Cloud Score+ cs_cdf >= {CLEAR_THRESHOLD}"),
+            "water_mask_dataset": WATER_IMAGE, "cloud_score_dataset": CLOUD_SCORE_COLLECTION,
+            "composite": "one mosaic per UTC acquisition date", "min_water_pixels": MIN_WATER_PIXELS,
             "scale_meters": S2_SCALE_METERS, "cloud_limit_percent": MAX_CLOUD_PERCENT, **totals,
-            "scenes_returned": len(scenes), "scenes_with_water_pixels": len(valid),
+            "scenes_returned": len(scenes), "truncated": totals["days_under_cloud_limit"] > len(scenes),
+            "scenes_with_water_pixels": len(valid),
             "ndci_range": [min(valid), max(valid)] if valid else None, "scenes": scenes,
-            "attribution": S2_ATTRIBUTION, "requests": [provenance], "response_bytes": provenance["response_bytes"]}
+            "attribution": S2_ATTRIBUTION + " " + WATER_ATTRIBUTION, "requests": [provenance],
+            "response_bytes": provenance["response_bytes"]}
 
 
 def alphaearth_context(site: str, year: str, compute=None) -> dict:
     """Annual mean of the 64 AlphaEarth embedding bands over a named site."""
     spec = check_site(site)
     value = check_year(year)
+    # Larger sites reduce at a coarser scale so the 64-band mean finishes within the request deadline.
+    scale = spec.get("alphaearth_scale_meters", ALPHAEARTH_SCALE_METERS)
     if compute is None:
         ee = _initialize()
         region = ee.Geometry.Rectangle(spec["bbox"])
@@ -213,9 +272,10 @@ def alphaearth_context(site: str, year: str, compute=None) -> dict:
                   .filterDate(f"{value}-01-01", f"{value + 1}-01-01"))
         first = ee.Image(images.first())
         stats = images.mosaic().select(list(BANDS)).reduceRegion(
-            reducer=ee.Reducer.mean(), geometry=region, scale=ALPHAEARTH_SCALE_METERS, maxPixels=10_000_000)
+            reducer=ee.Reducer.mean(), geometry=region, scale=scale,
+            maxPixels=MAX_PIXELS_PER_BAND * len(BANDS))
         pixels = images.mosaic().select("A00").reduceRegion(
-            reducer=ee.Reducer.count(), geometry=region, scale=ALPHAEARTH_SCALE_METERS, maxPixels=10_000_000)
+            reducer=ee.Reducer.count(), geometry=region, scale=scale, maxPixels=MAX_PIXELS_PER_BAND)
         compute = ee.Dictionary({"images": images.size(), "means": stats, "pixels": pixels.get("A00"),
                                  "dataset_version": first.get("DATASET_VERSION"),
                                  "model_version": first.get("MODEL_VERSION")})
@@ -235,7 +295,7 @@ def alphaearth_context(site: str, year: str, compute=None) -> dict:
                 for key in ("dataset_version", "model_version")}
     return {"operation": "alphaearth_context", "dataset": ALPHAEARTH_COLLECTION, "site": site,
             "site_label": spec["label"], "bbox": spec["bbox"], "year": value, "images": images,
-            "scale_meters": ALPHAEARTH_SCALE_METERS, "pixels": int(pixels) if pixels is not None else 0,
+            "scale_meters": scale, "pixels": int(pixels) if pixels is not None else 0,
             "mean_embedding": vector if present else None,
             "mean_vector_norm": round(math.sqrt(sum(item * item for item in present)), 6) if present else None,
             **{key: str(item)[:100] if item is not None else None for key, item in versions.items()},

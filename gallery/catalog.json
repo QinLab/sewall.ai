@@ -1,24 +1,144 @@
 {
   "title": "Sewall.ai recorded runs",
-  "description": "Recorded Sewall.ai workflow runs, each verified offline before publication. Live runs queried public NCBI metadata through a fixed script, without a model. Synthetic runs use fixture records and simulated policies. Open a report to inspect the graph, every source record and every event. No run establishes a biological finding.",
+  "description": "Recorded Sewall.ai workflow runs, each verified offline before publication. Live runs queried public NCBI, Earth Engine, NOAA and USGS sources through a fixed script, without a model. Review forums, panels and release gates use rule-based reviewers. Synthetic runs use fixture records and simulated policies. Open a report to inspect the graph, every source record and every event. No run establishes a biological finding.",
   "runs": [
-    {"slug": "live-bloom", "title": "Chesapeake bloom: public metadata map (live NCBI)", "manifest": "runs/live-bloom.json",
-     "note": "Scripted PubMed and BioProject searches plus GenBank inventories for two bloom-forming dinoflagellates. The script, not a model, chose the actions."},
-    {"slug": "live-safe-stop", "title": "Chesapeake bloom: controlled safe stop (live NCBI)", "manifest": "runs/live-safe-stop.json",
-     "note": "The same question with one labeled fault injected after the first GenBank inventory. The run stops, quarantines the affected nodes and withholds its summary."},
-    {"slug": "synthetic-coastal", "title": "Coastal plants: cross-scale graph (synthetic)", "manifest": "runs/synthetic-coastal.json",
-     "note": "Fixture records across genotype, expression, trait and environmental sources with deterministic replay."},
-    {"slug": "synthetic-missing-link", "title": "Coastal plants: missing link, run abstains (synthetic)", "manifest": "runs/synthetic-missing-link.json",
-     "note": "A taxon match cannot stand in for missing specimen evidence, so the run abstains instead of joining on a guess."},
-    {"slug": "synthetic-policy-denied", "title": "Coastal plants: denied policy, run abstains (synthetic)", "manifest": "runs/synthetic-policy-denied.json",
-     "note": "A simulated data-use policy prohibits the stated purpose. The affected source is blocked and the run abstains."},
-    {"slug": "synthetic-future-leakage", "title": "Coastal plants: temporal leakage, run abstains (synthetic)", "manifest": "runs/synthetic-future-leakage.json",
-     "note": "A feature interval or its availability date falls after the historical forecast cutoff, so the run abstains."},
-    {"slug": "safety-clean", "title": "Safety supervisor: clean run (synthetic)", "manifest": "runs/safety-clean.json",
-     "note": "The integrity supervisor completes without a critique."},
-    {"slug": "safety-critical-critique", "title": "Safety supervisor: critical critique (synthetic)", "manifest": "runs/safety-critical-critique.json",
-     "note": "A critical critique stops dispatch and withdraws dependent outputs."},
-    {"slug": "safety-tampered-evidence", "title": "Safety supervisor: tampered evidence (synthetic)", "manifest": "runs/safety-tampered-evidence.json",
-     "note": "Changed evidence fails its digest check and the run stops safely."}
+    {
+      "slug": "york-2022",
+      "title": "York River 2022: satellite chlorophyll proxy with review and release gate (live Earth Engine)",
+      "manifest": "runs/york-2022.json",
+      "forum": "runs/york-2022-forum.json",
+      "gate": "runs/york-2022-gate.json",
+      "note": "Scripted Sentinel-2 NDCI and AlphaEarth summaries over the lower York River during the documented 2022 Margalefidinium polykrikoides bloom, with literature searches. Rule-based reviewers critique the run; the release gate holds the result while a major concern is contested. Run on October 14, 2026 with the earlier per-scene Sentinel-2 scene classification (SCL) water mask; see the revised-mask entry."
+    },
+    {
+      "slug": "york-2022-30m",
+      "title": "York River 2022 at 30 m: release gate without review (live Earth Engine)",
+      "manifest": "runs/york-2022-30m.json",
+      "gate": "runs/york-2022-30m-gate.json",
+      "note": "The same site at 30 m AlphaEarth scale. With no review forum, the gate holds every monthly NDCI summary and the result."
+    },
+    {
+      "slug": "lafayette-2022",
+      "title": "Lafayette River 2022: satellite chlorophyll proxy with review and release gate (live Earth Engine)",
+      "manifest": "runs/lafayette-2022.json",
+      "forum": "runs/lafayette-2022-forum.json",
+      "gate": "runs/lafayette-2022-gate.json",
+      "note": "Scripted Sentinel-2 NDCI and AlphaEarth summaries over the Lafayette River across summer 2022. Rule-based reviewers raise minor concerns; the gate releases outputs with limitations. Run on October 14, 2026 with the earlier per-scene Sentinel-2 scene classification (SCL) water mask; see the revised-mask entry."
+    },
+    {
+      "slug": "york-2022-jrc",
+      "title": "York River 2022, revised mask: daily mosaics over clear permanent water (live Earth Engine)",
+      "manifest": "runs/york-2022-jrc.json",
+      "forum": "runs/york-2022-jrc-forum.json",
+      "gate": "runs/york-2022-jrc-gate.json",
+      "note": "The York River run repeated on October 16, 2026 with the revised Sentinel-2 Skill: one mosaic per day, JRC Global Surface Water permanent-water mask, per-pixel Cloud Score+ screening and a 100-pixel minimum. Rule-based reviewers critique the run; the release gate holds the result while a major concern is contested."
+    },
+    {
+      "slug": "lafayette-2022-jrc",
+      "title": "Lafayette River 2022, revised mask: daily mosaics over clear permanent water (live Earth Engine)",
+      "manifest": "runs/lafayette-2022-jrc.json",
+      "forum": "runs/lafayette-2022-jrc-forum.json",
+      "gate": "runs/lafayette-2022-jrc-gate.json",
+      "note": "The Lafayette River run repeated on October 16, 2026 with the revised Sentinel-2 Skill. Rule-based reviewers raise minor concerns; the gate releases outputs with limitations."
+    },
+    {
+      "slug": "consult-york-2022",
+      "title": "York River 2022: lab manager plan from rule-based dataset experts (live)",
+      "manifest": "runs/consult-york-2022.json",
+      "forum": "runs/consult-york-2022-forum.json",
+      "note": "Rule-based dataset-expert agents proposed Skill actions; the lab manager merged them into a capped script that the controller checked and ran."
+    },
+    {
+      "slug": "flood-chesapeake",
+      "title": "Chesapeake flood sensors: six areas with release gate (live NOAA and USGS)",
+      "manifest": "runs/flood-chesapeake.json",
+      "gate": "runs/flood-chesapeake-gate.json",
+      "note": "Latest public water levels and flood categories from NOAA NWPS, CO-OPS and USGS. Status no_evidence means no literature records; sensor readings are summaries. Provisional values and missing USGS flood thresholds release with limitations."
+    },
+    {
+      "slug": "growth-mpoly",
+      "title": "M. polykrikoides growth-model evidence: lab manager consultation (live)",
+      "manifest": "runs/growth-mpoly.json",
+      "note": "Rule-based growth, NCBI, Earth Engine and EOL experts mapped a growth-model question onto searches for growth responses, interactions and LSU records (Figure 5 of the proposal)."
+    },
+    {
+      "slug": "growth-amon",
+      "title": "A. monilatum growth-model evidence: lab manager consultation (live)",
+      "manifest": "runs/growth-amon.json",
+      "note": "The same consultation for Alexandrium monilatum, where public growth-response and pathway evidence is thin."
+    },
+    {
+      "slug": "growth-community",
+      "title": "M. polykrikoides community interactions: lab manager consultation (live)",
+      "manifest": "runs/growth-community.json",
+      "note": "Competition, allelopathy and bacterial interaction searches for the community-loss terms of a growth model."
+    },
+    {
+      "slug": "live-bloom",
+      "title": "Chesapeake bloom: public metadata map (live NCBI)",
+      "manifest": "runs/live-bloom.json",
+      "note": "Scripted PubMed and BioProject searches plus GenBank inventories for two bloom-forming dinoflagellates. The script, not a model, chose the actions."
+    },
+    {
+      "slug": "live-safe-stop",
+      "title": "Chesapeake bloom: controlled safe stop (live NCBI)",
+      "manifest": "runs/live-safe-stop.json",
+      "note": "The same question with one labeled fault injected after the first GenBank inventory. The run stops, quarantines the affected nodes and withholds its summary."
+    },
+    {
+      "slug": "synthetic-coastal",
+      "title": "Coastal plants: cross-scale graph (synthetic)",
+      "manifest": "runs/synthetic-coastal.json",
+      "note": "Fixture records across genotype, expression, trait and environmental sources with deterministic replay."
+    },
+    {
+      "slug": "synthetic-missing-link",
+      "title": "Coastal plants: missing link, run abstains (synthetic)",
+      "manifest": "runs/synthetic-missing-link.json",
+      "note": "A taxon match cannot stand in for missing specimen evidence, so the run abstains instead of joining on a guess."
+    },
+    {
+      "slug": "synthetic-policy-denied",
+      "title": "Coastal plants: denied policy, run abstains (synthetic)",
+      "manifest": "runs/synthetic-policy-denied.json",
+      "note": "A simulated data-use policy prohibits the stated purpose. The affected source is blocked and the run abstains."
+    },
+    {
+      "slug": "synthetic-future-leakage",
+      "title": "Coastal plants: temporal leakage, run abstains (synthetic)",
+      "manifest": "runs/synthetic-future-leakage.json",
+      "note": "A feature interval or its availability date falls after the historical forecast cutoff, so the run abstains."
+    },
+    {
+      "slug": "safety-clean",
+      "title": "Safety supervisor: clean run (synthetic)",
+      "manifest": "runs/safety-clean.json",
+      "note": "The integrity supervisor completes without a critique."
+    },
+    {
+      "slug": "safety-critical-critique",
+      "title": "Safety supervisor: critical critique (synthetic)",
+      "manifest": "runs/safety-critical-critique.json",
+      "note": "A critical critique stops dispatch and withdraws dependent outputs."
+    },
+    {
+      "slug": "safety-tampered-evidence",
+      "title": "Safety supervisor: tampered evidence (synthetic)",
+      "manifest": "runs/safety-tampered-evidence.json",
+      "note": "Changed evidence fails its digest check and the run stops safely."
+    }
+  ],
+  "panels": [
+    {
+      "slug": "panel-2022",
+      "title": "Cross-run critique panel: York, Lafayette and the York consultation (2022)",
+      "record": "runs/panel-2022.json",
+      "runs": {
+        "york": "york-2022",
+        "lafayette": "lafayette-2022",
+        "consult": "consult-york-2022"
+      },
+      "note": "Rule-based researcher agents critique only each other's runs; owners answer or concede, and the moderator gives each run its own verdict, hash-chained to every manifest."
+    }
   ]
 }

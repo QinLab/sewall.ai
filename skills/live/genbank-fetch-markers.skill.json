@@ -1,0 +1,41 @@
+{
+  "$schema": "../../schemas/executable_skill.schema.json",
+  "schema_version": "0.2.0",
+  "skill_id": "genbank.fetch-markers",
+  "version": "0.1.0",
+  "name": "Fetch public GenBank marker sequences for a taxon",
+  "description": "Fetch at most 100 public non-TSA NCBI Nucleotide (GenBank) records of one marker gene for one taxon, with accession, isolate or strain, country and collection date. Sequences stay in the run record; the planner sees only summaries.",
+  "operation": "fetch_markers",
+  "implementation": "sewall.agent:genbank_fetch_markers",
+  "planner_template": "{\"action\":\"fetch_markers\",\"taxon\":\"scientific name or NCBI taxonomy ID\",\"marker\":\"lsu|its|ssu|coi\",\"reason\":\"why\"}",
+  "planner_guidance": [
+    "Use fetch_markers when sequences of one marker are needed for a later step such as assign_ribotype; use taxon_inventory when counts are enough.",
+    "LSU is the marker that defines Margalefidinium polykrikoides ribotypes; ITS resolves some genera more finely.",
+    "Returned records are deposited sequences with submitter metadata; they do not establish presence or abundance at any site."
+  ],
+  "arguments": [
+    {"name": "taxon", "type": "string", "max_length": 100,
+     "description": "A numeric NCBI taxonomy ID, or a scientific name of one to three words starting with a capitalized genus."},
+    {"name": "marker", "type": "string", "enum": ["lsu", "its", "ssu", "coi"],
+     "description": "Marker gene matched by title keywords."}
+  ],
+  "sources": ["NCBI Nucleotide (GenBank) through E-utilities ESearch, ESummary and EFetch"],
+  "external_actions": true,
+  "evidence": {
+    "method": "title_keyword_marker_records",
+    "supports_causality": false,
+    "limitations": [
+      "At most 100 records in ESearch order; the result says when more exist.",
+      "Marker selection matches title keywords; operon records spanning several markers are returned whole.",
+      "TSA transcriptome contigs are excluded.",
+      "Isolate, location and date qualifiers are submitter metadata and are often missing."
+    ]
+  },
+  "policy_constraints": {
+    "egress": "public_sequence_records",
+    "may_grant_access": false,
+    "may_sign_agreements": false,
+    "attribution": "Cite GenBank accessions for any sequence used. NCBI disclaimer: https://www.ncbi.nlm.nih.gov/About/disclaimer.html"
+  },
+  "validation": {"tests": ["tests/test_markers.py", "tests/test_skills.py"]}
+}

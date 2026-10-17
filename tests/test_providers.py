@@ -17,6 +17,7 @@ from sewall.providers import (
     client_from_config,
     recorded_config,
 )
+from sewall.gallery import scan
 from test_llm import Response
 
 SECRET = "sk-test-not-a-real-key"
@@ -122,6 +123,13 @@ class ConfigTests(unittest.TestCase):
                 client_from_config(config, allow_endpoint_fields=False)
         self.assertIsInstance(client_from_config({"provider": "openai", "model": "gpt-example"},
                                                  allow_endpoint_fields=False), OpenAIClient)
+        with self.assertRaisesRegex(ValueError, "project_env"):
+            client_from_config({"project_env": "HOME", "location": "us-central1", "model": "gemini-example"},
+                               allow_endpoint_fields=False)
+        with patch("sewall.llm.VertexClient", lambda config: Mock(config=config)):
+            recorded = recorded_config(client_from_config(vertex))
+        self.assertNotIn("example-project", json.dumps(recorded))
+        self.assertEqual(scan(json.dumps({"context": {"models": {"planner": recorded}}})), [])
         recorded = recorded_config(openai(api_key_env="LAB_KEY"))
         self.assertEqual(recorded["api_key_env"], "LAB_KEY")
         self.assertEqual(recorded_config(Mock(config="other")), None)

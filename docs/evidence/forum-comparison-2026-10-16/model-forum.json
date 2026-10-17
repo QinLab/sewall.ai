@@ -1,0 +1,534 @@
+{
+  "schema_version": "0.1.0",
+  "kind": "sewall_review_forum",
+  "manifest_digest": "753bc2e424bd678b923626e517c63a973f9bae5c6eeaac9f1ba3b8e226daded8",
+  "question": "Did the Sentinel-2 chlorophyll proxy over the lower York River rise during the documented August to September 2022 Margalefidinium polykrikoides bloom, and what landscape context does AlphaEarth give?",
+  "topic": "Did the Sentinel-2 chlorophyll proxy over the lower York River rise during the documented August to September 2022 Margalefidinium polykrikoides bloom, and what landscape context does AlphaEarth give?",
+  "reviewers": [
+    {
+      "name": "methods",
+      "type": "rule",
+      "focus": "Provenance and completeness of the run itself."
+    },
+    {
+      "name": "ncbi",
+      "type": "rule",
+      "focus": "Literature and sequence records."
+    },
+    {
+      "name": "earthengine",
+      "type": "rule",
+      "focus": "Satellite summaries."
+    },
+    {
+      "name": "ecology",
+      "type": "rule",
+      "focus": "Whether the evidence can speak to the biological question."
+    },
+    {
+      "name": "gemini-methods",
+      "type": "model",
+      "focus": "remote sensing methods: NDCI as a chlorophyll proxy, scene counts, water masking, cloud screening, and what the summaries can and cannot show"
+    },
+    {
+      "name": "llama-ecology",
+      "type": "model",
+      "focus": "harmful algal bloom ecology in the York River and whether the run's evidence supports any statement about Margalefidinium polykrikoides blooms"
+    }
+  ],
+  "rule_only": false,
+  "posts": [
+    {
+      "id": "post:1",
+      "round": 1,
+      "author": "methods",
+      "kind": "concern",
+      "text": "The run's metadata review covers literature records only; 7 computed observations (satellite or sensor summaries) were never reviewed.",
+      "refs": [
+        "review",
+        "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01",
+        "earthengine:chlorophyll_timeseries:2022-07-31:york-river-lower:2022-07-01",
+        "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01",
+        "earthengine:chlorophyll_timeseries:2022-10-31:york-river-lower:2022-10-01",
+        "earthengine:alphaearth_context:york-river-lower:2021",
+        "earthengine:alphaearth_context:york-river-lower:2022"
+      ],
+      "severity": "minor",
+      "topic": "review-omits-observations",
+      "prev": "753bc2e424bd678b923626e517c63a973f9bae5c6eeaac9f1ba3b8e226daded8",
+      "hash": "de385a8e486408d298502d5c60e8cc29db5dfc1a1ab03cf364931472c9e3bfda"
+    },
+    {
+      "id": "post:2",
+      "round": 1,
+      "author": "methods",
+      "kind": "support",
+      "text": "Every action, observation and policy decision is a node in a digest-verified graph, so the run can be replayed and audited.",
+      "refs": [
+        "question",
+        "result"
+      ],
+      "topic": "verified-chain",
+      "prev": "de385a8e486408d298502d5c60e8cc29db5dfc1a1ab03cf364931472c9e3bfda",
+      "hash": "a15372c728a521d9ad615ca678b50c8917e41c467309e72ac00fd01003a125ff"
+    },
+    {
+      "id": "post:3",
+      "round": 1,
+      "author": "methods",
+      "kind": "question",
+      "text": "How many usable water scenes support each monthly NDCI value, and are any months too sparse to compare?",
+      "refs": [
+        "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01",
+        "earthengine:chlorophyll_timeseries:2022-07-31:york-river-lower:2022-07-01",
+        "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01",
+        "earthengine:chlorophyll_timeseries:2022-10-31:york-river-lower:2022-10-01"
+      ],
+      "topic": "scene-counts",
+      "prev": "a15372c728a521d9ad615ca678b50c8917e41c467309e72ac00fd01003a125ff",
+      "hash": "1089ea9c392d30b75ed74e5009178fcdb24ac15165ebc086699efc691bb5831f"
+    },
+    {
+      "id": "post:4",
+      "round": 1,
+      "author": "ncbi",
+      "kind": "support",
+      "text": "3 public literature records were retrieved and each is a node with its source URL.",
+      "refs": [
+        "ncbi:pubmed:38830711",
+        "ncbi:pubmed:35550296",
+        "ncbi:pubmed:34303516"
+      ],
+      "topic": "records-present",
+      "prev": "1089ea9c392d30b75ed74e5009178fcdb24ac15165ebc086699efc691bb5831f",
+      "hash": "6c699c178d4554158cbf70e0d043e1ecabd658d25d35b6707d5099a41122102a"
+    },
+    {
+      "id": "post:5",
+      "round": 1,
+      "author": "ncbi",
+      "kind": "limitation",
+      "text": "Records are metadata only: titles and summaries, no full text, sequences or measurements.",
+      "refs": [
+        "policy:pubmed"
+      ],
+      "topic": "metadata-only",
+      "prev": "6c699c178d4554158cbf70e0d043e1ecabd658d25d35b6707d5099a41122102a",
+      "hash": "6fd8943594418449ee09413a873b42b0395d4409401fdfc0deec5ecd918870ae"
+    },
+    {
+      "id": "post:6",
+      "round": 1,
+      "author": "earthengine",
+      "kind": "limitation",
+      "text": "NDCI is a chlorophyll proxy from red-edge reflectance; it cannot identify a species or confirm a bloom.",
+      "refs": [
+        "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01"
+      ],
+      "topic": "ndci-proxy",
+      "prev": "6fd8943594418449ee09413a873b42b0395d4409401fdfc0deec5ecd918870ae",
+      "hash": "e6d5f45c3e60036fa8d5ec20622fff65d2965e28e4207973b4f51f7ed969a12b"
+    },
+    {
+      "id": "post:7",
+      "round": 1,
+      "author": "earthengine",
+      "kind": "limitation",
+      "text": "AlphaEarth features are learned embeddings, not physical measurements; they were reduced at 30 m.",
+      "refs": [
+        "earthengine:alphaearth_context:york-river-lower:2021",
+        "earthengine:alphaearth_context:york-river-lower:2022"
+      ],
+      "topic": "alphaearth-learned",
+      "prev": "e6d5f45c3e60036fa8d5ec20622fff65d2965e28e4207973b4f51f7ed969a12b",
+      "hash": "9f48d5c5202b2a4e3bb1e6f840850f9fe11c718f86dea939da417de4802c2450"
+    },
+    {
+      "id": "post:8",
+      "round": 1,
+      "author": "ecology",
+      "kind": "concern",
+      "text": "The run holds no in situ cell count or species observation for the bloom, so the satellite signal cannot be attributed to the named organism.",
+      "refs": [
+        "question"
+      ],
+      "severity": "major",
+      "topic": "no-in-situ",
+      "prev": "9f48d5c5202b2a4e3bb1e6f840850f9fe11c718f86dea939da417de4802c2450",
+      "hash": "c5e573e0da6e1689416a3449ad44ad229bc8194e09a3ac3a3ad6b170c2e35814"
+    },
+    {
+      "id": "post:9",
+      "round": 1,
+      "author": "gemini-methods",
+      "kind": "concern",
+      "text": "The `scenes_with_water_pixels` count does not specify the quality of these scenes (e.g., cloud cover, sun glint). A scene with water pixels might still have significant cloud obstruction over the area of interest, affecting the reliability of the NDCI range.",
+      "refs": [
+        "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01",
+        "earthengine:chlorophyll_timeseries:2022-07-31:york-river-lower:2022-07-01",
+        "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01",
+        "earthengine:chlorophyll_timeseries:2022-10-31:york-river-lower:2022-10-01"
+      ],
+      "severity": "minor",
+      "topic": "scene-quality",
+      "prev": "c5e573e0da6e1689416a3449ad44ad229bc8194e09a3ac3a3ad6b170c2e35814",
+      "hash": "fdc1681a70b7cb61a9321837abbd9e1d94f51e5319f56363bf44f39d749c3fb3"
+    },
+    {
+      "id": "post:10",
+      "round": 1,
+      "author": "llama-ecology",
+      "kind": "concern",
+      "text": "The run's chlorophyll timeseries observations do not provide clear evidence of a rise in chlorophyll levels during the August to September 2022 Margalefidinium polykrikoides bloom.",
+      "refs": [
+        "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01"
+      ],
+      "severity": "major",
+      "topic": "chlorophyll-trend",
+      "prev": "fdc1681a70b7cb61a9321837abbd9e1d94f51e5319f56363bf44f39d749c3fb3",
+      "hash": "304ec31c476a19e46020b263062ad508c86e048cbb261f4734c3a1783ae2e280"
+    },
+    {
+      "id": "post:11",
+      "round": 1,
+      "author": "llama-ecology",
+      "kind": "question",
+      "text": "How do the AlphaEarth context features for 2021 and 2022 relate to the Margalefidinium polykrikoides bloom, and what landscape context do they provide?",
+      "refs": [
+        "earthengine:alphaearth_context:york-river-lower:2021",
+        "earthengine:alphaearth_context:york-river-lower:2022"
+      ],
+      "topic": "alphaearth-context",
+      "prev": "304ec31c476a19e46020b263062ad508c86e048cbb261f4734c3a1783ae2e280",
+      "hash": "797cd9698bfc9ae81cb65e111c22c3e24a28051c5ec8e5c5bcf654f1af0eea1c"
+    },
+    {
+      "id": "post:12",
+      "round": 1,
+      "author": "llama-ecology",
+      "kind": "support",
+      "text": "The retrieved literature records provide some context for the Margalefidinium polykrikoides bloom, including its impact on the York River Estuary microbiome.",
+      "refs": [
+        "ncbi:pubmed:35550296"
+      ],
+      "topic": "literature-context",
+      "prev": "797cd9698bfc9ae81cb65e111c22c3e24a28051c5ec8e5c5bcf654f1af0eea1c",
+      "hash": "699f9e821266773c7f7b3f76d2bd15f46af100f1957d01079be3ff19ef50e7c9"
+    },
+    {
+      "id": "post:13",
+      "round": 1,
+      "author": "llama-ecology",
+      "kind": "limitation",
+      "text": "The run's reliance on satellite data and lack of in situ observations limit its ability to confirm the presence and impact of the Margalefidinium polykrikoides bloom.",
+      "refs": [
+        "question"
+      ],
+      "topic": "methodological-limitation",
+      "prev": "699f9e821266773c7f7b3f76d2bd15f46af100f1957d01079be3ff19ef50e7c9",
+      "hash": "3fa4bd65a84c9cb2cfef0f3aaf44b03742e3c6c90ab973e59feb249978a8bb9e"
+    },
+    {
+      "id": "post:14",
+      "round": 1,
+      "author": "llama-ecology",
+      "kind": "concern",
+      "text": "The NDCI range values for the August and September observations overlap, making it difficult to determine a clear trend or correlation with the Margalefidinium polykrikoides bloom.",
+      "refs": [
+        "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01"
+      ],
+      "severity": "minor",
+      "topic": "ndci-range",
+      "prev": "3fa4bd65a84c9cb2cfef0f3aaf44b03742e3c6c90ab973e59feb249978a8bb9e",
+      "hash": "ea185b1f4a8112bf7d7a1752347297a91049866371ba5f765d41504dece09465"
+    },
+    {
+      "id": "post:15",
+      "round": 1,
+      "author": "llama-ecology",
+      "kind": "question",
+      "text": "What additional data or observations would be necessary to confirm the relationship between the Margalefidinium polykrikoides bloom and the satellite-derived chlorophyll levels?",
+      "refs": [
+        "question"
+      ],
+      "topic": "future-research",
+      "prev": "ea185b1f4a8112bf7d7a1752347297a91049866371ba5f765d41504dece09465",
+      "hash": "3b2fcf8c0879bd4baf45addea7a1a38fa90da76996eea4aad3b93d7e0a20e1fd"
+    },
+    {
+      "id": "post:16",
+      "round": 2,
+      "author": "ncbi",
+      "kind": "reply",
+      "text": "3 retrieved paper titles mention a bloom; those papers may hold in situ observations, but the run reads only their metadata.",
+      "refs": [
+        "post:8",
+        "ncbi:pubmed:38830711",
+        "ncbi:pubmed:35550296",
+        "ncbi:pubmed:34303516"
+      ],
+      "reply_to": "post:8",
+      "stance": "answer",
+      "prev": "3b2fcf8c0879bd4baf45addea7a1a38fa90da76996eea4aad3b93d7e0a20e1fd",
+      "hash": "cbb2cb40737d5438b61644ab00e58fd4ea50eb62699f299d9896cdbc8246814a"
+    },
+    {
+      "id": "post:17",
+      "round": 2,
+      "author": "earthengine",
+      "kind": "reply",
+      "text": "Usable water scenes per month: 2022-06: 5, 2022-07: 3, 2022-08: 6, 2022-09: 5, 2022-10: 3. Every month has at least 3 scenes.",
+      "refs": [
+        "post:3",
+        "earthengine:chlorophyll_timeseries:2022-06-30:york-river-lower:2022-06-01",
+        "earthengine:chlorophyll_timeseries:2022-07-31:york-river-lower:2022-07-01",
+        "earthengine:chlorophyll_timeseries:2022-08-31:york-river-lower:2022-08-01",
+        "earthengine:chlorophyll_timeseries:2022-09-30:york-river-lower:2022-09-01",
+        "earthengine:chlorophyll_timeseries:2022-10-31:york-river-lower:2022-10-01"
+      ],
+      "reply_to": "post:3",
+      "stance": "answer",
+      "prev": "cbb2cb40737d5438b61644ab00e58fd4ea50eb62699f299d9896cdbc8246814a",
+      "hash": "f44d8e50a8dddb756d6b2d0273719631ef5b698876c4ef2801006465001c007b"
+    },
+    {
+      "id": "post:18",
+      "round": 2,
+      "author": "earthengine",
+      "kind": "reply",
+      "text": "Agreed: paper metadata may name a bloom, but no cell count or species observation is linked to any satellite scene, so NDCI changes cannot be attributed to the organism.",
+      "refs": [
+        "post:8",
+        "post:16"
+      ],
+      "reply_to": "post:8",
+      "stance": "agree",
+      "prev": "f44d8e50a8dddb756d6b2d0273719631ef5b698876c4ef2801006465001c007b",
+      "hash": "79c50572d34a7a8c122abdd6eb6bdc12737d4260af38ef67ff37b2ea1aca71f7"
+    }
+  ],
+  "rejected": [
+    {
+      "author": "gemini-methods",
+      "round": 1,
+      "reason": "only concerns carry a severity",
+      "draft_sha256": "051f42a88d1b260558726bb4e0085c580c3e2ad4eae4c5fa0671214f1c5a5250"
+    },
+    {
+      "author": "gemini-methods",
+      "round": 1,
+      "reason": "only concerns carry a severity",
+      "draft_sha256": "5f34cea7dd531d469bc983184bcba12d766eeac9cb3806b47f174f72ce41d126"
+    },
+    {
+      "author": "gemini-methods",
+      "round": 1,
+      "reason": "only concerns carry a severity",
+      "draft_sha256": "1ae95297b000763b3a4a1b931074e2966ed9228eef0613042fcdb79642495f98"
+    },
+    {
+      "author": "gemini-methods",
+      "round": 1,
+      "reason": "only concerns carry a severity",
+      "draft_sha256": "e6bf5cd3985113a92280121b172680f70359e87fb2da8a3ea55e777e08b737d7"
+    },
+    {
+      "author": "gemini-methods",
+      "round": 1,
+      "reason": "only concerns carry a severity",
+      "draft_sha256": "70bfa7f04487a0e042e369b7078728d2198f094dc583a875fc0fc64349acbffc"
+    },
+    {
+      "author": "gemini-methods",
+      "round": 2,
+      "reason": "only concerns carry a severity",
+      "draft_sha256": "5f04ed9056a49887a75a7f5abf34e79be02ad03a47f2d9f8c98a50942f5d80ee"
+    },
+    {
+      "author": "gemini-methods",
+      "round": 2,
+      "reason": "only concerns carry a severity",
+      "draft_sha256": "c6862f7a397bf65505b68d23d909636b5c292ceda0f32e2efc75c5e48a81de59"
+    },
+    {
+      "author": "llama-ecology",
+      "round": 2,
+      "reason": "post must be an object with only the allowed fields",
+      "draft_sha256": "53c93e9a1dec0522ffec54fa4457714af6d5ea6795bddba5da8619e21f4e6703"
+    },
+    {
+      "author": "llama-ecology",
+      "round": 2,
+      "reason": "post must be an object with only the allowed fields",
+      "draft_sha256": "cc9ee6b868557691a9804d82499b70311ac44dfc74bde3259e51cb4dd2d5f34b"
+    },
+    {
+      "author": "llama-ecology",
+      "round": 2,
+      "reason": "post must be an object with only the allowed fields",
+      "draft_sha256": "714b8d9f1f26e6f5e316128cd124dd33944435c8fea2f45662de6d0b4da61a87"
+    },
+    {
+      "author": "llama-ecology",
+      "round": 2,
+      "reason": "post must be an object with only the allowed fields",
+      "draft_sha256": "c28e304a5d0beb8173bad61a1a4f71a5cfacb8e4c8c4d2b80618ecb574ce4eee"
+    },
+    {
+      "author": "llama-ecology",
+      "round": 2,
+      "reason": "post must be an object with only the allowed fields",
+      "draft_sha256": "4d7713ffdcf4700137a1134d78edc74133dfb6bd5a34a236b58bfbce24d38bd8"
+    },
+    {
+      "author": "llama-ecology",
+      "round": 2,
+      "reason": "post must be an object with only the allowed fields",
+      "draft_sha256": "8a1da66e673c7cb1b1f1840097ffd4b8f3b1cb88e1caed7bc5aef8b5e16cbf17"
+    }
+  ],
+  "model_calls": [
+    {
+      "author": "gemini-methods",
+      "round": 1,
+      "status": "completed",
+      "provider": "vertex-ai",
+      "model": "gemini-2.5-flash",
+      "model_version": "gemini-2.5-flash",
+      "request_id": "aCbSapatErPu-coPwKOswQw",
+      "response_sha256": "5e3a8d162c0224839866fccdf1b275376c51b6146cfb25d3cce5a50de28b1b56",
+      "usage": {
+        "input_tokens": 2838,
+        "output_tokens": 1335,
+        "total_tokens": 4173,
+        "thinking_tokens": null
+      },
+      "latency_seconds": 9.406357
+    },
+    {
+      "author": "llama-ecology",
+      "round": 1,
+      "status": "completed",
+      "provider": "vertex-ai",
+      "model": "meta/llama-3.3-70b-instruct-maas",
+      "model_version": "meta/llama-3.3-70b-instruct-maas",
+      "request_id": "cCbSarijFv_Wir4PiMb8oA4",
+      "response_sha256": "de40849bb6f9d5bafa5b5237e7d1cabaee8880e3772b1885e06ddb93472e3b10",
+      "usage": {
+        "input_tokens": 2689,
+        "output_tokens": 542,
+        "total_tokens": 3231
+      },
+      "latency_seconds": 3.673653
+    },
+    {
+      "author": "gemini-methods",
+      "round": 2,
+      "status": "completed",
+      "provider": "vertex-ai",
+      "model": "gemini-2.5-flash",
+      "model_version": "gemini-2.5-flash",
+      "request_id": "dCbSap3rAY3G-coP15y34A4",
+      "response_sha256": "4aa22ef1a020f4d2199acb4aee87a815671a1b6d73d27e62213738d5def35508",
+      "usage": {
+        "input_tokens": 4333,
+        "output_tokens": 353,
+        "total_tokens": 4686,
+        "thinking_tokens": null
+      },
+      "latency_seconds": 2.666579
+    },
+    {
+      "author": "llama-ecology",
+      "round": 2,
+      "status": "completed",
+      "provider": "vertex-ai",
+      "model": "meta/llama-3.3-70b-instruct-maas",
+      "model_version": "meta/llama-3.3-70b-instruct-maas",
+      "request_id": "dibSatWgKZit-coPpvSUgAw",
+      "response_sha256": "41ce4a16eb7251235340ab47eb43d387d52658654fc6981a28252e37034f2ade",
+      "usage": {
+        "input_tokens": 3755,
+        "output_tokens": 872,
+        "total_tokens": 4627
+      },
+      "latency_seconds": 4.843803
+    }
+  ],
+  "synthesis": {
+    "id": "post:19",
+    "round": 3,
+    "author": "moderator",
+    "kind": "synthesis",
+    "verdict": "needs_revision",
+    "concerns": [
+      {
+        "post": "post:1",
+        "author": "methods",
+        "severity": "minor",
+        "status": "open",
+        "replies": []
+      },
+      {
+        "post": "post:8",
+        "author": "ecology",
+        "severity": "major",
+        "status": "contested",
+        "replies": [
+          "post:16",
+          "post:18"
+        ]
+      },
+      {
+        "post": "post:9",
+        "author": "gemini-methods",
+        "severity": "minor",
+        "status": "open",
+        "replies": []
+      },
+      {
+        "post": "post:10",
+        "author": "llama-ecology",
+        "severity": "major",
+        "status": "open",
+        "replies": []
+      },
+      {
+        "post": "post:14",
+        "author": "llama-ecology",
+        "severity": "minor",
+        "status": "open",
+        "replies": []
+      }
+    ],
+    "blocking_concerns": [
+      "post:8",
+      "post:10"
+    ],
+    "disputed_posts": [],
+    "concern_counts": {
+      "open": 4,
+      "contested": 1,
+      "resolved": 0
+    },
+    "limitations": [
+      "post:5",
+      "post:6",
+      "post:7",
+      "post:13"
+    ],
+    "biological_claims_validated": false,
+    "prev": "79c50572d34a7a8c122abdd6eb6bdc12737d4260af38ef67ff37b2ea1aca71f7"
+  },
+  "limitations": [
+    "The forum reviews retrieved metadata and computed summaries; it validates no biological claim.",
+    "Rule reviewers apply fixed checks; agreement among them is not independent expert judgment.",
+    "Model reviewer posts are checked for structure and citations, not for truth."
+  ],
+  "content_digest": "7ee5a443b9b3c1aabcf2c865c75b42044e0f4e857551066a04c5211317c2759b"
+}

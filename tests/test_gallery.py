@@ -83,6 +83,49 @@ class GalleryTests(unittest.TestCase):
         with self.assertRaisesRegex(GalleryError, "new or empty"):
             build_gallery(self.catalog([{"slug": "a", "title": "x", "manifest": "runs/ok.json"}]), site)
 
+    def test_forum_gate_and_panel_records_are_verified_and_rendered(self):
+        from sewall.forum import run_forum
+        from sewall.panel import run_panel
+        from sewall.riskgate import assess
+        from test_panel import entries, runs
+        manifests = runs()
+        forum = run_forum(manifests["alice"])
+        self.write("alice.json", manifests["alice"])
+        self.write("bob.json", manifests["bob"])
+        self.write("carol.json", manifests["carol"])
+        self.write("alice-forum.json", forum)
+        self.write("alice-gate.json", assess(manifests["alice"], forum))
+        self.write("panel.json", run_panel(entries(manifests)))
+        listed = [{"slug": "alice", "title": "Alice", "manifest": "runs/alice.json",
+                   "forum": "runs/alice-forum.json", "gate": "runs/alice-gate.json"},
+                  {"slug": "bob", "title": "Bob", "manifest": "runs/bob.json"},
+                  {"slug": "carol", "title": "Carol", "manifest": "runs/carol.json"}]
+        panel = {"slug": "panel", "title": "Panel", "record": "runs/panel.json",
+                 "runs": {"alice": "alice", "bob": "bob", "carol": "carol"}}
+        result = build_gallery(self.catalog(listed, panels=[panel]), self.root / "site")
+        self.assertEqual(result["panels"], ["panel"])
+        site = self.root / "site"
+        for name in ("alice/forum.html", "alice/forum.json", "alice/gate.html", "alice/gate.json",
+                     "panels/panel/panel.html", "panels/panel/panel.json"):
+            self.assertTrue((site / name).is_file(), name)
+        index = (site / "index.html").read_text()
+        self.assertIn("rule-based reviewers", index)
+        self.assertIn("Cross-run review panels", index)
+        summary = json.loads((site / "gallery.json").read_text())
+        self.assertEqual(summary["runs"][0]["reviews"]["gate"]["decision"], assess(manifests["alice"], forum)["decision"])
+
+        # A gate recorded without the forum no longer verifies once the forum is attached.
+        self.write("alice-gate.json", assess(manifests["alice"]))
+        with self.assertRaisesRegex(GalleryError, "gate verification failed"):
+            build_gallery(self.catalog(listed), self.root / "site2")
+        self.write("alice-gate.json", assess(manifests["alice"], forum))
+        swapped = {**panel, "runs": {"alice": "bob", "bob": "alice", "carol": "carol"}}
+        with self.assertRaisesRegex(GalleryError, "panel verification failed"):
+            build_gallery(self.catalog(listed, panels=[swapped]), self.root / "site3")
+        with self.assertRaisesRegex(GalleryError, "not in the catalog"):
+            build_gallery(self.catalog(listed, panels=[{**panel, "runs": {"alice": "nobody"}}]), self.root / "site4")
+        self.assertFalse(any((self.root / name).exists() for name in ("site2", "site3", "site4")))
+
     def test_unsupported_mode_is_refused(self):
         manifest = {"mode": "unknown"}
         manifest["content_digest"] = digest(manifest)

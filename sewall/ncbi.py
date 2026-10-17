@@ -3,6 +3,7 @@
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 import threading
 import time
 from urllib.error import HTTPError, URLError
@@ -15,8 +16,21 @@ ENDPOINT = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
 MAX_RESPONSE_BYTES = 1_048_576
 TIMEOUT_SECONDS = 15
 MAX_QUERY_LENGTH = 2000
+# Seconds between keyless requests. Cluster nodes share one public IP, and 0.35 drew HTTP 429 on October 15, 2026.
+MIN_INTERVAL_SECONDS = 0.5
+# Seconds between requests that carry an API key; NCBI allows ten per second with a key.
+KEYED_INTERVAL_SECONDS = 0.12
 _REQUEST_LOCK = threading.Lock()
 _LAST_REQUEST_AT = 0.0
+
+
+def api_key() -> str | None:
+    """Return NCBI_API_KEY from the environment, or None. The key never enters provenance."""
+    return os.environ.get("NCBI_API_KEY") or None
+
+
+def interval(key: str | None) -> float:
+    return KEYED_INTERVAL_SECONDS if key else MIN_INTERVAL_SECONDS
 
 
 class MetadataSearchError(RuntimeError):
@@ -34,9 +48,10 @@ def search_metadata(
     """Return public Entrez IDs and provenance, not records or scientific claims.
 
     Queries go to a fixed host. Redirects and automatic retries are disabled.
-    Calls in this process are spaced below three requests per second; deployments
-    must coordinate the NCBI limit across processes sharing their public IP.
-    Optional contact email is sent to NCBI but omitted from returned provenance.
+    Calls in this process are spaced at most two requests per second, or about
+    eight with NCBI_API_KEY set; deployments must coordinate the NCBI limit
+    across processes sharing their public IP. Optional contact email and the API
+    key are sent to NCBI but omitted from returned provenance.
     """
     if not isinstance(database, str) or database not in DATABASES:
         raise ValueError("database must be one of: bioproject, gds, pubmed, snp")
@@ -69,6 +84,9 @@ def search_metadata(
     provenance_url = ENDPOINT + "?" + urlencode(parameters)
     if email:
         parameters["email"] = email
+    key = api_key()
+    if key:
+        parameters["api_key"] = key
     request_url = ENDPOINT + "?" + urlencode(parameters)
     request = Request(
         request_url,
@@ -82,7 +100,7 @@ def search_metadata(
     global _LAST_REQUEST_AT
     try:
         with _REQUEST_LOCK:
-            pause = 0.35 - (time.monotonic() - _LAST_REQUEST_AT)
+            pause = interval(key) - (time.monotonic() - _LAST_REQUEST_AT)
             if pause > 0:
                 time.sleep(pause)
             _LAST_REQUEST_AT = time.monotonic()

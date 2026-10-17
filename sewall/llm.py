@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import math
+import os
 import re
 import subprocess
 import time
@@ -106,6 +107,15 @@ class ModelConfig:
         if not isinstance(value, dict):
             raise ValueError("model configuration must be an object")
         expected = {field.name for field in fields(cls)}
+        if "project_env" in value:
+            if "project" in value:
+                raise ValueError("set only one of project and project_env")
+            name = value["project_env"]
+            if not isinstance(name, str) or not re.fullmatch(r"[A-Z][A-Z0-9_]{0,63}", name):
+                raise ValueError("project_env must name an environment variable")
+            if not os.environ.get(name):
+                raise ValueError(f"environment variable {name} is not set")
+            value = {**{k: v for k, v in value.items() if k != "project_env"}, "project": os.environ[name]}
         if set(value) - expected:
             raise ValueError("model configuration contains unknown fields")
         if not {"project", "location", "model"} <= set(value):
@@ -114,6 +124,16 @@ class ModelConfig:
 
     def to_dict(self) -> dict:
         return asdict(self)
+
+    def record(self) -> dict:
+        """Configuration for a manifest: the cloud project is replaced by a short digest."""
+        value = asdict(self)
+        value["project_sha256"] = hashlib.sha256(value.pop("project").encode()).hexdigest()[:16]
+        return value
+
+    @property
+    def recorded_endpoint(self) -> str:
+        return self.endpoint.replace(f"/projects/{self.project}/", "/projects/<redacted>/", 1)
 
     @property
     def endpoint(self) -> str:
@@ -336,7 +356,7 @@ class VertexClient:
             "latency_seconds": round(time.monotonic() - started, 6),
             "completed_at": datetime.now(timezone.utc).isoformat(),
             "attempts": 1,
-            "endpoint": self.config.endpoint,
+            "endpoint": self.config.recorded_endpoint,
             "max_output_tokens": self.config.max_output_tokens,
         }
 

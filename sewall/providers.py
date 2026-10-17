@@ -348,6 +348,8 @@ def client_from_config(value: dict, allow_endpoint_fields: bool = True):
         raise ValueError("model configuration must be an object")
     if not allow_endpoint_fields and any(field in value for field in ENDPOINT_FIELDS):
         raise ValueError("base_url and api_key_env are not accepted here; use the provider's default endpoint")
+    if not allow_endpoint_fields and "project_env" in value:
+        raise ValueError("project_env is not accepted here; the caller may not read server environment variables")
     provider = value.get("provider")
     # Looked up at call time so tests can substitute the Vertex client.
     if provider is None:
@@ -362,4 +364,6 @@ def client_from_config(value: dict, allow_endpoint_fields: bool = True):
 def recorded_config(client):
     """Return the client's configuration for a manifest, or None for an unrecognized client."""
     config = getattr(client, "config", None)
-    return config.to_dict() if isinstance(config, (ModelConfig, ProviderConfig)) else None
+    if isinstance(config, ModelConfig):
+        return config.record()
+    return config.to_dict() if isinstance(config, ProviderConfig) else None
