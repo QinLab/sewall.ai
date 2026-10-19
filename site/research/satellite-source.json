@@ -1,0 +1,19 @@
+{
+  "source_url": "https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2024.1378552/full#F1",
+  "image_url": "https://www.frontiersin.org/files/Articles/1378552/fmicb-15-1378552-HTML/image_m/fmicb-15-1378552-g001.jpg",
+  "doi": "10.3389/fmicb.2024.1378552",
+  "authors": "Clayton, Chrabot, Echevarria, Gibala-Smith, Mogatas, Bernhardt and Mulholland",
+  "year": 2024,
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "image_sha256": "bfcbdf1d2babf2ec83d077b3797e759de5a27e304cdb627db370945b05843479",
+  "image_pixels": [
+    1535,
+    629
+  ],
+  "image_unmodified": true,
+  "satellite": "MODIS Terra Level 2 chlorophyll-a",
+  "imagery_date": "2016-08-22",
+  "site": "Norfolk Yacht and Country Club (NYCC), Lafayette River",
+  "source_site_markers": "White cross: NYCC; white circle: Lafayette River; rectangle: lower-Bay extent"
+}

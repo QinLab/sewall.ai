@@ -30,7 +30,7 @@ jobs:
         run: python -m sewall gallery --catalog gallery/catalog.json --out _site/gallery
       - name: Add landing page and figures
         run: |
-          cp site/index.html _site/index.html
+          cp -R site/. _site/
           mkdir _site/figures
           cp docs/figures/fig*.png _site/figures/
           touch _site/.nojekyll

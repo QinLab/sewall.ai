@@ -1,0 +1,8 @@
+policy,valid_yield_of_120,invalid_versions,released_versions,validator_runs,mean_cost
+Halt,48,0,48,0,13.0
+Contain,64,0,64,0,15.5
+Rules,83,37,120,0,11.07
+Risk-Local,51,0,55,235,15.8
+Risk-Lineage,100,0,106,248,19.65
+ValidateAll*,112,0,119,359,25.17
+RandomMatched*,101,3,111,251,21.76

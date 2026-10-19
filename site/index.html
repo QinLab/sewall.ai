@@ -34,6 +34,7 @@ figcaption{color:var(--muted);font-size:.9rem;margin-top:10px}
 pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;font-size:.88rem}
 code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 ul{padding-left:1.2em}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;margin:16px 0}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);vertical-align:top}caption{text-align:left;color:var(--muted);margin-bottom:8px}section{scroll-margin-top:20px}nav{margin-bottom:24px}figure a:focus-visible{outline:3px solid var(--accent)}
 footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
 @media (max-width:520px){h1{font-size:1.9rem}header{padding-top:32px}}
 </style>
@@ -53,6 +54,12 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);color:v
   </div>
 </header>
 
+<nav class="buttons" aria-label="Page sections">
+<a class="btn" href="#preliminary-results">Preliminary results</a>
+<a class="btn" href="#satellite-images">Satellite imagery</a>
+<a class="btn" href="#expert-domains">Expert agent domains</a>
+<a class="btn" href="#virtual-forum">Virtual research forum</a>
+</nav>
 <h2>How a run works</h2>
 <figure>
   <div class="img"><img src="figures/fig1-architecture.png" alt="Architecture: planners propose actions to one deterministic controller, which checks them against the Skill registry, policies, budgets and integrity gates, calls bounded public Skills and writes a hash-chained manifest, an HTML report and an offline replay" loading="lazy"></div>
@@ -79,7 +86,105 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);color:v
   dataset experts and writes a capped plan script for the controller.</p></div>
 </div>
 
-<h2>Live results</h2>
+
+<section id="preliminary-results">
+<h2>Preliminary research results</h2>
+<p>These results are cited in the current Sewall.ai research proposal. They demonstrate release controls,
+public-source access and evidence discovery. Ecological prediction and full cross-custodian federation remain research goals.</p>
+<h3>Release controls on source-linked workflows</h3>
+<figure><div class="img"><a href="research/release-control.png"><img src="research/release-control.png" alt="Seven release policies compared by valid yield, invalid released versions and validator runs" loading="lazy"></a></div>
+<figcaption>Acharya, Al Amin and Qin (2026), <i>Structure Before Intelligence: Gating What Agentic Scientific Workflows Release</i>, Table 4.
+Sixty held-out paired instances of two workflows with injected faults produced 120 possible valid deliverables.
+Risk-Lineage used 248 validators versus 359 for post-hoc ValidateAll, about 31% fewer, with valid yield 100 versus 112.
+Invalid/released counts include versions later retracted. All seven policies are shown; starred arms are post-hoc.
+Language-model agents did not improve the base policies. These bounded results establish neither general safety nor better targeting than random validation.
+<a href="https://arxiv.org/abs/2610.19507v1">Read the preprint</a> · <a href="research/release-control-table4.csv">Download Table 4 CSV</a>.</figcaption></figure>
+<h3>Model-driven public metadata retrieval</h3>
+<p>A September 10, 2026 demonstration used Gemini planning with Llama review to retrieve three GEO records and one PubMed record for a seagrass question and check two explicit publication links. It tested public-metadata interfaces and retained execution records; it did not integrate specimens or validate biological findings.
+<a href="https://github.com/QinLab/sewall.ai/blob/main/docs/live-validation-2026-09-10.md">Read the historical validation record</a>.</p>
+<h3>Distributed satellite and sensor access</h3>
+<figure><div class="img"><a href="research/distributed-access.png"><img src="research/distributed-access.png" alt="Recorded Sentinel-2 NDCI for York and Lafayette rivers, NWS gauge categories and NOAA tide levels across six Chesapeake areas" loading="lazy"></a></div>
+<figcaption>Recorded Earth Engine execution retrieved October 14, 2026: 2022 mean water-pixel NDCI from 22 lower York and 19 Lafayette River scenes.
+The shaded York bloom window follows <a href="https://doi.org/10.3389/fmars.2025.1561340">Yu et al. (2025)</a>. These earlier SCL-mask summaries differ from the revised-mask demonstration below.
+Public-sensor integration on October 15, 2026 at 12:03 UTC covers six Chesapeake areas with 24 source requests.
+NWS gauge categories and NOAA provisional tide levels retain source-specific thresholds; all tide stations were below their own minor-flood thresholds.
+These panels show bounded remote summarization, normalization and replay, without establishing bloom onset, species identity or alert skill.
+<a href="gallery/york-2022/report.html">York run</a> · <a href="gallery/lafayette-2022/report.html">Lafayette run</a> · <a href="gallery/flood-chesapeake/report.html">Sensor run</a>.</figcaption></figure>
+<h3>Question-directed molecular and field evidence discovery</h3>
+<figure><div class="img"><a href="research/evidence-discovery.png"><img src="research/evidence-discovery.png" alt="Expert consultation search counts, molecular evidence narrowed to one Virginia culture, and sparse Chesapeake phytoplankton observations" loading="lazy"></a></div>
+<figcaption>Three deterministic expert consultations, October 15–16, 2026. Indexed record counts are not independent biological observations:
+128,816 of 128,823 <i>A. monilatum</i> nucleotide records are contigs from one transcriptome assembly.
+Of 169 non-transcriptome <i>M. polykrikoides</i> nucleotide records, only PQ384573.1 is from Virginia.
+The assignment Skill labeled 75 of 93 LSU records and abstained on 18. This is provisional coverage, not independent assignment accuracy:
+thresholds were set on these records, reference labels still need review, and two excluded references received disputed labels.
+Ribotype does not establish strain identity, growth phenotype or phylogenetic placement.
+Across 21 Virginia stations, 1984–2025, 230 station-dates had <i>Cochlodinium</i> and 39 had <i>A. monilatum</i>; none reached 1,000 cells/mL.
+Neither taxon was reported during 2013–2021 despite continued sampling. <i>Cochlodinium</i> counts are not species-confirmed <i>M. polykrikoides</i>.
+The public records do not establish an onset cohort.
+<a href="https://www.ncbi.nlm.nih.gov/nuccore/PQ384573.1">Virginia culture accession</a> ·
+<a href="https://github.com/QinLab/sewall.ai/blob/main/docs/ribotype-assignment-results-2026-10-16.md">Assignment methods and unresolved checks</a>.</figcaption></figure>
+</section>
+<section id="satellite-images">
+<h2>Satellite imagery of the Chesapeake Bay</h2>
+<p>Published satellite views connect the broad Bay setting to an existing Lafayette River sampling site.</p>
+<figure><div class="img"><a href="research/chesapeake-modis.jpg"><img src="research/chesapeake-modis.jpg" alt="Two MODIS Terra chlorophyll-a satellite maps from August 22, 2016, showing Chesapeake Bay and the lower Bay; a white circle locates the Lafayette River and a white cross marks the NYCC field site" loading="lazy"></a></div>
+<figcaption>MODIS-Terra chlorophyll-a, August 22, 2016. (A) Chesapeake Bay; (B) lower Bay.
+White cross: Norfolk Yacht and Country Club sampling site. White circle: Lafayette River.
+Reproduced unchanged from Clayton et al. (2024), Figure 1, © the authors,
+<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+This historical bloom-period context does not identify a species or define an onset cohort.
+<a href="https://doi.org/10.3389/fmicb.2024.1378552">Original paper</a> · <a href="research/satellite-source.json">Image provenance</a>.</figcaption></figure>
+</section>
+<section id="expert-domains">
+<h2>Expert agent domains</h2>
+<p>The implemented expert consultations use deterministic rules. A lab manager merges proposed Skill actions into a bounded plan;
+the controller checks and executes it. Experts propose actions, while scientists inspect and approve scientific interpretations.</p>
+<div class="grid">
+<article class="card"><h3>NCBI dataset expert</h3><p>Taxon names and synonyms, PubMed literature, GenBank inventories and BioProject metadata.
+Distinguishes transcriptome contigs from independent marker evidence.</p></article>
+<article class="card"><h3>Earth Engine expert</h3><p>Sentinel-2 NDCI, named coastal regions and AlphaEarth context.
+Records scene caps, water masks, temporal limits and the inability of a chlorophyll proxy to identify a species.</p></article>
+<article class="card"><h3>Growth and community expert</h3><p>Temperature, salinity, light, nutrients, grazing, competition and microbial interactions.
+Proposes literature, marker and ribotype Skills; it has not estimated or validated genotype-specific growth parameters.</p></article>
+<article class="card"><h3>EOL trait expert</h3><p>Recognizes trait-data needs and provider-specific attribution.
+Currently records an explicit source gap; a live EOL/TraitBank connector is not implemented.</p></article>
+<article class="card"><h3>Methods and ecology reviewers</h3><p>Challenge measurement quality, missing field observations, temporal comparisons and unsupported conclusions.
+Rule-based review is implemented; a bounded comparison also uses Gemini and Llama reviewers.</p></article>
+<article class="card"><h3>Planned domain coverage</h3><p>NEON microbial ecology, Chesapeake Bay Program observations and published CBEFS forecasting knowledge are planned extensions.
+Their inclusion here does not imply custodian endorsement, operational adoption or implemented connectors.</p></article>
+</div>
+<p><a href="gallery/consult-york-2022/report.html">Inspect an expert-planned York River run</a> ·
+<a href="https://github.com/QinLab/sewall.ai/blob/main/sewall/experts.py">Inspect the expert rules</a></p>
+</section>
+<section id="virtual-forum">
+<h2>Virtual discussion forum of the agentic research team</h2>
+<p>Researcher agents post evidence-linked questions, critiques, answers and concessions on a recorded run.
+A moderator checks the post structure and evidence references, preserves the discussion in a hash chain,
+and records open or contested concerns. A separate release gate can hold outputs despite an agent's favorable opinion.
+These are archived research discussions; this website does not run a live chat.</p>
+<div class="buttons">
+<a class="btn primary" href="gallery/york-2022-model-review/forum.html">Read Gemini and Llama discussion</a>
+<a class="btn" href="gallery/york-2022-model-review/gate.html">Inspect its release decision</a>
+<a class="btn" href="gallery/panels/panel-2022/panel.html">Cross-run research-team panel</a>
+<a class="btn" href="gallery/york-2022/forum.html">Rule-based York discussion</a>
+</div>
+<h3>One run, four review conditions</h3>
+<div class="table-wrap"><table>
+<caption>October 16, 2026 comparison on the October 14 York River run</caption>
+<thead><tr><th scope="col">Condition</th><th scope="col">Posts kept / rejected</th><th scope="col">Held outputs</th></tr></thead>
+<tbody><tr><th scope="row">No forum</th><td>0 / 0</td><td>All five NDCI months and the result</td></tr>
+<tr><th scope="row">Rule-based methods and ecology</th><td>11 / 0</td><td>Result</td></tr>
+<tr><th scope="row">Rules + Gemini methods + Llama ecology</th><td>18 / 13</td><td>August and September NDCI, plus result</td></tr>
+<tr><th scope="row">Rules + adversarial Gemini reviewer</th><td>13 / 0</td><td>Result</td></tr></tbody></table></div>
+<p>Llama challenged the claimed rise in chlorophyll because the August and September ranges overlap.
+Gemini raised a cloud/glint quality concern. The model forum held those two months and the final result.
+An adversarial reviewer tried to clear a major concern without new evidence; the concern stayed contested.</p>
+<p>This is one run with one model call per reviewer per round. Thirteen malformed model posts were rejected.
+The moderator checks whether evidence is new, but does not establish its semantic relevance.
+No condition validates a biological claim, and the comparison does not establish general multi-agent superiority.</p>
+</section>
+
+<h2 id="recorded-access">Additional recorded access demonstrations</h2>
 <figure>
   <div class="img"><img src="figures/fig6-ndci-2022.png" alt="Mean Sentinel-2 NDCI per 2022 day over the lower York River and the Lafayette River" loading="lazy"></div>
   <figcaption>Mean Sentinel-2 NDCI for each 2022 day in two live Earth Engine runs on October 16,
@@ -138,7 +243,7 @@ Engine Skills need a Google Cloud project with Earth Engine enabled. See the
 
 <footer>
   School of Data Science and Department of Computer Science, Old Dominion University.
-  Released under the Apache License 2.0.
+  Software released under the Apache License 2.0. Published satellite imagery retains its credited CC BY 4.0 license. Updated October 18, 2026.
 </footer>
 </main>
 </body>

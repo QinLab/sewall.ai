@@ -1,6 +1,6 @@
 {
   "title": "Sewall.ai recorded runs",
-  "description": "Recorded Sewall.ai workflow runs, each verified offline before publication. Live runs queried public NCBI, Earth Engine, NOAA and USGS sources through a fixed script, without a model. Review forums, panels and release gates use rule-based reviewers. Synthetic runs use fixture records and simulated policies. Open a report to inspect the graph, every source record and every event. No run establishes a biological finding.",
+  "description": "Recorded Sewall.ai workflows verified offline before publication. Source queries use fixed scripts or deterministic expert plans. Most forums use rule-based reviewers; the labeled model-review comparison adds Gemini and Llama. Synthetic runs use fixture records and simulated policies. Inspect reports, source records, review posts, release gates and event histories. These demonstrations do not validate ecological predictions.",
   "runs": [
     {
       "slug": "york-2022",
@@ -9,6 +9,14 @@
       "forum": "runs/york-2022-forum.json",
       "gate": "runs/york-2022-gate.json",
       "note": "Scripted Sentinel-2 NDCI and AlphaEarth summaries over the lower York River during the documented 2022 Margalefidinium polykrikoides bloom, with literature searches. Rule-based reviewers critique the run; the release gate holds the result while a major concern is contested. Run on October 14, 2026 with the earlier per-scene Sentinel-2 scene classification (SCL) water mask; see the revised-mask entry."
+    },
+    {
+      "slug": "york-2022-model-review",
+      "title": "York River 2022: Gemini and Llama virtual review forum",
+      "manifest": "runs/york-2022.json",
+      "forum": "runs/york-2022-model-forum.json",
+      "gate": "runs/york-2022-model-gate.json",
+      "note": "October 16 model-review comparison on the October 14 SCL-mask run. Gemini methods and Llama ecology reviewers supplement rule-based review. Thirteen malformed model posts were rejected. The gate holds August and September NDCI and the result; no biological claim is validated."
     },
     {
       "slug": "york-2022-30m",
