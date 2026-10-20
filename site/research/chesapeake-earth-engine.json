@@ -1,0 +1,109 @@
+{
+ "created": "2026-10-20T01:42:23+00:00",
+ "date": "2016-08-22",
+ "earthengine_api": "1.7.48",
+ "water_mask": {
+  "image": "JRC/GSW1_4/GlobalSurfaceWater",
+  "band": "occurrence",
+  "threshold_percent": 50
+ },
+ "nycc": {
+  "lon": -76.306105,
+  "lat": 36.906511,
+  "source": "Clayton et al. data description, Zenodo doi:10.5281/zenodo.13986851"
+ },
+ "panels": {
+  "A": {
+   "product": "NASA/OCEANDATA/MODIS-Terra/L3SMI",
+   "band": "chlor_a",
+   "units": "mg m-3",
+   "images": [
+    "T2016236"
+   ],
+   "bbox": [
+    -77.45,
+    36.55,
+    -75.35,
+    39.65
+   ],
+   "step_deg": 0.01,
+   "color_range": [
+    1.0,
+    50.0
+   ],
+   "water_pixels": 23113,
+   "valid_pixels": 6993,
+   "valid_fraction": 0.303,
+   "median": 7.71,
+   "p95": 42.05
+  },
+  "B": {
+   "product": "LANDSAT/LC08/C02/T1_L2",
+   "quantity": "SR_B3 / SR_B2 (green/blue), relative index",
+   "scene_date": "2016-08-12",
+   "days_from_requested": -10,
+   "images": [
+    "LC08_014034_20160812",
+    "LC08_014035_20160812"
+   ],
+   "candidates": [
+    {
+     "id": "LC08_014034_20160812",
+     "date": "2016-08-12",
+     "cloud_cover": 1.99,
+     "wrs_row": 34
+    },
+    {
+     "id": "LC08_014034_20160828",
+     "date": "2016-08-28",
+     "cloud_cover": 6.99,
+     "wrs_row": 34
+    },
+    {
+     "id": "LC08_014034_20160913",
+     "date": "2016-09-13",
+     "cloud_cover": 3.46,
+     "wrs_row": 34
+    },
+    {
+     "id": "LC08_014035_20160812",
+     "date": "2016-08-12",
+     "cloud_cover": 15.2,
+     "wrs_row": 35
+    },
+    {
+     "id": "LC08_014035_20160828",
+     "date": "2016-08-28",
+     "cloud_cover": 65.08,
+     "wrs_row": 35
+    },
+    {
+     "id": "LC08_014035_20160913",
+     "date": "2016-09-13",
+     "cloud_cover": 3.83,
+     "wrs_row": 35
+    }
+   ],
+   "selection": "chosen with --landsat-date",
+   "bbox": [
+    -76.62,
+    36.78,
+    -75.95,
+    37.22
+   ],
+   "step_deg": 0.0004,
+   "color_range_p2_p98": [
+    1.381,
+    4.126
+   ],
+   "nycc_5x5_valid_pixels": 22,
+   "nycc_5x5_median": 1.734,
+   "water_pixels": 925457,
+   "valid_pixels": 683145,
+   "valid_fraction": 0.738,
+   "median": 2.449,
+   "p95": 3.761
+  }
+ },
+ "reference_figure": "Clayton et al. 2024, Front Microbiol 15:1378552, Figure 1 (MODIS Terra Level 2)"
+}

@@ -126,7 +126,7 @@ The public records do not establish an onset cohort.
 </section>
 <section id="satellite-images">
 <h2>Satellite imagery of the Chesapeake Bay</h2>
-<p>Published satellite views connect the broad Bay setting to an existing Lafayette River sampling site.</p>
+<p>Published and regenerated satellite views connect the broad Bay setting to an existing Lafayette River sampling site.</p>
 <figure><div class="img"><a href="research/chesapeake-modis.jpg"><img src="research/chesapeake-modis.jpg" alt="Two MODIS Terra chlorophyll-a satellite maps from August 22, 2016, showing Chesapeake Bay and the lower Bay; a white circle locates the Lafayette River and a white cross marks the NYCC field site" loading="lazy"></a></div>
 <figcaption>MODIS-Terra chlorophyll-a, August 22, 2016. (A) Chesapeake Bay; (B) lower Bay.
 White cross: Norfolk Yacht and Country Club sampling site. White circle: Lafayette River.
@@ -134,6 +134,17 @@ Reproduced unchanged from Clayton et al. (2024), Figure 1, © the authors,
 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
 This historical bloom-period context does not identify a species or define an onset cohort.
 <a href="https://doi.org/10.3389/fmicb.2024.1378552">Original paper</a> · <a href="research/satellite-source.json">Image provenance</a>.</figcaption></figure>
+<p>For comparison, the same map was rebuilt from public archives in Google Earth Engine.
+No pixels were copied from the published figure.</p>
+<figure><div class="img"><a href="research/chesapeake-earth-engine.jpg"><img src="research/chesapeake-earth-engine.jpg" alt="Two satellite maps rebuilt in Google Earth Engine: (A) MODIS Terra Level 3 chlorophyll-a over Chesapeake Bay on August 22, 2016, with the lower-Bay study region boxed; (B) Landsat 8 green-to-blue reflectance ratio over the lower Bay on August 12, 2016, with the Lafayette River circled and the NYCC site marked by a cross" loading="lazy"></a></div>
+<figcaption>Regenerated in Google Earth Engine, October 19, 2026. (A) MODIS Terra Level 3 chlorophyll-a (about 4.6 km), August 22, 2016.
+The published figure uses the finer Level 2 product, which Earth Engine does not hold.
+(B) Landsat 8 OLI surface reflectance, August 12, 2016: the 30 m green/blue ratio resolves the Lafayette River.
+No Landsat 8 overpass falls on August 22; the nearest clear scenes are August 12 and 28.
+The ratio is a relative chlorophyll index, not mg m<sup>−3</sup>; sediment and dissolved organic matter also raise it.
+NYCC is placed at the coordinates in the authors' <a href="https://doi.org/10.5281/zenodo.13986851">data description</a>.
+Hatched: water without a valid retrieval. Data: NASA OBPG, USGS Landsat Collection 2, JRC Global Surface Water.
+<a href="research/chesapeake-earth-engine.json">Image IDs and provenance</a>.</figcaption></figure>
 </section>
 <section id="expert-domains">
 <h2>Expert agent domains</h2>
@@ -243,7 +254,7 @@ Engine Skills need a Google Cloud project with Earth Engine enabled. See the
 
 <footer>
   School of Data Science and Department of Computer Science, Old Dominion University.
-  Software released under the Apache License 2.0. Published satellite imagery retains its credited CC BY 4.0 license. Updated October 18, 2026.
+  Software released under the Apache License 2.0. Published satellite imagery retains its credited CC BY 4.0 license. Updated October 19, 2026.
 </footer>
 </main>
 </body>
