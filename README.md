@@ -44,7 +44,7 @@ python3 scripts/check_knowledge_map.py --node node
 
 The graph is a separate catalog format from execution manifests. It makes no source/model
 requests or access decisions. Generated figures are grouped projections of the same JSON.
-The website entry point includes the map; this commit alone does not deploy it.
+The Pages workflow publishes the map with the website when this change reaches main.
 
 ## How a run works
 

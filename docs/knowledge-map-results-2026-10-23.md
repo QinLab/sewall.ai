@@ -2,7 +2,7 @@
 
 Built October 23, 2026 from the [dated source registry](knowledge-map-source-registry-2026-10-23.json).
 The [interactive viewer](../knowledge-map/index.html) and [JSON snapshot](../knowledge-map/graph.json)
-are working local prototype artifacts. They are not a published release or a verified scientific cohort.
+are preliminary software artifacts. This catalog snapshot is not a verified scientific cohort.
 
 ## Observed result
 
