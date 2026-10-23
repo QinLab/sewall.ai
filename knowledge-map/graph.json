@@ -1,0 +1,4704 @@
+{
+  "schema_version": "1.0",
+  "graph_kind": "catalog_and_governance",
+  "prepared_on": "2026-10-23",
+  "source_registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+  "source_registry_version": "0.1-draft",
+  "scope": "catalog_structure_and_unresolved_policy_requirements",
+  "scientific_join_count": 0,
+  "authorization_grant_count": 0,
+  "network_requests_in_build": 0,
+  "nodes": [
+    {
+      "id": "collection:gee:COPERNICUS/S2_SR_HARMONIZED",
+      "kind": "Product",
+      "label": "Sentinel-2 harmonized surface reflectance",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/6",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "service_id": "service:earth-engine",
+        "native_id": "COPERNICUS/S2_SR_HARMONIZED",
+        "asset_version_required": true,
+        "record_policy_required": true,
+        "documentation_url": "https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED",
+        "review_state": "catalog_documentation_reviewed_record_terms_pending"
+      }
+    },
+    {
+      "id": "collection:gee:GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL",
+      "kind": "Product",
+      "label": "Satellite Embedding V1 annual",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/5",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "service_id": "service:earth-engine",
+        "native_id": "GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL",
+        "asset_version_required": true,
+        "record_policy_required": true,
+        "documentation_url": "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL",
+        "review_state": "catalog_documentation_reviewed"
+      }
+    },
+    {
+      "id": "collection:gee:LANDSAT/LC08/C02/T1_L2",
+      "kind": "Product",
+      "label": "Landsat 8 Collection 2 Level 2",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/4",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C02_T1_L2"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "service_id": "service:earth-engine",
+        "native_id": "LANDSAT/LC08/C02/T1_L2",
+        "asset_version_required": true,
+        "record_policy_required": true,
+        "documentation_url": "https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C02_T1_L2",
+        "review_state": "catalog_documentation_reviewed"
+      }
+    },
+    {
+      "id": "environment:gcp-project-template",
+      "kind": "Environment",
+      "label": "GCP project (unconfigured template)",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/environments/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "type": "CloudProjectEnvironment",
+        "provider_id": "org:google",
+        "service_id": "service:earth-engine",
+        "project_ref": null,
+        "visibility": "private_operational_overlay",
+        "registration_state": "must_verify_actual_project",
+        "iam_state": "must_verify_per_actor",
+        "residency_state": "unknown_until_documented",
+        "quota_and_cost_ceiling": null,
+        "export_destination_ref": null,
+        "authorization_granted": false,
+        "provisioned_by_this_plan": false
+      }
+    },
+    {
+      "id": "org:cbp",
+      "kind": "Organization",
+      "label": "Chesapeake Bay Program",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/providers/4",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "type": "Organization"
+      }
+    },
+    {
+      "id": "org:eol",
+      "kind": "Organization",
+      "label": "Encyclopedia of Life",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/providers/3",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "type": "Organization"
+      }
+    },
+    {
+      "id": "org:google",
+      "kind": "Organization",
+      "label": "Google",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/providers/9",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "type": "Organization"
+      }
+    },
+    {
+      "id": "org:jgi",
+      "kind": "Organization",
+      "label": "DOE Joint Genome Institute",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/providers/7",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "type": "Organization"
+      }
+    },
+    {
+      "id": "org:ncbi",
+      "kind": "Organization",
+      "label": "NCBI at NLM NIH",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/providers/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "type": "Organization"
+      }
+    },
+    {
+      "id": "org:neon",
+      "kind": "Organization",
+      "label": "NEON operated by Battelle",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/providers/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "type": "Organization"
+      }
+    },
+    {
+      "id": "org:noaa",
+      "kind": "Organization",
+      "label": "NOAA",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/providers/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "type": "Organization"
+      }
+    },
+    {
+      "id": "org:odu",
+      "kind": "Organization",
+      "label": "ODU or verified data custodian",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/providers/5",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "type": "Organization"
+      }
+    },
+    {
+      "id": "org:pangaea",
+      "kind": "Organization",
+      "label": "PANGAEA",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/providers/8",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "type": "Organization"
+      }
+    },
+    {
+      "id": "org:usgs",
+      "kind": "Organization",
+      "label": "USGS",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/providers/6",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "type": "Organization"
+      }
+    },
+    {
+      "id": "org:virginia-custodian-unconfirmed",
+      "kind": "Organization",
+      "label": "Actual Virginia data custodian must be identified",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/providers/10",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "type": "Organization",
+        "authority_status": "unconfirmed_template_not_authoritative_designation"
+      }
+    },
+    {
+      "id": "product:neon:DP1.10086.001",
+      "kind": "Product",
+      "label": "Soil physical and chemical properties periodic",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/3",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://data.neonscience.org/api/v0/products/DP1.10086.001"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "service_id": "service:neon",
+        "native_id": "DP1.10086.001",
+        "release_required": true,
+        "record_policy_required": true,
+        "documentation_url": "https://data.neonscience.org/api/v0/products/DP1.10086.001",
+        "metadata_evidence": "neon-api-evidence-2026-10-23/inspection-summary.json"
+      }
+    },
+    {
+      "id": "product:neon:DP1.10107.001",
+      "kind": "Product",
+      "label": "Soil microbe metagenome sequences",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://data.neonscience.org/api/v0/products/DP1.10107.001"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "service_id": "service:neon",
+        "native_id": "DP1.10107.001",
+        "release_required": true,
+        "record_policy_required": true,
+        "documentation_url": "https://data.neonscience.org/api/v0/products/DP1.10107.001",
+        "metadata_evidence": "neon-api-evidence-2026-10-23/inspection-summary.json"
+      }
+    },
+    {
+      "id": "product:neon:DP1.20093.001",
+      "kind": "Product",
+      "label": "Chemical properties of surface water",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://data.neonscience.org/api/v0/products/DP1.20093.001"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "service_id": "service:neon",
+        "native_id": "DP1.20093.001",
+        "release_required": true,
+        "record_policy_required": true,
+        "documentation_url": "https://data.neonscience.org/api/v0/products/DP1.20093.001",
+        "metadata_evidence": "neon-api-evidence-2026-10-23/inspection-summary.json"
+      }
+    },
+    {
+      "id": "product:neon:DP1.20281.001",
+      "kind": "Product",
+      "label": "Surface water microbe metagenome sequences",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://data.neonscience.org/api/v0/products/DP1.20281.001"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "service_id": "service:neon",
+        "native_id": "DP1.20281.001",
+        "release_required": true,
+        "record_policy_required": true,
+        "documentation_url": "https://data.neonscience.org/api/v0/products/DP1.20281.001",
+        "metadata_evidence": "neon-api-evidence-2026-10-23/inspection-summary.json"
+      }
+    },
+    {
+      "id": "review:collection:gee:COPERNICUS/S2_SR_HARMONIZED",
+      "kind": "PolicyReview",
+      "label": "Review: Sentinel-2 harmonized surface reflectance",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/6",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "collection:gee:COPERNICUS/S2_SR_HARMONIZED",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:collection:gee:GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL",
+      "kind": "PolicyReview",
+      "label": "Review: Satellite Embedding V1 annual",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/5",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "collection:gee:GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:collection:gee:LANDSAT/LC08/C02/T1_L2",
+      "kind": "PolicyReview",
+      "label": "Review: Landsat 8 Collection 2 Level 2",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/4",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C02_T1_L2"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "collection:gee:LANDSAT/LC08/C02/T1_L2",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:environment:gcp-project-template",
+      "kind": "PolicyReview",
+      "label": "Review: GCP project (unconfigured template)",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/environments/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "environment:gcp-project-template",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:product:neon:DP1.10086.001",
+      "kind": "PolicyReview",
+      "label": "Review: Soil physical and chemical properties periodic",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/3",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://data.neonscience.org/api/v0/products/DP1.10086.001"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "product:neon:DP1.10086.001",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:product:neon:DP1.10107.001",
+      "kind": "PolicyReview",
+      "label": "Review: Soil microbe metagenome sequences",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://data.neonscience.org/api/v0/products/DP1.10107.001"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "product:neon:DP1.10107.001",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:product:neon:DP1.20093.001",
+      "kind": "PolicyReview",
+      "label": "Review: Chemical properties of surface water",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://data.neonscience.org/api/v0/products/DP1.20093.001"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "product:neon:DP1.20093.001",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:product:neon:DP1.20281.001",
+      "kind": "PolicyReview",
+      "label": "Review: Surface water microbe metagenome sequences",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/products/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://data.neonscience.org/api/v0/products/DP1.20281.001"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "product:neon:DP1.20281.001",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:chesapeake-bay-program",
+      "kind": "PolicyReview",
+      "label": "Review: Chesapeake Bay Program DataHub",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/14",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://datahub.chesapeakebay.net/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:chesapeake-bay-program",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:earth-engine",
+      "kind": "PolicyReview",
+      "label": "Review: Google Earth Engine",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/19",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://developers.google.com/earth-engine/guides/access"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:earth-engine",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:eol",
+      "kind": "PolicyReview",
+      "label": "Review: Encyclopedia of Life and original trait providers",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/13",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://eol.org/docs/what-is-eol/copyright-and-linking-policy"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:eol",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:jgi",
+      "kind": "PolicyReview",
+      "label": "Review: JGI GOLD and IMG",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/17",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://portal-web-3.jgi.doe.gov/portal/help/download.jsf"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:jgi",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:ncbi-bioproject",
+      "kind": "PolicyReview",
+      "label": "Review: NCBI BioProject",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/6",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:ncbi-bioproject",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:ncbi-biosample",
+      "kind": "PolicyReview",
+      "label": "Review: NCBI BioSample",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/7",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:ncbi-biosample",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:ncbi-geo",
+      "kind": "PolicyReview",
+      "label": "Review: NCBI GEO",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/11",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:ncbi-geo",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:ncbi-nuccore",
+      "kind": "PolicyReview",
+      "label": "Review: NCBI GenBank Nucleotide",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/8",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:ncbi-nuccore",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:ncbi-pubmed",
+      "kind": "PolicyReview",
+      "label": "Review: NCBI PubMed",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/12",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:ncbi-pubmed",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:ncbi-sra",
+      "kind": "PolicyReview",
+      "label": "Review: NCBI Sequence Read Archive",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/9",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:ncbi-sra",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:ncbi-taxonomy",
+      "kind": "PolicyReview",
+      "label": "Review: NCBI Taxonomy",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/10",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:ncbi-taxonomy",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:neon",
+      "kind": "PolicyReview",
+      "label": "Review: NEON Data Portal and API",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/5",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://data.neonscience.org/data-api/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:neon",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:noaa-coastwatch",
+      "kind": "PolicyReview",
+      "label": "Review: NOAA CoastWatch products",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/4",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://coastwatch.pfeg.noaa.gov/wcn/erddap/index.html"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:noaa-coastwatch",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:noaa-coops",
+      "kind": "PolicyReview",
+      "label": "Review: NOAA CO-OPS",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://tidesandcurrents.noaa.gov/web_services_info.html"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:noaa-coops",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:noaa-ncei",
+      "kind": "PolicyReview",
+      "label": "Review: NOAA National Centers for Environmental Information",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/3",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncei.noaa.gov/support/access-data-service-api-user-documentation"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:noaa-ncei",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:noaa-nwps",
+      "kind": "PolicyReview",
+      "label": "Review: NOAA National Water Prediction Service",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://api.water.noaa.gov/nwps/v1/docs/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:noaa-nwps",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:noaa-nws",
+      "kind": "PolicyReview",
+      "label": "Review: NOAA National Weather Service",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.weather.gov/documentation/services-web-api"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:noaa-nws",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:pangaea",
+      "kind": "PolicyReview",
+      "label": "Review: PANGAEA and linked culture deposits",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/18",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://wiki.pangaea.de/wiki/License"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:pangaea",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:usgs-water",
+      "kind": "PolicyReview",
+      "label": "Review: USGS Water Data",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/16",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://api.waterdata.usgs.gov/docs/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:usgs-water",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "review:service:virginia-custodian",
+      "kind": "PolicyReview",
+      "label": "Review: Existing custodian-controlled Virginia holdings",
+      "status": "needs_review",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/15",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "scope_id": "service:virginia-custodian",
+        "default_decision": "needs_review",
+        "field_states": {
+          "authorization": "unknown",
+          "permitted_uses": "unknown",
+          "license": "unknown",
+          "attribution": "unknown",
+          "residency": "unknown",
+          "egress": "unknown",
+          "retention": "unknown",
+          "model_disclosure": "unknown",
+          "audit": "unknown",
+          "source_version": "unknown",
+          "policy_version": "unknown",
+          "actor": "unknown",
+          "purpose": "unknown",
+          "operation": "unknown",
+          "environment": "unknown",
+          "destination": "unknown"
+        },
+        "decision_binding": [
+          "actor",
+          "purpose",
+          "operation",
+          "representation",
+          "source_version",
+          "policy_version",
+          "environment",
+          "destination",
+          "plan_digest",
+          "time_and_expiry"
+        ],
+        "policy_interpretation": "unresolved_requirements_not_an_enforceable_license_or_access_grant"
+      }
+    },
+    {
+      "id": "service:chesapeake-bay-program",
+      "kind": "Service",
+      "label": "Chesapeake Bay Program DataHub",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/14",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://datahub.chesapeakebay.net/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:cbp",
+        "data_modalities": [
+          "water_quality",
+          "plankton_observation",
+          "monitoring_effort"
+        ],
+        "native_identifier_fields": [
+          "data_stream",
+          "station_id",
+          "collection_event",
+          "parameter_code"
+        ],
+        "documentation_urls": [
+          "https://datahub.chesapeakebay.net/"
+        ],
+        "governance_note": "Current API and record/stream conditions need mapping; public stream is distinct from custodian private records.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [],
+        "runtime_integration_state": "planned_or_source_mapping_required"
+      }
+    },
+    {
+      "id": "service:earth-engine",
+      "kind": "Service",
+      "label": "Google Earth Engine",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/19",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://developers.google.com/earth-engine/guides/access"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:google",
+        "data_modalities": [
+          "asset_catalog",
+          "image_collection",
+          "authorized_spatial_summary"
+        ],
+        "native_identifier_fields": [
+          "collection_id",
+          "asset_id",
+          "dataset_version",
+          "model_version"
+        ],
+        "documentation_urls": [
+          "https://developers.google.com/earth-engine/guides/access"
+        ],
+        "governance_note": "Project registration, enabled API, identity/IAM and quotas are separate from per-collection rights.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [
+          "sewall/earthengine.py"
+        ],
+        "runtime_integration_state": "references_existing_components"
+      }
+    },
+    {
+      "id": "service:eol",
+      "kind": "Service",
+      "label": "Encyclopedia of Life and original trait providers",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/13",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://eol.org/docs/what-is-eol/copyright-and-linking-policy"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:eol",
+        "data_modalities": [
+          "taxon_concept",
+          "trait_assertion",
+          "interaction",
+          "media"
+        ],
+        "native_identifier_fields": [
+          "taxon_page_id",
+          "data_object_id",
+          "provider_id"
+        ],
+        "documentation_urls": [
+          "https://eol.org/docs/what-is-eol/copyright-and-linking-policy"
+        ],
+        "governance_note": "Per-content license and original attribution required; API endpoint/key validation pending after documentation HTTP403.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [],
+        "runtime_integration_state": "planned_or_source_mapping_required"
+      }
+    },
+    {
+      "id": "service:jgi",
+      "kind": "Service",
+      "label": "JGI GOLD and IMG",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/17",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://portal-web-3.jgi.doe.gov/portal/help/download.jsf"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:jgi",
+        "data_modalities": [
+          "external_project_metadata",
+          "assembly_annotation_metadata"
+        ],
+        "native_identifier_fields": [
+          "gold_id",
+          "img_id",
+          "analysis_version"
+        ],
+        "documentation_urls": [
+          "https://portal-web-3.jgi.doe.gov/portal/help/download.jsf"
+        ],
+        "governance_note": "NEON access does not authorize JGI; verify portal/record policy, account and current version separately.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [],
+        "runtime_integration_state": "planned_or_source_mapping_required"
+      }
+    },
+    {
+      "id": "service:ncbi-bioproject",
+      "kind": "Service",
+      "label": "NCBI BioProject",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/6",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:ncbi",
+        "data_modalities": [
+          "study_metadata"
+        ],
+        "native_identifier_fields": [
+          "bioproject_accession"
+        ],
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+        ],
+        "governance_note": "Public metadata route; explicit project membership does not prove sample identity.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [
+          "sewall/ncbi.py"
+        ],
+        "runtime_integration_state": "references_existing_components"
+      }
+    },
+    {
+      "id": "service:ncbi-biosample",
+      "kind": "Service",
+      "label": "NCBI BioSample",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/7",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:ncbi",
+        "data_modalities": [
+          "sample_metadata",
+          "collection_attributes"
+        ],
+        "native_identifier_fields": [
+          "biosample_accession"
+        ],
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+        ],
+        "governance_note": "Retain submitted/harmonized/custom attribute distinction and sensitive/unknown attributes.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [
+          "sewall/ncbi.py"
+        ],
+        "runtime_integration_state": "references_existing_components"
+      }
+    },
+    {
+      "id": "service:ncbi-geo",
+      "kind": "Service",
+      "label": "NCBI GEO",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/11",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:ncbi",
+        "data_modalities": [
+          "assay_metadata",
+          "expression_metadata",
+          "functional_genomics"
+        ],
+        "native_identifier_fields": [
+          "gse",
+          "gsm",
+          "gpl",
+          "entrez_uid"
+        ],
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+        ],
+        "governance_note": "Metadata versus expression products and controlled/sensitive context separated.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [
+          "sewall/ncbi.py"
+        ],
+        "runtime_integration_state": "references_existing_components"
+      }
+    },
+    {
+      "id": "service:ncbi-nuccore",
+      "kind": "Service",
+      "label": "NCBI GenBank Nucleotide",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/8",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:ncbi",
+        "data_modalities": [
+          "sequence_metadata",
+          "nucleotide_sequence"
+        ],
+        "native_identifier_fields": [
+          "accession_version"
+        ],
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+        ],
+        "governance_note": "Molecular reuse policy and submitter claims reviewed; sequence is not individual genotype.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [
+          "sewall/genbank.py"
+        ],
+        "runtime_integration_state": "references_existing_components"
+      }
+    },
+    {
+      "id": "service:ncbi-pubmed",
+      "kind": "Service",
+      "label": "NCBI PubMed",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/12",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:ncbi",
+        "data_modalities": [
+          "publication_metadata",
+          "evidence_assertion"
+        ],
+        "native_identifier_fields": [
+          "pmid"
+        ],
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+        ],
+        "governance_note": "Citation metadata and copyrighted abstracts/full text have separate representation policies.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [
+          "sewall/ncbi.py"
+        ],
+        "runtime_integration_state": "references_existing_components"
+      }
+    },
+    {
+      "id": "service:ncbi-sra",
+      "kind": "Service",
+      "label": "NCBI Sequence Read Archive",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/9",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:ncbi",
+        "data_modalities": [
+          "sequencing_run_metadata",
+          "sequence_reads"
+        ],
+        "native_identifier_fields": [
+          "run_accession",
+          "experiment_accession",
+          "sample_accession"
+        ],
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+        ],
+        "governance_note": "Metadata-only initial node; raw download and any controlled-access content require a separate approved path.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [],
+        "runtime_integration_state": "planned_or_source_mapping_required"
+      }
+    },
+    {
+      "id": "service:ncbi-taxonomy",
+      "kind": "Service",
+      "label": "NCBI Taxonomy",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/10",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:ncbi",
+        "data_modalities": [
+          "taxon_concept",
+          "taxonomy_cross_reference"
+        ],
+        "native_identifier_fields": [
+          "taxid",
+          "taxonomy_snapshot"
+        ],
+        "documentation_urls": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+        ],
+        "governance_note": "Preserve authority and version; taxonomy equivalence is not specimen equivalence.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [],
+        "runtime_integration_state": "planned_or_source_mapping_required"
+      }
+    },
+    {
+      "id": "service:neon",
+      "kind": "Service",
+      "label": "NEON Data Portal and API",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/5",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://data.neonscience.org/data-api/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:neon",
+        "data_modalities": [
+          "sample_metadata",
+          "metagenome_metadata",
+          "soil_chemistry",
+          "water_chemistry",
+          "sensor_time_series"
+        ],
+        "native_identifier_fields": [
+          "product_code",
+          "release_tag",
+          "site_code",
+          "sample_id",
+          "event_id"
+        ],
+        "documentation_urls": [
+          "https://data.neonscience.org/data-api/"
+        ],
+        "governance_note": "Catalog discovery differs from tokened file listings/downloads; current CC BY policy requires record/release-specific citation evidence.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [
+          "sewall/neon.py",
+          "sewall/neon_expert.py"
+        ],
+        "runtime_integration_state": "references_existing_components"
+      }
+    },
+    {
+      "id": "service:noaa-coastwatch",
+      "kind": "Service",
+      "label": "NOAA CoastWatch products",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/4",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://coastwatch.pfeg.noaa.gov/wcn/erddap/index.html"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:noaa",
+        "data_modalities": [
+          "gridded_image",
+          "ocean_color",
+          "sea_surface_temperature"
+        ],
+        "native_identifier_fields": [
+          "erddap_dataset_id",
+          "algorithm_version",
+          "valid_time"
+        ],
+        "documentation_urls": [
+          "https://coastwatch.pfeg.noaa.gov/wcn/erddap/index.html"
+        ],
+        "governance_note": "Exact dataset and service metadata gate; preserve quality masks, algorithm and terms.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [],
+        "runtime_integration_state": "planned_or_source_mapping_required"
+      }
+    },
+    {
+      "id": "service:noaa-coops",
+      "kind": "Service",
+      "label": "NOAA CO-OPS",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://tidesandcurrents.noaa.gov/web_services_info.html"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:noaa",
+        "data_modalities": [
+          "sensor_time_series",
+          "station_metadata",
+          "tide_prediction"
+        ],
+        "native_identifier_fields": [
+          "station_id",
+          "product",
+          "datum",
+          "interval"
+        ],
+        "documentation_urls": [
+          "https://tidesandcurrents.noaa.gov/web_services_info.html"
+        ],
+        "governance_note": "Application-tagged bounded API calls; dataset and output review required.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [
+          "sewall/floodsensors.py"
+        ],
+        "runtime_integration_state": "references_existing_components"
+      }
+    },
+    {
+      "id": "service:noaa-ncei",
+      "kind": "Service",
+      "label": "NOAA National Centers for Environmental Information",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/3",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.ncei.noaa.gov/support/access-data-service-api-user-documentation"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:noaa",
+        "data_modalities": [
+          "historical_weather",
+          "climate_time_series"
+        ],
+        "native_identifier_fields": [
+          "dataset_id",
+          "station_id",
+          "variable_id"
+        ],
+        "documentation_urls": [
+          "https://www.ncei.noaa.gov/support/access-data-service-api-user-documentation"
+        ],
+        "governance_note": "Access Data Service supports selected datasets; verify actual dataset conditions and coverage.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [],
+        "runtime_integration_state": "planned_or_source_mapping_required"
+      }
+    },
+    {
+      "id": "service:noaa-nwps",
+      "kind": "Service",
+      "label": "NOAA National Water Prediction Service",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://api.water.noaa.gov/nwps/v1/docs/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:noaa",
+        "data_modalities": [
+          "river_stage",
+          "gauge_threshold",
+          "hydrologic_context"
+        ],
+        "native_identifier_fields": [
+          "gauge_id",
+          "product_id",
+          "issuance_time"
+        ],
+        "documentation_urls": [
+          "https://api.water.noaa.gov/nwps/v1/docs/"
+        ],
+        "governance_note": "Preserve source-specific observed/predicted/threshold status; no derived universal flood rule.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [
+          "sewall/floodsensors.py"
+        ],
+        "runtime_integration_state": "references_existing_components"
+      }
+    },
+    {
+      "id": "service:noaa-nws",
+      "kind": "Service",
+      "label": "NOAA National Weather Service",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://www.weather.gov/documentation/services-web-api"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:noaa",
+        "data_modalities": [
+          "weather_observation",
+          "forecast",
+          "alert"
+        ],
+        "native_identifier_fields": [
+          "station_id",
+          "grid_id",
+          "issuance_time",
+          "valid_time"
+        ],
+        "documentation_urls": [
+          "https://www.weather.gov/documentation/services-web-api"
+        ],
+        "governance_note": "Current documentation requires User-Agent; rate limits and temporal vintage reviewed per endpoint.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [],
+        "runtime_integration_state": "planned_or_source_mapping_required"
+      }
+    },
+    {
+      "id": "service:pangaea",
+      "kind": "Service",
+      "label": "PANGAEA and linked culture deposits",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/18",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://wiki.pangaea.de/wiki/License"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:pangaea",
+        "data_modalities": [
+          "growth_curve",
+          "experiment_condition",
+          "trait_measurement"
+        ],
+        "native_identifier_fields": [
+          "doi",
+          "child_dataset_id",
+          "experiment_key"
+        ],
+        "documentation_urls": [
+          "https://wiki.pangaea.de/wiki/License"
+        ],
+        "governance_note": "Read exact deposit/child license and attribution; combination/ShareAlike review before derivative release.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [],
+        "runtime_integration_state": "planned_or_source_mapping_required"
+      }
+    },
+    {
+      "id": "service:usgs-water",
+      "kind": "Service",
+      "label": "USGS Water Data",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/16",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [
+          "https://api.waterdata.usgs.gov/docs/"
+        ],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:usgs",
+        "data_modalities": [
+          "hydrologic_time_series",
+          "station_metadata",
+          "water_quality"
+        ],
+        "native_identifier_fields": [
+          "monitoring_location_id",
+          "time_series_id",
+          "parameter_code"
+        ],
+        "documentation_urls": [
+          "https://api.waterdata.usgs.gov/docs/"
+        ],
+        "governance_note": "Use selected current service; retain qualifiers, units, datum and query coverage.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [
+          "sewall/floodsensors.py"
+        ],
+        "runtime_integration_state": "references_existing_components"
+      }
+    },
+    {
+      "id": "service:virginia-custodian",
+      "kind": "Service",
+      "label": "Existing custodian-controlled Virginia holdings",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services/15",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {
+        "provider_id": "org:virginia-custodian-unconfirmed",
+        "data_modalities": [
+          "species_count",
+          "sampling_effort",
+          "culture_metadata"
+        ],
+        "native_identifier_fields": [
+          "custodian_record_id",
+          "station_id",
+          "collection_event"
+        ],
+        "documentation_urls": [],
+        "governance_note": "No live use authorized by this seed; require actual custodian, agreement, workspace and output terms.",
+        "policy_evidence_state": "record_specific_review_required",
+        "default_data_action": "needs_review",
+        "authorization_granted": false,
+        "credential_values_stored": false,
+        "existing_module_references": [],
+        "runtime_integration_state": "planned_or_source_mapping_required",
+        "evidence_required": "Actual custodian designation, holding inventory and signed authorization; CBP public terms do not apply to this private holding."
+      }
+    },
+    {
+      "id": "type:alert",
+      "kind": "DataType",
+      "label": "alert",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:assay_metadata",
+      "kind": "DataType",
+      "label": "assay metadata",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:assembly_annotation_metadata",
+      "kind": "DataType",
+      "label": "assembly annotation metadata",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:asset_catalog",
+      "kind": "DataType",
+      "label": "asset catalog",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:authorized_spatial_summary",
+      "kind": "DataType",
+      "label": "authorized spatial summary",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:climate_time_series",
+      "kind": "DataType",
+      "label": "climate time series",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:collection_attributes",
+      "kind": "DataType",
+      "label": "collection attributes",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:culture_metadata",
+      "kind": "DataType",
+      "label": "culture metadata",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:evidence_assertion",
+      "kind": "DataType",
+      "label": "evidence assertion",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:experiment_condition",
+      "kind": "DataType",
+      "label": "experiment condition",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:expression_metadata",
+      "kind": "DataType",
+      "label": "expression metadata",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:external_project_metadata",
+      "kind": "DataType",
+      "label": "external project metadata",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:forecast",
+      "kind": "DataType",
+      "label": "forecast",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:functional_genomics",
+      "kind": "DataType",
+      "label": "functional genomics",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:gauge_threshold",
+      "kind": "DataType",
+      "label": "gauge threshold",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:gridded_image",
+      "kind": "DataType",
+      "label": "gridded image",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:growth_curve",
+      "kind": "DataType",
+      "label": "growth curve",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:historical_weather",
+      "kind": "DataType",
+      "label": "historical weather",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:hydrologic_context",
+      "kind": "DataType",
+      "label": "hydrologic context",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:hydrologic_time_series",
+      "kind": "DataType",
+      "label": "hydrologic time series",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:image_collection",
+      "kind": "DataType",
+      "label": "image collection",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:interaction",
+      "kind": "DataType",
+      "label": "interaction",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:media",
+      "kind": "DataType",
+      "label": "media",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:metagenome_metadata",
+      "kind": "DataType",
+      "label": "metagenome metadata",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:monitoring_effort",
+      "kind": "DataType",
+      "label": "monitoring effort",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:nucleotide_sequence",
+      "kind": "DataType",
+      "label": "nucleotide sequence",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:ocean_color",
+      "kind": "DataType",
+      "label": "ocean color",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:plankton_observation",
+      "kind": "DataType",
+      "label": "plankton observation",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:publication_metadata",
+      "kind": "DataType",
+      "label": "publication metadata",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:river_stage",
+      "kind": "DataType",
+      "label": "river stage",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:sample_metadata",
+      "kind": "DataType",
+      "label": "sample metadata",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:sampling_effort",
+      "kind": "DataType",
+      "label": "sampling effort",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:sea_surface_temperature",
+      "kind": "DataType",
+      "label": "sea surface temperature",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:sensor_time_series",
+      "kind": "DataType",
+      "label": "sensor time series",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:sequence_metadata",
+      "kind": "DataType",
+      "label": "sequence metadata",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:sequence_reads",
+      "kind": "DataType",
+      "label": "sequence reads",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:sequencing_run_metadata",
+      "kind": "DataType",
+      "label": "sequencing run metadata",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:soil_chemistry",
+      "kind": "DataType",
+      "label": "soil chemistry",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:species_count",
+      "kind": "DataType",
+      "label": "species count",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:station_metadata",
+      "kind": "DataType",
+      "label": "station metadata",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:study_metadata",
+      "kind": "DataType",
+      "label": "study metadata",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:taxon_concept",
+      "kind": "DataType",
+      "label": "taxon concept",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:taxonomy_cross_reference",
+      "kind": "DataType",
+      "label": "taxonomy cross reference",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:tide_prediction",
+      "kind": "DataType",
+      "label": "tide prediction",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:trait_assertion",
+      "kind": "DataType",
+      "label": "trait assertion",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:trait_measurement",
+      "kind": "DataType",
+      "label": "trait measurement",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:water_chemistry",
+      "kind": "DataType",
+      "label": "water chemistry",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:water_quality",
+      "kind": "DataType",
+      "label": "water quality",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    },
+    {
+      "id": "type:weather_observation",
+      "kind": "DataType",
+      "label": "weather observation",
+      "status": "catalog_entry",
+      "authorization_granted": false,
+      "evidence": {
+        "registry_pointer": "/services",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+        "documentation_urls": [],
+        "level": "curated_registry_reference_not_live_verification"
+      },
+      "attributes": {}
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:0073a887df7362511133a441",
+      "subject": "service:chesapeake-bay-program",
+      "predicate": "requires_policy_review",
+      "object": "review:service:chesapeake-bay-program",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/14",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:00bd67b704204359d2d4d43a",
+      "subject": "service:neon",
+      "predicate": "offers_data_type",
+      "object": "type:sample_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/5/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:02387e8e6515130cb6730215",
+      "subject": "service:jgi",
+      "predicate": "offers_data_type",
+      "object": "type:external_project_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/17/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:03bdf4e490f06281d0702f91",
+      "subject": "service:ncbi-biosample",
+      "predicate": "published_by",
+      "object": "org:ncbi",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/7/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:0783c1f7329f9771be56d82e",
+      "subject": "service:ncbi-nuccore",
+      "predicate": "offers_data_type",
+      "object": "type:nucleotide_sequence",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/8/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:08935fbf05f746836e485d8c",
+      "subject": "product:neon:DP1.20093.001",
+      "predicate": "served_by",
+      "object": "service:neon",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/1/service_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:08e26bf74c6875a7db5c9841",
+      "subject": "collection:gee:COPERNICUS/S2_SR_HARMONIZED",
+      "predicate": "served_by",
+      "object": "service:earth-engine",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/6/service_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:0ae6c12ee55f582daecece58",
+      "subject": "service:ncbi-biosample",
+      "predicate": "offers_data_type",
+      "object": "type:sample_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/7/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:0def87c48e86288a5de0dfef",
+      "subject": "service:pangaea",
+      "predicate": "offers_data_type",
+      "object": "type:trait_measurement",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/18/data_modalities/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:0ff584b5716075668652d0bb",
+      "subject": "service:ncbi-taxonomy",
+      "predicate": "published_by",
+      "object": "org:ncbi",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/10/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:11777606800416f97276f647",
+      "subject": "service:ncbi-sra",
+      "predicate": "requires_policy_review",
+      "object": "review:service:ncbi-sra",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/9",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:1dc0b6eb72bbba54d17679ea",
+      "subject": "service:noaa-nws",
+      "predicate": "offers_data_type",
+      "object": "type:alert",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/1/data_modalities/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:1e6d00d390b009c0f744e942",
+      "subject": "service:usgs-water",
+      "predicate": "requires_policy_review",
+      "object": "review:service:usgs-water",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/16",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:207e126e29f7c4abedb4854a",
+      "subject": "service:noaa-coops",
+      "predicate": "requires_policy_review",
+      "object": "review:service:noaa-coops",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:21355393032dc1b5202939fb",
+      "subject": "product:neon:DP1.20281.001",
+      "predicate": "requires_policy_review",
+      "object": "review:product:neon:DP1.20281.001",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:26a159df1451b74b44133206",
+      "subject": "service:noaa-ncei",
+      "predicate": "offers_data_type",
+      "object": "type:historical_weather",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/3/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:29563d9651990e11524d3da3",
+      "subject": "service:noaa-ncei",
+      "predicate": "requires_policy_review",
+      "object": "review:service:noaa-ncei",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/3",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:2a7b761402bd2a1835feded9",
+      "subject": "service:ncbi-taxonomy",
+      "predicate": "offers_data_type",
+      "object": "type:taxonomy_cross_reference",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/10/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:2b8e257dd5fb54835322adc4",
+      "subject": "service:ncbi-taxonomy",
+      "predicate": "requires_policy_review",
+      "object": "review:service:ncbi-taxonomy",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/10",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:2e2a1acb006e99d7407b2a02",
+      "subject": "service:jgi",
+      "predicate": "offers_data_type",
+      "object": "type:assembly_annotation_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/17/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:332c73720751561ee5be3224",
+      "subject": "service:noaa-nws",
+      "predicate": "published_by",
+      "object": "org:noaa",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/1/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:35ad7faefd5212b2664e2d78",
+      "subject": "service:chesapeake-bay-program",
+      "predicate": "offers_data_type",
+      "object": "type:monitoring_effort",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/14/data_modalities/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:374b89305b26b397cf83fc8d",
+      "subject": "service:earth-engine",
+      "predicate": "offers_data_type",
+      "object": "type:asset_catalog",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/19/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:37fe876fff37bfbc0027f082",
+      "subject": "service:noaa-coastwatch",
+      "predicate": "offers_data_type",
+      "object": "type:sea_surface_temperature",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/4/data_modalities/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:3809edef7af6df329d104d14",
+      "subject": "service:noaa-nwps",
+      "predicate": "offers_data_type",
+      "object": "type:hydrologic_context",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/2/data_modalities/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:399f194d3131bc1d2cc9127d",
+      "subject": "service:neon",
+      "predicate": "offers_data_type",
+      "object": "type:sensor_time_series",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/5/data_modalities/4",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:3ba9e73c9b76f75670e7ae02",
+      "subject": "service:noaa-ncei",
+      "predicate": "published_by",
+      "object": "org:noaa",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/3/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:3be0be7d7fe32fa7987b807b",
+      "subject": "service:noaa-nws",
+      "predicate": "offers_data_type",
+      "object": "type:weather_observation",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/1/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:3cb000dad9db44bc8ae84333",
+      "subject": "service:virginia-custodian",
+      "predicate": "offers_data_type",
+      "object": "type:sampling_effort",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/15/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:3f04a11feb296a066c302a09",
+      "subject": "service:chesapeake-bay-program",
+      "predicate": "published_by",
+      "object": "org:cbp",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/14/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:410fe92b4d1d335893be4f1d",
+      "subject": "service:ncbi-pubmed",
+      "predicate": "offers_data_type",
+      "object": "type:publication_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/12/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:4b1560d86c8e501c8999114d",
+      "subject": "service:neon",
+      "predicate": "offers_data_type",
+      "object": "type:soil_chemistry",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/5/data_modalities/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:501036be1ad78d42789c1347",
+      "subject": "service:usgs-water",
+      "predicate": "offers_data_type",
+      "object": "type:station_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/16/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:506f4775080cf461319db6e2",
+      "subject": "service:neon",
+      "predicate": "offers_data_type",
+      "object": "type:water_chemistry",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/5/data_modalities/3",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:54105ccb598fd08707158d0c",
+      "subject": "service:ncbi-sra",
+      "predicate": "offers_data_type",
+      "object": "type:sequence_reads",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/9/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:580b4c5dba31682b7f2d434d",
+      "subject": "service:usgs-water",
+      "predicate": "offers_data_type",
+      "object": "type:hydrologic_time_series",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/16/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:58c7fc7a36dbb0ef0cd72d33",
+      "subject": "service:ncbi-nuccore",
+      "predicate": "requires_policy_review",
+      "object": "review:service:ncbi-nuccore",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/8",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:58ca8fa11c65094396d0146a",
+      "subject": "service:usgs-water",
+      "predicate": "published_by",
+      "object": "org:usgs",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/16/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:594b04dad5dd020a9049c98f",
+      "subject": "service:neon",
+      "predicate": "published_by",
+      "object": "org:neon",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/5/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:5a3a4ca034b4ef4a54b6ab53",
+      "subject": "service:eol",
+      "predicate": "requires_policy_review",
+      "object": "review:service:eol",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/13",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:5c0c64b46abc0b598654220d",
+      "subject": "service:noaa-coastwatch",
+      "predicate": "published_by",
+      "object": "org:noaa",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/4/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:5ec17b0e51cc25d600a7012b",
+      "subject": "service:ncbi-bioproject",
+      "predicate": "requires_policy_review",
+      "object": "review:service:ncbi-bioproject",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/6",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:646dad6a9cf97b8cb7444f3d",
+      "subject": "service:ncbi-pubmed",
+      "predicate": "offers_data_type",
+      "object": "type:evidence_assertion",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/12/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:6f228367c12ef669c7b9a209",
+      "subject": "collection:gee:GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL",
+      "predicate": "requires_policy_review",
+      "object": "review:collection:gee:GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/5",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:766318c47764f7a02fd34d3d",
+      "subject": "product:neon:DP1.10107.001",
+      "predicate": "served_by",
+      "object": "service:neon",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/2/service_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:79d7d939781d86a778af4d8e",
+      "subject": "service:jgi",
+      "predicate": "requires_policy_review",
+      "object": "review:service:jgi",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/17",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:7ae35a9a40b997b0475dc23e",
+      "subject": "service:neon",
+      "predicate": "offers_data_type",
+      "object": "type:metagenome_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/5/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:7c83037d3ff7055e4345595b",
+      "subject": "service:ncbi-nuccore",
+      "predicate": "published_by",
+      "object": "org:ncbi",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/8/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:7dd293cacb842b8e168b470d",
+      "subject": "service:ncbi-bioproject",
+      "predicate": "published_by",
+      "object": "org:ncbi",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/6/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:7ecd3898d7eaf702c1fc77e6",
+      "subject": "environment:gcp-project-template",
+      "predicate": "uses_service",
+      "object": "service:earth-engine",
+      "status": "configuration_template",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/environments/0/service_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:826abfef62070def7b80f021",
+      "subject": "service:noaa-coops",
+      "predicate": "published_by",
+      "object": "org:noaa",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/0/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:84488d04fe9e47fc8c05e284",
+      "subject": "service:ncbi-pubmed",
+      "predicate": "published_by",
+      "object": "org:ncbi",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/12/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:89d7303e26f3c078d23623fd",
+      "subject": "service:chesapeake-bay-program",
+      "predicate": "offers_data_type",
+      "object": "type:plankton_observation",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/14/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:8e6ecb66060e394d023deb24",
+      "subject": "service:earth-engine",
+      "predicate": "offers_data_type",
+      "object": "type:image_collection",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/19/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:8ef16db2976bf0b6f15732c1",
+      "subject": "service:ncbi-bioproject",
+      "predicate": "offers_data_type",
+      "object": "type:study_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/6/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:8f6b7499bdac29281f3ced5c",
+      "subject": "service:earth-engine",
+      "predicate": "offers_data_type",
+      "object": "type:authorized_spatial_summary",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/19/data_modalities/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:95a9440035dbd94259314eb9",
+      "subject": "environment:gcp-project-template",
+      "predicate": "hosted_by",
+      "object": "org:google",
+      "status": "configuration_template",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/environments/0/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:9b4492baa98ca5bfda7c6a22",
+      "subject": "collection:gee:COPERNICUS/S2_SR_HARMONIZED",
+      "predicate": "requires_policy_review",
+      "object": "review:collection:gee:COPERNICUS/S2_SR_HARMONIZED",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/6",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:9c1e890bebf93be87fe6f54f",
+      "subject": "service:noaa-nwps",
+      "predicate": "offers_data_type",
+      "object": "type:gauge_threshold",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/2/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:9d1b5827a5de3d612013411a",
+      "subject": "service:virginia-custodian",
+      "predicate": "published_by",
+      "object": "org:virginia-custodian-unconfirmed",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/15/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:9df22fe92cb4f9bc333cfd42",
+      "subject": "service:noaa-nwps",
+      "predicate": "offers_data_type",
+      "object": "type:river_stage",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/2/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:9f0e386f26450c09527044da",
+      "subject": "service:pangaea",
+      "predicate": "published_by",
+      "object": "org:pangaea",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/18/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:9faafeed493f9bcef45fc951",
+      "subject": "service:ncbi-geo",
+      "predicate": "offers_data_type",
+      "object": "type:functional_genomics",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/11/data_modalities/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:9fe7e1e58400c88d53701ac6",
+      "subject": "service:ncbi-pubmed",
+      "predicate": "requires_policy_review",
+      "object": "review:service:ncbi-pubmed",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/12",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:a2302995c6b74a4152ffa1f3",
+      "subject": "product:neon:DP1.10086.001",
+      "predicate": "served_by",
+      "object": "service:neon",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/3/service_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:a656068f2317fc10a9c3b2ec",
+      "subject": "service:earth-engine",
+      "predicate": "published_by",
+      "object": "org:google",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/19/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:af05b4ea951d44b6da8b88ca",
+      "subject": "service:neon",
+      "predicate": "requires_policy_review",
+      "object": "review:service:neon",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/5",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:afcc78d6a9f784b87b4e4ee2",
+      "subject": "service:ncbi-geo",
+      "predicate": "requires_policy_review",
+      "object": "review:service:ncbi-geo",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/11",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:b0032afb3bf7a338475269a4",
+      "subject": "service:ncbi-taxonomy",
+      "predicate": "offers_data_type",
+      "object": "type:taxon_concept",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/10/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:b52580495ad9bafbd7979bf8",
+      "subject": "service:noaa-coastwatch",
+      "predicate": "offers_data_type",
+      "object": "type:gridded_image",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/4/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:b6edbb71436e16c4ff007ed8",
+      "subject": "product:neon:DP1.20093.001",
+      "predicate": "requires_policy_review",
+      "object": "review:product:neon:DP1.20093.001",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:bbccebac2159a45e5c9c392a",
+      "subject": "service:noaa-coastwatch",
+      "predicate": "offers_data_type",
+      "object": "type:ocean_color",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/4/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:bc40ed9a300cb61eb0d1eebc",
+      "subject": "service:ncbi-sra",
+      "predicate": "offers_data_type",
+      "object": "type:sequencing_run_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/9/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:bfcd00dd23eac1c6d22e0a91",
+      "subject": "service:ncbi-sra",
+      "predicate": "published_by",
+      "object": "org:ncbi",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/9/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:c18a9e208792750221d85c2c",
+      "subject": "service:virginia-custodian",
+      "predicate": "offers_data_type",
+      "object": "type:species_count",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/15/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:c192d3b649ab8fdc84f8d805",
+      "subject": "service:noaa-nws",
+      "predicate": "offers_data_type",
+      "object": "type:forecast",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/1/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:c63c492e6e00237eccd16668",
+      "subject": "service:noaa-nws",
+      "predicate": "requires_policy_review",
+      "object": "review:service:noaa-nws",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:c7e32a1a3b0dd86b4eeb370b",
+      "subject": "service:earth-engine",
+      "predicate": "requires_policy_review",
+      "object": "review:service:earth-engine",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/19",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:c8a7a85d0ee90c7c06e1e012",
+      "subject": "service:usgs-water",
+      "predicate": "offers_data_type",
+      "object": "type:water_quality",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/16/data_modalities/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:c9aa603861ff7fb874e4ee19",
+      "subject": "environment:gcp-project-template",
+      "predicate": "requires_policy_review",
+      "object": "review:environment:gcp-project-template",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/environments/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:ce16b63cc9b15ab61aafe637",
+      "subject": "service:ncbi-nuccore",
+      "predicate": "offers_data_type",
+      "object": "type:sequence_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/8/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:cf3b1983e1de49331acaf1e9",
+      "subject": "collection:gee:GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL",
+      "predicate": "served_by",
+      "object": "service:earth-engine",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/5/service_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:d22eb793bf52798f4e59ea2e",
+      "subject": "service:noaa-coops",
+      "predicate": "offers_data_type",
+      "object": "type:tide_prediction",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/0/data_modalities/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:d25d542c4c447377eeae6d85",
+      "subject": "service:pangaea",
+      "predicate": "requires_policy_review",
+      "object": "review:service:pangaea",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/18",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:d2b636f5b71617d9d128bcd5",
+      "subject": "service:eol",
+      "predicate": "published_by",
+      "object": "org:eol",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/13/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:d2b8b6a77b5f67242dd05cac",
+      "subject": "service:noaa-coops",
+      "predicate": "offers_data_type",
+      "object": "type:sensor_time_series",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/0/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:d3472633fb7b62eb3563a43a",
+      "subject": "service:ncbi-geo",
+      "predicate": "published_by",
+      "object": "org:ncbi",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/11/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:d94f251a676e36b99ae72b19",
+      "subject": "service:eol",
+      "predicate": "offers_data_type",
+      "object": "type:media",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/13/data_modalities/3",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:d988819ad5dd06b65b305f99",
+      "subject": "service:pangaea",
+      "predicate": "offers_data_type",
+      "object": "type:growth_curve",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/18/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:e0fe111ade4c67de8da63d36",
+      "subject": "service:pangaea",
+      "predicate": "offers_data_type",
+      "object": "type:experiment_condition",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/18/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:e20801dc4f56d880e07af674",
+      "subject": "product:neon:DP1.10086.001",
+      "predicate": "requires_policy_review",
+      "object": "review:product:neon:DP1.10086.001",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/3",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:e36fc60474c66017fa27d945",
+      "subject": "service:ncbi-geo",
+      "predicate": "offers_data_type",
+      "object": "type:assay_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/11/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:e3717583b7cb77554f86fff5",
+      "subject": "service:eol",
+      "predicate": "offers_data_type",
+      "object": "type:interaction",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/13/data_modalities/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:e51c68f430ca059815e0f611",
+      "subject": "service:noaa-ncei",
+      "predicate": "offers_data_type",
+      "object": "type:climate_time_series",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/3/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:e625526b586e1682d0cd615a",
+      "subject": "product:neon:DP1.10107.001",
+      "predicate": "requires_policy_review",
+      "object": "review:product:neon:DP1.10107.001",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:e78ecf2e5df8450c892870a8",
+      "subject": "service:noaa-coastwatch",
+      "predicate": "requires_policy_review",
+      "object": "review:service:noaa-coastwatch",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/4",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:e96fba078ceec9aeb7963220",
+      "subject": "service:noaa-nwps",
+      "predicate": "requires_policy_review",
+      "object": "review:service:noaa-nwps",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:ebc2f8fe418f5d45fde6d129",
+      "subject": "service:virginia-custodian",
+      "predicate": "requires_policy_review",
+      "object": "review:service:virginia-custodian",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/15",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:eeac8aa4e2f7ea5cd7b6f76e",
+      "subject": "product:neon:DP1.20281.001",
+      "predicate": "served_by",
+      "object": "service:neon",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/0/service_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:ef4fb63761a66c173b6a459b",
+      "subject": "collection:gee:LANDSAT/LC08/C02/T1_L2",
+      "predicate": "requires_policy_review",
+      "object": "review:collection:gee:LANDSAT/LC08/C02/T1_L2",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/4",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:ef5ff854c1a746a17ac17faa",
+      "subject": "service:eol",
+      "predicate": "offers_data_type",
+      "object": "type:taxon_concept",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/13/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:efc57c66de2f1deabdea3c01",
+      "subject": "service:ncbi-biosample",
+      "predicate": "requires_policy_review",
+      "object": "review:service:ncbi-biosample",
+      "status": "review_requirement",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/7",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:f397b8c36db525f0a05baa59",
+      "subject": "service:ncbi-biosample",
+      "predicate": "offers_data_type",
+      "object": "type:collection_attributes",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/7/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:f590e9d12e84d10779ac1d17",
+      "subject": "service:virginia-custodian",
+      "predicate": "offers_data_type",
+      "object": "type:culture_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/15/data_modalities/2",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:f5c4e5ae84d28ec1753f01ba",
+      "subject": "service:chesapeake-bay-program",
+      "predicate": "offers_data_type",
+      "object": "type:water_quality",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/14/data_modalities/0",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:f813978ab5f68835c55bef88",
+      "subject": "collection:gee:LANDSAT/LC08/C02/T1_L2",
+      "predicate": "served_by",
+      "object": "service:earth-engine",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/products/4/service_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:f869ed3d0ac78d2975f6ffb4",
+      "subject": "service:eol",
+      "predicate": "offers_data_type",
+      "object": "type:trait_assertion",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/13/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:fa8af918c7236a85ca1e5f40",
+      "subject": "service:noaa-coops",
+      "predicate": "offers_data_type",
+      "object": "type:station_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/0/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:fae6d3116b9c723018268da0",
+      "subject": "service:noaa-nwps",
+      "predicate": "published_by",
+      "object": "org:noaa",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/2/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:fd1db398c0d6cc7abfb690eb",
+      "subject": "service:ncbi-geo",
+      "predicate": "offers_data_type",
+      "object": "type:expression_metadata",
+      "status": "catalog_category",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/11/data_modalities/1",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    },
+    {
+      "id": "edge:fe14c26d9a64abde7cfb3626",
+      "subject": "service:jgi",
+      "predicate": "published_by",
+      "object": "org:jgi",
+      "status": "catalog_mapping",
+      "authorization_effect": "none",
+      "scientific_identity_claim": false,
+      "evidence": {
+        "registry_pointer": "/services/17/provider_id",
+        "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d"
+      }
+    }
+  ],
+  "limitations": [
+    "Documentation references are curated inputs, not fresh API verification.",
+    "Data-type categories do not establish compatible units, assays or sampling support.",
+    "No sample identity, causal relationship or ecological prediction is asserted.",
+    "Review nodes are unresolved requirements; no record-level permission has been decided.",
+    "The GCP node is an unconfigured template, not a provisioned or authorized project.",
+    "The Virginia custodian remains unconfirmed; ODU is a planning organization entry."
+  ],
+  "statistics": {
+    "nodes": 116,
+    "edges": 111,
+    "node_kinds": {
+      "DataType": 49,
+      "Environment": 1,
+      "Organization": 11,
+      "PolicyReview": 28,
+      "Product": 7,
+      "Service": 20
+    },
+    "edge_predicates": {
+      "hosted_by": 1,
+      "offers_data_type": 54,
+      "published_by": 20,
+      "requires_policy_review": 28,
+      "served_by": 7,
+      "uses_service": 1
+    }
+  },
+  "graph_sha256": "03be89b8506cd2cdfa7a5ba188fcff554b592acd0be2f57c6ffa5afb5a3fc99a"
+}

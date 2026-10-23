@@ -1,0 +1,21 @@
+test_catalog_inventory_and_federated_service_identity (test_knowledge_map.KnowledgeMapTests.test_catalog_inventory_and_federated_service_identity) ... ok
+test_duplicate_nodes_are_rejected (test_knowledge_map.KnowledgeMapTests.test_duplicate_nodes_are_rejected) ... ok
+test_figure_uses_actual_graph_counts (test_knowledge_map.KnowledgeMapTests.test_figure_uses_actual_graph_counts) ... ok
+test_html_payload_is_safe_and_self_contained (test_knowledge_map.KnowledgeMapTests.test_html_payload_is_safe_and_self_contained) ... ok
+test_missing_endpoint_fails_even_after_rehash (test_knowledge_map.KnowledgeMapTests.test_missing_endpoint_fails_even_after_rehash) ... ok
+test_missing_review_is_rejected (test_knowledge_map.KnowledgeMapTests.test_missing_review_is_rejected) ... ok
+test_policy_permission_cannot_be_inserted (test_knowledge_map.KnowledgeMapTests.test_policy_permission_cannot_be_inserted) ... ok
+test_private_cloud_project_is_not_exported (test_knowledge_map.KnowledgeMapTests.test_private_cloud_project_is_not_exported) ... ok
+test_products_and_environment_have_separate_reviews (test_knowledge_map.KnowledgeMapTests.test_products_and_environment_have_separate_reviews) ... ok
+test_rebuild_and_replay_are_identical (test_knowledge_map.KnowledgeMapTests.test_rebuild_and_replay_are_identical) ... ok
+test_registry_allow_default_is_rejected (test_knowledge_map.KnowledgeMapTests.test_registry_allow_default_is_rejected) ... ok
+test_registry_grant_is_rejected (test_knowledge_map.KnowledgeMapTests.test_registry_grant_is_rejected) ... ok
+test_scientific_edge_cannot_be_inserted (test_knowledge_map.KnowledgeMapTests.test_scientific_edge_cannot_be_inserted) ... ok
+test_signed_urls_and_credentials_are_rejected (test_knowledge_map.KnowledgeMapTests.test_signed_urls_and_credentials_are_rejected) ... ok
+test_tampering_without_rehash_fails (test_knowledge_map.KnowledgeMapTests.test_tampering_without_rehash_fails) ... ok
+test_wrong_registry_replay_is_rejected (test_knowledge_map.KnowledgeMapTests.test_wrong_registry_replay_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.060s
+
+OK

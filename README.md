@@ -14,6 +14,38 @@ University. Released under the Apache License 2.0.
 
 Project page and recorded-run gallery: <https://qinlab.github.io/sewall.ai/>
 
+## Initial knowledge map
+
+Open [`site/knowledge-map/index.html`](site/knowledge-map/index.html) for a self-contained,
+searchable graph of NOAA/weather, NEON, seven NCBI databases, EOL, Earth Engine/GCP and
+supporting sources. The October 23, 2026 snapshot has **116 typed nodes and 111 typed edges**.
+Its four views expose sources/products, data types, policy reviews and the complete graph;
+select a node to inspect its identifiers, evidence references, neighbors and JSON.
+
+The [result and limitations](docs/knowledge-map-results-2026-10-23.md),
+[source registry](docs/knowledge-map-source-registry-2026-10-23.json),
+[graph JSON](knowledge-map/graph.json) and [schema](schemas/knowledge_map.schema.json)
+support inspection and offline replay. The 28 review nodes remain unresolved. Shared data
+types establish neither sample identity nor scientific compatibility, and the GCP node is
+an unconfigured template. Source-workspace module references and dated metadata-evidence
+paths record the catalog's preparation context; they do not assert that those components
+or archives are included in this public checkout. Official documentation URLs remain available.
+
+```bash
+python3 -m sewall.knowledge_map \
+  --registry docs/knowledge-map-source-registry-2026-10-23.json --out knowledge-map
+python3 -m sewall.knowledge_map --verify knowledge-map/graph.json \
+  --registry docs/knowledge-map-source-registry-2026-10-23.json
+python3 -m unittest discover -s tests -p test_knowledge_map.py -v
+node tests/knowledge_map_viewer.cjs knowledge-map/index.html
+# Requires the validation extra and Node.js:
+python3 scripts/check_knowledge_map.py --node node
+```
+
+The graph is a separate catalog format from execution manifests. It makes no source/model
+requests or access decisions. Generated figures are grouped projections of the same JSON.
+The website entry point includes the map; this commit alone does not deploy it.
+
 ## How a run works
 
 ```mermaid

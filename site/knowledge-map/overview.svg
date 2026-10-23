@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="690" viewBox="0 0 1500 690" role="img" aria-labelledby="title desc">
+<title id="title">Sewall.ai initial catalog and governance graph</title>
+<desc id="desc">Grouped view of a deterministic JSON graph. Source families connect to data-type categories and unresolved policy requirements. No scientific joins or access grants.</desc>
+<defs><style>text{font-family:Arial,Helvetica,sans-serif;fill:#162b3b}.label{font-size:25px;font-weight:700}.body{font-size:22px}.small{font-size:20px}.edge{fill:none;stroke:#a8b7c0;stroke-width:2.2}.policy{stroke:#b77922;stroke-dasharray:7 5}</style></defs>
+<rect width="1500" height="690" fill="white"/>
+<text x="24" y="35" class="label">Sewall.ai | Initial catalog and governance graph</text>
+<text x="24" y="66" class="small">116 typed nodes · 111 typed edges · deterministic JSON replay · October 23, 2026</text>
+<path d="M625 136 C690 136,680 310,750 310" class="edge"/>
+<path d="M625 136 C690 136,650 90,710 90 L1090 90 Q1130 90,1130 165" class="edge policy"/>
+<rect x="24" y="112" width="600" height="68" rx="8" fill="#eef4f8" stroke="#829cab"/>
+<text x="40" y="140" class="label">NOAA</text>
+<text x="40" y="166" class="small">5 services: weather, tides, rivers, climate, ocean</text>
+<path d="M625 218 C690 218,680 310,750 310" class="edge"/>
+<path d="M625 218 C690 218,650 90,710 90 L1090 90 Q1130 90,1130 165" class="edge policy"/>
+<rect x="24" y="194" width="600" height="68" rx="8" fill="#eef4f8" stroke="#829cab"/>
+<text x="40" y="222" class="label">NEON</text>
+<text x="40" y="248" class="small">1 service + 4 aquatic/soil products</text>
+<path d="M625 300 C690 300,680 310,750 310" class="edge"/>
+<path d="M625 300 C690 300,650 90,710 90 L1090 90 Q1130 90,1130 165" class="edge policy"/>
+<rect x="24" y="276" width="600" height="68" rx="8" fill="#eef4f8" stroke="#829cab"/>
+<text x="40" y="304" class="label">NCBI</text>
+<text x="40" y="330" class="small">7 databases: studies, samples, reads, taxa, literature</text>
+<path d="M625 382 C690 382,680 310,750 310" class="edge"/>
+<path d="M625 382 C690 382,650 90,710 90 L1090 90 Q1130 90,1130 165" class="edge policy"/>
+<rect x="24" y="358" width="600" height="68" rx="8" fill="#eef4f8" stroke="#829cab"/>
+<text x="40" y="386" class="label">Earth Engine / GCP</text>
+<text x="40" y="412" class="small">1 service + 3 collections + project template</text>
+<path d="M625 464 C690 464,680 310,750 310" class="edge"/>
+<path d="M625 464 C690 464,650 90,710 90 L1090 90 Q1130 90,1130 165" class="edge policy"/>
+<rect x="24" y="440" width="600" height="68" rx="8" fill="#eef4f8" stroke="#829cab"/>
+<text x="40" y="468" class="label">EOL · CBP · USGS · JGI · PANGAEA</text>
+<text x="40" y="494" class="small">5 services; Virginia custodian: 1 unresolved</text>
+<rect x="750" y="140" width="330" height="345" rx="8" fill="#edf7f2" stroke="#608c79"/>
+<text x="771" y="177" class="label">49 data-type categories</text>
+<text x="771" y="217" class="body">Molecular / omics</text>
+<text x="771" y="255" class="body">Samples / taxonomy / traits</text>
+<text x="771" y="293" class="body">Ecology / water / soil</text>
+<text x="771" y="331" class="body">Weather / time series</text>
+<text x="771" y="369" class="body">Images / spatial context</text>
+<text x="771" y="407" class="body">Studies / literature</text>
+<text x="771" y="454" class="small">Category links ≠ sample joins</text>
+<rect x="1130" y="140" width="346" height="345" rx="8" fill="#fff8ec" stroke="#b77922"/>
+<text x="1150" y="177" class="label">28 review requirements</text>
+<text x="1150" y="217" class="body">Identity / purpose / operation</text>
+<text x="1150" y="255" class="body">License / attribution / version</text>
+<text x="1150" y="293" class="body">Residency / egress / retention</text>
+<text x="1150" y="331" class="body">Model disclosure / audit</text>
+<text x="1150" y="369" class="body">Environment / destination</text>
+<text x="1150" y="414" class="small" style="fill:#8c591c;font-weight:700">All need record-level review</text>
+<text x="1150" y="454" class="small">No authorization issued</text>
+<text x="24" y="555" class="body">11 organization entries · 20 services · 7 products · 1 environment template · 49 data types · 28 review nodes</text>
+<path d="M26 590 L78 590" class="edge"/><text x="90" y="597" class="small">Catalog/category mapping</text>
+<path d="M480 590 L532 590" class="edge policy"/><text x="544" y="597" class="small">Unresolved review requirement</text>
+<text x="24" y="638" class="body">Preliminary software result: inspectable topology and offline replay. No validated scientific joins or access grants.</text>
+<text x="24" y="672" class="small">Grouped display of graph.json. Documentation references are curated inputs; units, sampling support and permissions remain to be reviewed.</text>
+</svg>

@@ -1,0 +1,43 @@
+{
+  "checked_at": "2026-10-23T18:35:50.905691+00:00",
+  "graph_sha256": "03be89b8506cd2cdfa7a5ba188fcff554b592acd0be2f57c6ffa5afb5a3fc99a",
+  "deterministic_replay": true,
+  "json_schema_validation": {
+    "passed": true,
+    "validator": "jsonschema",
+    "version": "4.26.0",
+    "schema_sha256": "875303706d3bdc46cabccd8fcd5cafb06180c2a7522e05ad87ddcf4e03d1765a"
+  },
+  "python_tests": {
+    "passed": true,
+    "run": 16,
+    "failures": 0,
+    "errors": 0,
+    "log": "unit-tests.txt"
+  },
+  "viewer_script_checks": {
+    "passed": true,
+    "interaction_checks": 9,
+    "browser_visual_qa": false,
+    "scope": "actual embedded script with minimal DOM; no browser service available"
+  },
+  "wheel": {
+    "filename": "sewall-0.1.3-py3-none-any.whl",
+    "sha256": "7398bb0b6d83e8259b001e1f60933a233cc498058611c23beb51972a2339b0ea",
+    "module_and_viewer_match_source": true
+  },
+  "browser_visual_check": {
+    "completed": false,
+    "reason": "Browser-control inventory empty; native Chrome pipe failed to initialize"
+  },
+  "files_sha256": {
+    "sewall/knowledge_map.py": "06b291759b6a00c6e90f4f809c85c100a4cd4b0dcabdbeaf81944bb1679ac27f",
+    "sewall/knowledge_map_viewer.html": "962113f03a07fdf75f1df7c276010e4961d3ee0c0db7b4c872b80f95859187f5",
+    "tests/test_knowledge_map.py": "e55a876ef445cb60e43c040bdb911e7bffb94cb5c998388653633411b66b66ee",
+    "tests/knowledge_map_viewer.cjs": "0aa69b2c4994e0c9d618c721bfe4814d09ee37e4542403b49af842409577cd2c",
+    "knowledge-map/index.html": "d73c33032f836e2d16a37ef64ab8f669d502cc852e075d671d57ae4d6aa8a521",
+    "knowledge-map/graph.json": "a0de91c984e4ef217dbb88db488e304738fe24a5c95e782ae666262820299bc1"
+  },
+  "scientific_validation_performed": false,
+  "authorization_grants_issued": 0
+}

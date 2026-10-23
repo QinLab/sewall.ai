@@ -1,0 +1,686 @@
+{
+  "design_version": "0.1-draft",
+  "prepared_on": "2026-10-23",
+  "status": "planning_seed_not_runtime_authorization",
+  "graph_scope": "source_catalog_only_no_observation_or_sample_identity_claims",
+  "providers": [
+    {
+      "id": "org:noaa",
+      "type": "Organization",
+      "label": "NOAA"
+    },
+    {
+      "id": "org:neon",
+      "type": "Organization",
+      "label": "NEON operated by Battelle"
+    },
+    {
+      "id": "org:ncbi",
+      "type": "Organization",
+      "label": "NCBI at NLM NIH"
+    },
+    {
+      "id": "org:eol",
+      "type": "Organization",
+      "label": "Encyclopedia of Life"
+    },
+    {
+      "id": "org:cbp",
+      "type": "Organization",
+      "label": "Chesapeake Bay Program"
+    },
+    {
+      "id": "org:odu",
+      "type": "Organization",
+      "label": "ODU or verified data custodian"
+    },
+    {
+      "id": "org:usgs",
+      "type": "Organization",
+      "label": "USGS"
+    },
+    {
+      "id": "org:jgi",
+      "type": "Organization",
+      "label": "DOE Joint Genome Institute"
+    },
+    {
+      "id": "org:pangaea",
+      "type": "Organization",
+      "label": "PANGAEA"
+    },
+    {
+      "id": "org:google",
+      "type": "Organization",
+      "label": "Google"
+    },
+    {
+      "id": "org:virginia-custodian-unconfirmed",
+      "type": "Organization",
+      "label": "Actual Virginia data custodian must be identified",
+      "authority_status": "unconfirmed_template_not_authoritative_designation"
+    }
+  ],
+  "services": [
+    {
+      "id": "service:noaa-coops",
+      "label": "NOAA CO-OPS",
+      "provider_id": "org:noaa",
+      "data_modalities": [
+        "sensor_time_series",
+        "station_metadata",
+        "tide_prediction"
+      ],
+      "native_identifier_fields": [
+        "station_id",
+        "product",
+        "datum",
+        "interval"
+      ],
+      "documentation_urls": [
+        "https://tidesandcurrents.noaa.gov/web_services_info.html"
+      ],
+      "governance_note": "Application-tagged bounded API calls; dataset and output review required.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [
+        "sewall/floodsensors.py"
+      ],
+      "runtime_integration_state": "references_existing_components"
+    },
+    {
+      "id": "service:noaa-nws",
+      "label": "NOAA National Weather Service",
+      "provider_id": "org:noaa",
+      "data_modalities": [
+        "weather_observation",
+        "forecast",
+        "alert"
+      ],
+      "native_identifier_fields": [
+        "station_id",
+        "grid_id",
+        "issuance_time",
+        "valid_time"
+      ],
+      "documentation_urls": [
+        "https://www.weather.gov/documentation/services-web-api"
+      ],
+      "governance_note": "Current documentation requires User-Agent; rate limits and temporal vintage reviewed per endpoint.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [],
+      "runtime_integration_state": "planned_or_source_mapping_required"
+    },
+    {
+      "id": "service:noaa-nwps",
+      "label": "NOAA National Water Prediction Service",
+      "provider_id": "org:noaa",
+      "data_modalities": [
+        "river_stage",
+        "gauge_threshold",
+        "hydrologic_context"
+      ],
+      "native_identifier_fields": [
+        "gauge_id",
+        "product_id",
+        "issuance_time"
+      ],
+      "documentation_urls": [
+        "https://api.water.noaa.gov/nwps/v1/docs/"
+      ],
+      "governance_note": "Preserve source-specific observed/predicted/threshold status; no derived universal flood rule.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [
+        "sewall/floodsensors.py"
+      ],
+      "runtime_integration_state": "references_existing_components"
+    },
+    {
+      "id": "service:noaa-ncei",
+      "label": "NOAA National Centers for Environmental Information",
+      "provider_id": "org:noaa",
+      "data_modalities": [
+        "historical_weather",
+        "climate_time_series"
+      ],
+      "native_identifier_fields": [
+        "dataset_id",
+        "station_id",
+        "variable_id"
+      ],
+      "documentation_urls": [
+        "https://www.ncei.noaa.gov/support/access-data-service-api-user-documentation"
+      ],
+      "governance_note": "Access Data Service supports selected datasets; verify actual dataset conditions and coverage.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [],
+      "runtime_integration_state": "planned_or_source_mapping_required"
+    },
+    {
+      "id": "service:noaa-coastwatch",
+      "label": "NOAA CoastWatch products",
+      "provider_id": "org:noaa",
+      "data_modalities": [
+        "gridded_image",
+        "ocean_color",
+        "sea_surface_temperature"
+      ],
+      "native_identifier_fields": [
+        "erddap_dataset_id",
+        "algorithm_version",
+        "valid_time"
+      ],
+      "documentation_urls": [
+        "https://coastwatch.pfeg.noaa.gov/wcn/erddap/index.html"
+      ],
+      "governance_note": "Exact dataset and service metadata gate; preserve quality masks, algorithm and terms.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [],
+      "runtime_integration_state": "planned_or_source_mapping_required"
+    },
+    {
+      "id": "service:neon",
+      "label": "NEON Data Portal and API",
+      "provider_id": "org:neon",
+      "data_modalities": [
+        "sample_metadata",
+        "metagenome_metadata",
+        "soil_chemistry",
+        "water_chemistry",
+        "sensor_time_series"
+      ],
+      "native_identifier_fields": [
+        "product_code",
+        "release_tag",
+        "site_code",
+        "sample_id",
+        "event_id"
+      ],
+      "documentation_urls": [
+        "https://data.neonscience.org/data-api/"
+      ],
+      "governance_note": "Catalog discovery differs from tokened file listings/downloads; current CC BY policy requires record/release-specific citation evidence.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [
+        "sewall/neon.py",
+        "sewall/neon_expert.py"
+      ],
+      "runtime_integration_state": "references_existing_components"
+    },
+    {
+      "id": "service:ncbi-bioproject",
+      "label": "NCBI BioProject",
+      "provider_id": "org:ncbi",
+      "data_modalities": [
+        "study_metadata"
+      ],
+      "native_identifier_fields": [
+        "bioproject_accession"
+      ],
+      "documentation_urls": [
+        "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+      ],
+      "governance_note": "Public metadata route; explicit project membership does not prove sample identity.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [
+        "sewall/ncbi.py"
+      ],
+      "runtime_integration_state": "references_existing_components"
+    },
+    {
+      "id": "service:ncbi-biosample",
+      "label": "NCBI BioSample",
+      "provider_id": "org:ncbi",
+      "data_modalities": [
+        "sample_metadata",
+        "collection_attributes"
+      ],
+      "native_identifier_fields": [
+        "biosample_accession"
+      ],
+      "documentation_urls": [
+        "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+      ],
+      "governance_note": "Retain submitted/harmonized/custom attribute distinction and sensitive/unknown attributes.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [
+        "sewall/ncbi.py"
+      ],
+      "runtime_integration_state": "references_existing_components"
+    },
+    {
+      "id": "service:ncbi-nuccore",
+      "label": "NCBI GenBank Nucleotide",
+      "provider_id": "org:ncbi",
+      "data_modalities": [
+        "sequence_metadata",
+        "nucleotide_sequence"
+      ],
+      "native_identifier_fields": [
+        "accession_version"
+      ],
+      "documentation_urls": [
+        "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+      ],
+      "governance_note": "Molecular reuse policy and submitter claims reviewed; sequence is not individual genotype.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [
+        "sewall/genbank.py"
+      ],
+      "runtime_integration_state": "references_existing_components"
+    },
+    {
+      "id": "service:ncbi-sra",
+      "label": "NCBI Sequence Read Archive",
+      "provider_id": "org:ncbi",
+      "data_modalities": [
+        "sequencing_run_metadata",
+        "sequence_reads"
+      ],
+      "native_identifier_fields": [
+        "run_accession",
+        "experiment_accession",
+        "sample_accession"
+      ],
+      "documentation_urls": [
+        "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+      ],
+      "governance_note": "Metadata-only initial node; raw download and any controlled-access content require a separate approved path.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [],
+      "runtime_integration_state": "planned_or_source_mapping_required"
+    },
+    {
+      "id": "service:ncbi-taxonomy",
+      "label": "NCBI Taxonomy",
+      "provider_id": "org:ncbi",
+      "data_modalities": [
+        "taxon_concept",
+        "taxonomy_cross_reference"
+      ],
+      "native_identifier_fields": [
+        "taxid",
+        "taxonomy_snapshot"
+      ],
+      "documentation_urls": [
+        "https://www.ncbi.nlm.nih.gov/books/NBK25497/"
+      ],
+      "governance_note": "Preserve authority and version; taxonomy equivalence is not specimen equivalence.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [],
+      "runtime_integration_state": "planned_or_source_mapping_required"
+    },
+    {
+      "id": "service:ncbi-geo",
+      "label": "NCBI GEO",
+      "provider_id": "org:ncbi",
+      "data_modalities": [
+        "assay_metadata",
+        "expression_metadata",
+        "functional_genomics"
+      ],
+      "native_identifier_fields": [
+        "gse",
+        "gsm",
+        "gpl",
+        "entrez_uid"
+      ],
+      "documentation_urls": [
+        "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+      ],
+      "governance_note": "Metadata versus expression products and controlled/sensitive context separated.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [
+        "sewall/ncbi.py"
+      ],
+      "runtime_integration_state": "references_existing_components"
+    },
+    {
+      "id": "service:ncbi-pubmed",
+      "label": "NCBI PubMed",
+      "provider_id": "org:ncbi",
+      "data_modalities": [
+        "publication_metadata",
+        "evidence_assertion"
+      ],
+      "native_identifier_fields": [
+        "pmid"
+      ],
+      "documentation_urls": [
+        "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+      ],
+      "governance_note": "Citation metadata and copyrighted abstracts/full text have separate representation policies.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [
+        "sewall/ncbi.py"
+      ],
+      "runtime_integration_state": "references_existing_components"
+    },
+    {
+      "id": "service:eol",
+      "label": "Encyclopedia of Life and original trait providers",
+      "provider_id": "org:eol",
+      "data_modalities": [
+        "taxon_concept",
+        "trait_assertion",
+        "interaction",
+        "media"
+      ],
+      "native_identifier_fields": [
+        "taxon_page_id",
+        "data_object_id",
+        "provider_id"
+      ],
+      "documentation_urls": [
+        "https://eol.org/docs/what-is-eol/copyright-and-linking-policy"
+      ],
+      "governance_note": "Per-content license and original attribution required; API endpoint/key validation pending after documentation HTTP403.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [],
+      "runtime_integration_state": "planned_or_source_mapping_required"
+    },
+    {
+      "id": "service:chesapeake-bay-program",
+      "label": "Chesapeake Bay Program DataHub",
+      "provider_id": "org:cbp",
+      "data_modalities": [
+        "water_quality",
+        "plankton_observation",
+        "monitoring_effort"
+      ],
+      "native_identifier_fields": [
+        "data_stream",
+        "station_id",
+        "collection_event",
+        "parameter_code"
+      ],
+      "documentation_urls": [
+        "https://datahub.chesapeakebay.net/"
+      ],
+      "governance_note": "Current API and record/stream conditions need mapping; public stream is distinct from custodian private records.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [],
+      "runtime_integration_state": "planned_or_source_mapping_required"
+    },
+    {
+      "id": "service:virginia-custodian",
+      "label": "Existing custodian-controlled Virginia holdings",
+      "provider_id": "org:virginia-custodian-unconfirmed",
+      "data_modalities": [
+        "species_count",
+        "sampling_effort",
+        "culture_metadata"
+      ],
+      "native_identifier_fields": [
+        "custodian_record_id",
+        "station_id",
+        "collection_event"
+      ],
+      "documentation_urls": [],
+      "governance_note": "No live use authorized by this seed; require actual custodian, agreement, workspace and output terms.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [],
+      "runtime_integration_state": "planned_or_source_mapping_required",
+      "evidence_required": "Actual custodian designation, holding inventory and signed authorization; CBP public terms do not apply to this private holding."
+    },
+    {
+      "id": "service:usgs-water",
+      "label": "USGS Water Data",
+      "provider_id": "org:usgs",
+      "data_modalities": [
+        "hydrologic_time_series",
+        "station_metadata",
+        "water_quality"
+      ],
+      "native_identifier_fields": [
+        "monitoring_location_id",
+        "time_series_id",
+        "parameter_code"
+      ],
+      "documentation_urls": [
+        "https://api.waterdata.usgs.gov/docs/"
+      ],
+      "governance_note": "Use selected current service; retain qualifiers, units, datum and query coverage.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [
+        "sewall/floodsensors.py"
+      ],
+      "runtime_integration_state": "references_existing_components"
+    },
+    {
+      "id": "service:jgi",
+      "label": "JGI GOLD and IMG",
+      "provider_id": "org:jgi",
+      "data_modalities": [
+        "external_project_metadata",
+        "assembly_annotation_metadata"
+      ],
+      "native_identifier_fields": [
+        "gold_id",
+        "img_id",
+        "analysis_version"
+      ],
+      "documentation_urls": [
+        "https://portal-web-3.jgi.doe.gov/portal/help/download.jsf"
+      ],
+      "governance_note": "NEON access does not authorize JGI; verify portal/record policy, account and current version separately.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [],
+      "runtime_integration_state": "planned_or_source_mapping_required"
+    },
+    {
+      "id": "service:pangaea",
+      "label": "PANGAEA and linked culture deposits",
+      "provider_id": "org:pangaea",
+      "data_modalities": [
+        "growth_curve",
+        "experiment_condition",
+        "trait_measurement"
+      ],
+      "native_identifier_fields": [
+        "doi",
+        "child_dataset_id",
+        "experiment_key"
+      ],
+      "documentation_urls": [
+        "https://wiki.pangaea.de/wiki/License"
+      ],
+      "governance_note": "Read exact deposit/child license and attribution; combination/ShareAlike review before derivative release.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [],
+      "runtime_integration_state": "planned_or_source_mapping_required"
+    },
+    {
+      "id": "service:earth-engine",
+      "label": "Google Earth Engine",
+      "provider_id": "org:google",
+      "data_modalities": [
+        "asset_catalog",
+        "image_collection",
+        "authorized_spatial_summary"
+      ],
+      "native_identifier_fields": [
+        "collection_id",
+        "asset_id",
+        "dataset_version",
+        "model_version"
+      ],
+      "documentation_urls": [
+        "https://developers.google.com/earth-engine/guides/access"
+      ],
+      "governance_note": "Project registration, enabled API, identity/IAM and quotas are separate from per-collection rights.",
+      "policy_evidence_state": "record_specific_review_required",
+      "default_data_action": "needs_review",
+      "authorization_granted": false,
+      "credential_values_stored": false,
+      "existing_module_references": [
+        "sewall/earthengine.py"
+      ],
+      "runtime_integration_state": "references_existing_components"
+    }
+  ],
+  "products": [
+    {
+      "id": "product:neon:DP1.20281.001",
+      "service_id": "service:neon",
+      "native_id": "DP1.20281.001",
+      "label": "Surface water microbe metagenome sequences",
+      "release_required": true,
+      "record_policy_required": true,
+      "documentation_url": "https://data.neonscience.org/api/v0/products/DP1.20281.001",
+      "metadata_evidence": "neon-api-evidence-2026-10-23/inspection-summary.json"
+    },
+    {
+      "id": "product:neon:DP1.20093.001",
+      "service_id": "service:neon",
+      "native_id": "DP1.20093.001",
+      "label": "Chemical properties of surface water",
+      "release_required": true,
+      "record_policy_required": true,
+      "documentation_url": "https://data.neonscience.org/api/v0/products/DP1.20093.001",
+      "metadata_evidence": "neon-api-evidence-2026-10-23/inspection-summary.json"
+    },
+    {
+      "id": "product:neon:DP1.10107.001",
+      "service_id": "service:neon",
+      "native_id": "DP1.10107.001",
+      "label": "Soil microbe metagenome sequences",
+      "release_required": true,
+      "record_policy_required": true,
+      "documentation_url": "https://data.neonscience.org/api/v0/products/DP1.10107.001",
+      "metadata_evidence": "neon-api-evidence-2026-10-23/inspection-summary.json"
+    },
+    {
+      "id": "product:neon:DP1.10086.001",
+      "service_id": "service:neon",
+      "native_id": "DP1.10086.001",
+      "label": "Soil physical and chemical properties periodic",
+      "release_required": true,
+      "record_policy_required": true,
+      "documentation_url": "https://data.neonscience.org/api/v0/products/DP1.10086.001",
+      "metadata_evidence": "neon-api-evidence-2026-10-23/inspection-summary.json"
+    },
+    {
+      "id": "collection:gee:LANDSAT/LC08/C02/T1_L2",
+      "service_id": "service:earth-engine",
+      "native_id": "LANDSAT/LC08/C02/T1_L2",
+      "label": "Landsat 8 Collection 2 Level 2",
+      "asset_version_required": true,
+      "record_policy_required": true,
+      "documentation_url": "https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C02_T1_L2",
+      "review_state": "catalog_documentation_reviewed"
+    },
+    {
+      "id": "collection:gee:GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL",
+      "service_id": "service:earth-engine",
+      "native_id": "GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL",
+      "label": "Satellite Embedding V1 annual",
+      "asset_version_required": true,
+      "record_policy_required": true,
+      "documentation_url": "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL",
+      "review_state": "catalog_documentation_reviewed"
+    },
+    {
+      "id": "collection:gee:COPERNICUS/S2_SR_HARMONIZED",
+      "service_id": "service:earth-engine",
+      "native_id": "COPERNICUS/S2_SR_HARMONIZED",
+      "label": "Sentinel-2 harmonized surface reflectance",
+      "asset_version_required": true,
+      "record_policy_required": true,
+      "documentation_url": "https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED",
+      "review_state": "catalog_documentation_reviewed_record_terms_pending"
+    }
+  ],
+  "environments": [
+    {
+      "id": "environment:gcp-project-template",
+      "type": "CloudProjectEnvironment",
+      "provider_id": "org:google",
+      "service_id": "service:earth-engine",
+      "project_ref": null,
+      "visibility": "private_operational_overlay",
+      "registration_state": "must_verify_actual_project",
+      "iam_state": "must_verify_per_actor",
+      "residency_state": "unknown_until_documented",
+      "quota_and_cost_ceiling": null,
+      "export_destination_ref": null,
+      "authorization_granted": false,
+      "provisioned_by_this_plan": false
+    }
+  ],
+  "policy_contract": {
+    "default": "needs_review",
+    "record_version_policy_required": true,
+    "model_disclosure_separate_from_retrieval": true,
+    "decision_bound_to": [
+      "actor",
+      "purpose",
+      "operation",
+      "representation",
+      "source_version",
+      "policy_version",
+      "environment",
+      "destination",
+      "plan_digest",
+      "time_and_expiry"
+    ],
+    "secrets_and_signed_urls_permitted": false
+  },
+  "implementation_status": "No new adapter, schema or policy engine is implemented by these seed files."
+}

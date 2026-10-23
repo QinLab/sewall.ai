@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="6.5in" height="1.775in" viewBox="0 0 1300 355" role="img" aria-labelledby="title desc">
+<title id="title">Initial Sewall.ai catalog and governance graph</title>
+<desc id="desc">Grouped projection of 116 typed nodes and 111 typed edges. Twenty services, seven products and one unconfigured environment connect to 49 data types and 28 unresolved review requirements. Eleven organization entries are counted. These are catalog mappings, not scientific sample joins or access grants.</desc>
+<defs><style>text{font-family:Arial,Helvetica,sans-serif;fill:#183346}.title{font-size:26px;font-weight:700}.body{font-size:24px}.small{font-size:22px}.edge{fill:none;stroke:#8ea8b6;stroke-width:2}.policy{stroke:#b27a2a;stroke-dasharray:6 4}</style></defs>
+<rect width="1300" height="355" fill="white"/>
+<text x="10" y="29" class="title">Initial catalog graph: 116 nodes, 111 edges | October 23, 2026</text>
+<path d="M109 150 C109 180,350 175,350 204" class="edge"/>
+<path d="M109 150 C109 185,960 178,960 204" class="edge policy"/>
+<rect x="10" y="48" width="200" height="102" rx="5" fill="#edf4f7" stroke="#8ea8b6"/>
+<text x="18" y="76" class="title" style="font-size:26px">NOAA</text>
+<text x="18" y="104" class="body" style="font-size:24px">5 services</text>
+<text x="18" y="131" class="small" style="font-size:20px">Weather / tides</text>
+<path d="M325 150 C325 180,350 175,350 204" class="edge"/>
+<path d="M325 150 C325 185,960 178,960 204" class="edge policy"/>
+<rect x="226" y="48" width="200" height="102" rx="5" fill="#edf4f7" stroke="#8ea8b6"/>
+<text x="234" y="76" class="title" style="font-size:26px">NEON</text>
+<text x="234" y="104" class="body" style="font-size:24px">1 service</text>
+<text x="234" y="131" class="small" style="font-size:20px">4 products</text>
+<path d="M541 150 C541 180,350 175,350 204" class="edge"/>
+<path d="M541 150 C541 185,960 178,960 204" class="edge policy"/>
+<rect x="442" y="48" width="200" height="102" rx="5" fill="#edf4f7" stroke="#8ea8b6"/>
+<text x="450" y="76" class="title" style="font-size:26px">NCBI</text>
+<text x="450" y="104" class="body" style="font-size:24px">7 databases</text>
+<text x="450" y="131" class="small" style="font-size:20px">Distinct identifiers</text>
+<path d="M757 150 C757 180,350 175,350 204" class="edge"/>
+<path d="M757 150 C757 185,960 178,960 204" class="edge policy"/>
+<rect x="658" y="48" width="200" height="102" rx="5" fill="#edf4f7" stroke="#8ea8b6"/>
+<text x="666" y="76" class="title" style="font-size:26px">Earth Engine</text>
+<text x="666" y="104" class="body" style="font-size:24px">1 service</text>
+<text x="666" y="131" class="small" style="font-size:20px">3 collections + GCP</text>
+<path d="M973 150 C973 180,350 175,350 204" class="edge"/>
+<path d="M973 150 C973 185,960 178,960 204" class="edge policy"/>
+<rect x="874" y="48" width="200" height="102" rx="5" fill="#edf4f7" stroke="#8ea8b6"/>
+<text x="882" y="76" class="title" style="font-size:22px">Other public (5)</text>
+<text x="882" y="104" class="body" style="font-size:21px">EOL / CBP / USGS</text>
+<text x="882" y="131" class="small" style="font-size:20px">JGI / PANGAEA</text>
+<path d="M1189 150 C1189 180,350 175,350 204" class="edge"/>
+<path d="M1189 150 C1189 185,960 178,960 204" class="edge policy"/>
+<rect x="1090" y="48" width="200" height="102" rx="5" fill="#edf4f7" stroke="#8ea8b6"/>
+<text x="1098" y="76" class="title" style="font-size:22px">Virginia</text>
+<text x="1098" y="104" class="body" style="font-size:24px">1 template</text>
+<text x="1098" y="131" class="small" style="font-size:20px">Authority pending</text>
+<rect x="80" y="204" width="540" height="102" rx="5" fill="#edf7f2" stroke="#608c79"/>
+<text x="96" y="234" class="title">49 data-type categories</text>
+<text x="96" y="263" class="body">Omics · traits · ecology · weather</text>
+<text x="96" y="292" class="body">Images · spatial context · literature</text>
+<rect x="690" y="204" width="540" height="102" rx="5" fill="#fff7e9" stroke="#b27a2a"/>
+<text x="706" y="234" class="title">28 unresolved policy reviews</text>
+<text x="706" y="263" class="body">License · attribution · egress · retention</text>
+<text x="706" y="292" class="body">Actor · purpose · environment · audit</text>
+<text x="10" y="341" class="small">11 organization entries · 20 services · 7 products · 1 unconfigured environment · no scientific joins or grants</text>
+</svg>

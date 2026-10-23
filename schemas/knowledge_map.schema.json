@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sewall.ai/schemas/knowledge-map-1.0.json",
+  "title": "Sewall.ai initial catalog and governance graph",
+  "description": "A catalog snapshot, never an access decision or a scientific sample-identity graph. Semantic validation and exact registry replay are also required.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "graph_kind", "prepared_on", "source_registry_sha256", "source_registry_version", "scope", "scientific_join_count", "authorization_grant_count", "network_requests_in_build", "nodes", "edges", "limitations", "statistics", "graph_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "graph_kind": {"const": "catalog_and_governance"},
+    "prepared_on": {"type": "string", "format": "date"},
+    "source_registry_sha256": {"$ref": "#/$defs/digest"},
+    "source_registry_version": {"type": "string"},
+    "scope": {"const": "catalog_structure_and_unresolved_policy_requirements"},
+    "scientific_join_count": {"const": 0},
+    "authorization_grant_count": {"const": 0},
+    "network_requests_in_build": {"const": 0},
+    "nodes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/node"}},
+    "edges": {"type": "array", "items": {"$ref": "#/$defs/edge"}},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "statistics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["nodes", "edges", "node_kinds", "edge_predicates"],
+      "properties": {
+        "nodes": {"type": "integer", "minimum": 1}, "edges": {"type": "integer", "minimum": 0},
+        "node_kinds": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 1}},
+        "edge_predicates": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 1}}
+      }
+    },
+    "graph_sha256": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["registry_pointer", "registry_sha256"],
+      "properties": {
+        "registry_pointer": {"type": "string", "pattern": "^/"},
+        "registry_sha256": {"$ref": "#/$defs/digest"},
+        "documentation_urls": {"type": "array", "items": {"type": "string", "pattern": "^https://[^?#]+$"}},
+        "level": {"const": "curated_registry_reference_not_live_verification"}
+      }
+    },
+    "node": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "kind", "label", "status", "authorization_granted", "evidence", "attributes"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["Organization", "Service", "Product", "Environment", "DataType", "PolicyReview"]},
+        "label": {"type": "string", "minLength": 1},
+        "status": {"enum": ["catalog_entry", "needs_review"]},
+        "authorization_granted": {"const": false},
+        "evidence": {"allOf": [{"$ref": "#/$defs/evidence"}, {"required": ["documentation_urls", "level"]}]},
+        "attributes": {"type": "object"}
+      }
+    },
+    "edge": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "subject", "predicate", "object", "status", "authorization_effect", "scientific_identity_claim", "evidence"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^edge:[a-f0-9]{24}$"},
+        "subject": {"type": "string"}, "object": {"type": "string"},
+        "predicate": {"enum": ["published_by", "served_by", "hosted_by", "uses_service", "offers_data_type", "requires_policy_review"]},
+        "status": {"enum": ["catalog_mapping", "catalog_category", "configuration_template", "review_requirement"]},
+        "authorization_effect": {"const": "none"},
+        "scientific_identity_claim": {"const": false},
+        "evidence": {"$ref": "#/$defs/evidence"}
+      }
+    }
+  }
+}

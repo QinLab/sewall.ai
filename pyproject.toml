@@ -29,7 +29,7 @@ packages = ["sewall", "sewall.skills_live"]
 package-dir = {"sewall.skills_live" = "skills/live"}
 
 [tool.setuptools.package-data]
-"sewall" = ["panels/*.json"]
+"sewall" = ["panels/*.json", "knowledge_map_viewer.html"]
 "sewall.skills_live" = ["*.skill.json"]
 
 [tool.setuptools.dynamic]

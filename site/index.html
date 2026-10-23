@@ -51,6 +51,7 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);color:v
   that anyone can replay offline.</p>
   <div class="buttons">
     <a class="btn primary" href="gallery/">Recorded-run gallery</a>
+    <a class="btn" href="knowledge-map/">Initial knowledge map</a>
     <a class="btn" href="https://github.com/QinLab/sewall.ai">Source on GitHub</a>
     <a class="btn" href="https://github.com/QinLab/sewall.ai/blob/main/docs/mcp-quickstart.md">MCP quickstart</a>
   </div>
@@ -62,6 +63,20 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);color:v
 <a class="btn" href="#expert-domains">Expert agent domains</a>
 <a class="btn" href="#virtual-forum">Virtual research forum</a>
 </nav>
+<section id="initial-knowledge-map">
+<h2>Initial catalog and governance graph</h2>
+<p>The October 23 local build represents 20 services, seven products and their data types,
+documentation and unresolved policy requirements as 116 nodes and 111 edges. NOAA/weather,
+NEON, NCBI, EOL and Earth Engine/GCP are included with supporting sources. The viewer supports
+search, source/product and data-type views, policy inspection and JSON export.</p>
+<p><a href="knowledge-map/">Explore the interactive graph</a> ·
+<a href="knowledge-map/graph.json">Download its JSON snapshot</a></p>
+<figure><div class="img"><img src="knowledge-map/proposal.svg" alt="Grouped view of the initial Sewall.ai catalog: NOAA, NEON, NCBI, Earth Engine, supporting public sources and unconfirmed Virginia holdings connect to 49 data types and 28 unresolved policy reviews. No scientific joins or access grants." loading="lazy"></div>
+<figcaption>Preliminary software result: deterministic catalog topology and offline replay.
+Sixteen focused unit tests and nine script-interaction checks passed. The 28 reviews remain
+unresolved, and the GCP project is a template. The map does not establish sample identity,
+scientific validity, permission or institutional commitment. This local addition has not been deployed.</figcaption></figure>
+</section>
 <h2>How a run works</h2>
 <figure>
   <div class="img"><img src="figures/fig1-architecture.png" alt="Architecture: planners propose actions to one deterministic controller, which checks them against the Skill registry, policies, budgets and integrity gates, calls bounded public Skills and writes a hash-chained manifest, an HTML report and an offline replay" loading="lazy"></div>

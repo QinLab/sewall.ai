@@ -1,0 +1,28 @@
+{
+  "build_version": "1.0",
+  "registry_sha256": "9e44a8862df3046a86712fecd873377fe66c04ffb0c022cd5d81942820cc028d",
+  "graph_sha256": "03be89b8506cd2cdfa7a5ba188fcff554b592acd0be2f57c6ffa5afb5a3fc99a",
+  "nodes": 116,
+  "edges": 111,
+  "node_kinds": {
+    "DataType": 49,
+    "Environment": 1,
+    "Organization": 11,
+    "PolicyReview": 28,
+    "Product": 7,
+    "Service": 20
+  },
+  "edge_predicates": {
+    "hosted_by": 1,
+    "offers_data_type": 54,
+    "published_by": 20,
+    "requires_policy_review": 28,
+    "served_by": 7,
+    "uses_service": 1
+  },
+  "structural_validation_passed": true,
+  "deterministic_rebuild_matches": true,
+  "scientific_join_count": 0,
+  "authorization_grant_count": 0,
+  "network_requests_in_build": 0
+}
